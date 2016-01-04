@@ -28,8 +28,8 @@ public class Files_Sent extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_files);
-        Intent intent;
-        String fileName = getIntent().getStringExtra("File_Name");
+        Intent intent = getIntent();
+
 
     }
 

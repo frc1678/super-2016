@@ -15,6 +15,7 @@
       android:layout_height="wrap_content"
       android:text = "Files"
       android:clickable="true"
-      android:onClick="Files"/>
+      android:onClick="Files"
+      android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

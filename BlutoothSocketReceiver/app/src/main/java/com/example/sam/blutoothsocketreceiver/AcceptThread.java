@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by sam on 1/3/16.
@@ -98,8 +102,13 @@ public class AcceptThread extends  Thread{
 
                             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
                             myFirebaseRef.child("Mass String Data").child("Byte Size").setValue(Integer.toString(size));
-                            System.out.println("Firebase");
-
+                            myFirebaseRef.child("Mass String Data").child("File name").setValue("Sent_Data.txt");
+                            myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                            System.out.println(" Sent to Firebase");
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.activity_main);
+                            adapter.add(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + "Sent_Data.txt");
+                            ListView listView = (ListView)context.findViewById(R.id.view_sent);
+                            listView.setAdapter(adapter);
                         }
                         System.out.println("end");
                         text("end");
