@@ -26,6 +26,7 @@ public class accept_loop extends Thread {
     TextView changing;
 
     public accept_loop(Activity context){
+
         this.context = context;
     }
     public void run() {

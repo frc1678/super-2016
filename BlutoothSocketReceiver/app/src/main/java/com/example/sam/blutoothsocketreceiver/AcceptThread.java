@@ -15,6 +15,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -46,14 +48,14 @@ public class AcceptThread extends  Thread{
                     out = new PrintWriter(socket.getOutputStream(), true);
                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter file = null;
-                        /*try {
+                        try {
                             File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
                             //can delete when doing the actual thing
                             file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt")));
                         } catch (IOException IOE) {
                             Log.e("File error", "Failed to open File");
                             return;
-                        }*/
+                        }
                     try {
                         text = "";
                         //get the bytesize from the first line of the data
@@ -74,6 +76,13 @@ public class AcceptThread extends  Thread{
                             //append data to the variable "data"
                             data = data.concat(text + "\n");
                             System.out.println(data);
+                            file.println(text);
+                            if (file.checkError()){
+                                Toast.makeText(context, "Failed to write to file", Toast.LENGTH_SHORT).show();
+                                Display_Unsent_list("UNSENT_Data.txt");
+
+                            }
+
                             //text(Integer.toString(size));
                         }
                         //data = data.concat("asdf");
@@ -105,10 +114,7 @@ public class AcceptThread extends  Thread{
                             myFirebaseRef.child("Mass String Data").child("File name").setValue("Sent_Data.txt");
                             myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
                             System.out.println(" Sent to Firebase");
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.activity_main);
-                            adapter.add(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + "Sent_Data.txt");
-                            ListView listView = (ListView)context.findViewById(R.id.view_sent);
-                            listView.setAdapter(adapter);
+                            Display_Sent_list("Sent_Data");
                         }
                         System.out.println("end");
                         text("end");
@@ -134,6 +140,19 @@ public class AcceptThread extends  Thread{
             }
         });
     }
+    public void Display_Sent_list(final String fileName ){
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        adapter.add(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + fileName);
+        ListView listView = (ListView)context.findViewById(R.id.view_sent);
+        listView.setAdapter(adapter);
+    }
+    public void Display_Unsent_list(final String fileName ){
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        adapter.add(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + fileName);
+        ListView listView = (ListView)context.findViewById(R.id.view_unsent);
+        listView.setAdapter(adapter);
+    }
+
 
 }
 
