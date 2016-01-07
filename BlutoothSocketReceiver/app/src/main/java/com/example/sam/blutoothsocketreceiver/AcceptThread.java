@@ -82,7 +82,8 @@ public class AcceptThread extends  Thread{
                                 Display_Unsent_list("UNSENT_Data.txt");
 
                             }
-
+                            Toast.makeText(context, "Sent to File", Toast.LENGTH_SHORT).show();
+                            Display_Sent_list("Sent_Data");
                             //text(Integer.toString(size));
                         }
                         //data = data.concat("asdf");
@@ -113,8 +114,9 @@ public class AcceptThread extends  Thread{
                             myFirebaseRef.child("Mass String Data").child("Byte Size").setValue(Integer.toString(size));
                             myFirebaseRef.child("Mass String Data").child("File name").setValue("Sent_Data.txt");
                             myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
-                            System.out.println(" Sent to Firebase");
-                            Display_Sent_list("Sent_Data");
+                            System.out.println(" Data Sent to Firebase");
+                            Toast.makeText(context, "Data sent to Firebase", Toast.LENGTH_SHORT).show();
+
                         }
                         System.out.println("end");
                         text("end");

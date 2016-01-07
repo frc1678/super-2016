@@ -31,14 +31,14 @@ public class MainActivity extends ActionBarActivity {
         changing = (TextView)findViewById(R.id.text);
     }
 
-    public void Files(){
+    public void sent_files(){
 
         Intent intent = new Intent(this, Files_Sent.class);
         startActivity(intent);
 
     }
 
-    public void unsent_cliked(){
+    public void unsent_clicked(){
         Intent intent = new Intent(this, Unsent_Files.class);
         startActivity(intent);
     }
