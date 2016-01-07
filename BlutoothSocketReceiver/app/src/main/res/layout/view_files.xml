@@ -10,10 +10,10 @@
         android:id="@+id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "Files Sent:  "/>
+        android:text = "Files Received:  "/>
     <ListView
         android:layout_below="@id/text2"
-        android:id="@+id/view_sent"
+        android:id="@+id/view_files_received"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 

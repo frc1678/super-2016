@@ -31,9 +31,9 @@ public class MainActivity extends ActionBarActivity {
         changing = (TextView)findViewById(R.id.text);
     }
 
-    public void sent_files(){
+    public void File_View(){
 
-        Intent intent = new Intent(this, Files_Sent.class);
+        Intent intent = new Intent(this, Files_Received.class);
         startActivity(intent);
 
     }

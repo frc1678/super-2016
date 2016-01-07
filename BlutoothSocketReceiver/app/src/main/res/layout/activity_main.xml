@@ -14,17 +14,9 @@
   <Button
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text = "Sent"
+      android:text = "Files Received"
       android:clickable="true"
-      android:onClick="sent_files"
+      android:onClick="File_View"
       android:layout_alignParentRight="true"/>
-    <Button
-        android:id="@+id/Unsent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:clickable="true"
-        android:text = "Unsent"
-        android:onClick="unsent_clicked"/>
 
 </RelativeLayout>

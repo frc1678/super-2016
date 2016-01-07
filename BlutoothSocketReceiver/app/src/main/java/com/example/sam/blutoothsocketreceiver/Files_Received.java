@@ -1,28 +1,17 @@
 package com.example.sam.blutoothsocketreceiver;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import java.io.File;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.UUID;
-
-public class Files_Sent extends ActionBarActivity {
+public class Files_Received extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +19,17 @@ public class Files_Sent extends ActionBarActivity {
         setContentView(R.layout.view_files);
         Intent intent = getIntent();
 
-
+        File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/MatchData/");
+        if (!dir.mkdir()) {
+            Log.i("File Info", "Failed to make Directory. Unimportant");
+        }
+        File[] files = dir.listFiles();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        for (File tmpFile : files) {
+            adapter.add(tmpFile.getName());
+        }
+        ListView listView = (ListView) findViewById(R.id.view_files_received);
+        listView.setAdapter(adapter);
     }
 
     @Override
