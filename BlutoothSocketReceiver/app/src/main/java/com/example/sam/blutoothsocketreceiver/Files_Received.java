@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.io.File;
@@ -30,7 +32,11 @@ public class Files_Received extends ActionBarActivity {
         }
         ListView listView = (ListView) findViewById(R.id.view_files_received);
         listView.setAdapter(adapter);
-    }
+
+}
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
