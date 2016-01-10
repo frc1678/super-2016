@@ -50,6 +50,7 @@ import org.json.JSONObject;
                     PrintWriter file = null;
                     try {
                         File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+                        dir.mkdir();
                         //can delete when doing the actual thing
                         file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
                     } catch (IOException IOE) {
@@ -162,7 +163,7 @@ import org.json.JSONObject;
             context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/MatchData/");
+                    File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
                     if (!dir.mkdir()) {
                         Log.i("File Info", "Failed to make Directory. Unimportant");
                     }

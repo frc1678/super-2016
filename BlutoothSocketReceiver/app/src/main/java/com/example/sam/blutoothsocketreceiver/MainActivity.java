@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -55,40 +56,44 @@ public class MainActivity extends ActionBarActivity {
         file = null;
     }
 
-    public void deleteAllFiles(){
+    public void deleteAllFiles(View view){
         ListView listView = (ListView)findViewById(R.id.view_files_received);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add("");
         listView.setAdapter(adapter);
     }
-    public void sendData() {
+    public void sendData(View view) {
         try {
             File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
+            dir.mkdir();
             //can delete when doing the actual thing
             file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
         } catch (IOException IOE) {
             Log.e("File error", "Failed to open File");
+            return;
         }
 
         user_name = name.getText().toString();
         foul_points = foul.getText().toString();
         alliance = alliance_score.getText().toString();
         if (user_name == "") {
-            Toast.makeText(context, "You forgot Name input!", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "You forgot Name input!", Toast.LENGTH_SHORT).show();
         } else if (foul_points == "") {
-            Toast.makeText(context, "You forgot foul points!", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "You forgot foul points!", Toast.LENGTH_SHORT).show();
         } else if (alliance == "") {
-            Toast.makeText(context, "You forgot alliance score!", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "You forgot alliance score!", Toast.LENGTH_SHORT).show();
         } else {
 
             file.println(user_name + "\n" + foul_points + "\n" + alliance);
+            Toast.makeText(context, "Sent to file",  Toast.LENGTH_SHORT).show();
             updateList();
             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
             myFirebaseRef.child("Super Scout Data").child("Data").setValue(user_name + "\n" + foul_points + "\n" + alliance);
-
+            System.out.println("sent to firebase");
             name.setText("");
             foul.setText("");
             alliance_score.setText("");
+            System.out.println("cleared edittext");
         }
     }
 
@@ -119,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/MatchData/");
+                File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
                 if (!dir.mkdir()) {
                     Log.i("File Info", "Failed to make Directory. Unimportant");
                 }
