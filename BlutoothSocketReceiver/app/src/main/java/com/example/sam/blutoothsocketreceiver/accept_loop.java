@@ -63,7 +63,6 @@ public class accept_loop extends Thread {
                 System.out.println("accepting...");
                 //text("accepting connection...");
                 toasts("accepting connection");
-                System.out.println();
                 //socket now calls accept() which returns bluetooth socket
                 System.out.println("before .accept");
                 socket = mmServerSocket.accept();

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +33,9 @@ public class MainActivity extends ActionBarActivity {
     EditText name;
     EditText foul;
     EditText alliance_score;
+    String user_name;
+    String foul_points;
+    String alliance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,38 +46,53 @@ public class MainActivity extends ActionBarActivity {
         loop.start();
         Firebase.setAndroidContext(this);
         changing = (TextView)findViewById(R.id.text);
-        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+        //Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
         myFirebaseRef.keepSynced(true);
-        Firebase.getDefaultConfig().setPersistenceEnabled(true);
         name = (EditText)findViewById(R.id.userName);
         foul = (EditText)findViewById(R.id.foul_Points);
         alliance_score = (EditText)findViewById(R.id.scoreEdit);
         file = null;
     }
+
     public void deleteAllFiles(){
         ListView listView = (ListView)findViewById(R.id.view_files_received);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add("");
         listView.setAdapter(adapter);
     }
-    public void sendData(){
+    public void sendData() {
         try {
-            File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+            File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
             //can delete when doing the actual thing
             file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
         } catch (IOException IOE) {
             Log.e("File error", "Failed to open File");
         }
-        String user_name = name.getText().toString();
-        String foul_points = foul.getText().toString();
-        String alliance = alliance_score.getText().toString();
-        file.println(user_name + "\n" + foul_points + "\n" + alliance);
-        updateList();
-        Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-        myFirebaseRef.child("Super Scout Data").child("Data").setValue(user_name + "\n" + foul_points + "\n" + alliance);
 
+        user_name = name.getText().toString();
+        foul_points = foul.getText().toString();
+        alliance = alliance_score.getText().toString();
+        if (user_name == "") {
+            Toast.makeText(context, "You forgot Name input!", Toast.LENGTH_SHORT);
+        } else if (foul_points == "") {
+            Toast.makeText(context, "You forgot foul points!", Toast.LENGTH_SHORT);
+        } else if (alliance == "") {
+            Toast.makeText(context, "You forgot alliance score!", Toast.LENGTH_SHORT);
+        } else {
+
+            file.println(user_name + "\n" + foul_points + "\n" + alliance);
+            updateList();
+            Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
+            myFirebaseRef.child("Super Scout Data").child("Data").setValue(user_name + "\n" + foul_points + "\n" + alliance);
+
+            name.setText("");
+            foul.setText("");
+            alliance_score.setText("");
+        }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

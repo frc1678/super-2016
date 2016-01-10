@@ -7,9 +7,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.client.Firebase;
+import com.shaded.fasterxml.jackson.core.JsonParser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.json.JSONObject;
 
 /**
  * Created by sam on 1/7/16.
@@ -74,6 +77,7 @@ import java.util.Date;
                             data = data.concat(text + "\n");
                             System.out.println(data);
                             file.println(text);
+                            System.out.println(text);
                             updateList();
                             if (file.checkError()){
                                 toasts("Failed to write to file");
@@ -104,11 +108,20 @@ import java.util.Date;
                                     Toast.makeText(context, "Data trasnfer success", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            JSONObject jsonObject = new JSONObject();
 
                             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
                             myFirebaseRef.child("Mass String Data").child("Byte Size").setValue(Integer.toString(size));
                             myFirebaseRef.child("Mass String Data").child("File name").setValue("Sent_Data.txt");
                             myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                            try {
+
+                                myFirebaseRef.child("JSON file").setValue( jsonObject.getJSONObject(text));
+
+                            }catch(JSONException JE){
+                                toasts("Failed to convert data to JSON");
+                            }
+
                             System.out.println(" Data Sent to Firebase");
                             toasts("Sent to Firebase");
 
