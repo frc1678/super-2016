@@ -71,9 +71,21 @@
             android:layout_height="wrap_content"
             android:text="delete all"
             android:id="@+id/deleteAll"
+            android:onClick="deleteAllFiles"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="deleteAllFiles"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload"
+            android:id="@+id/Upload_File"
+            android:layout_alignTop="@+id/deleteAll"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:onClick="upload_Clicked"/>
     </RelativeLayout>
 </LinearLayout>
 

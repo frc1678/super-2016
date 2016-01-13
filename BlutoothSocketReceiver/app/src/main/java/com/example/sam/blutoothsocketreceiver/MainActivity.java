@@ -62,6 +62,10 @@ public class MainActivity extends ActionBarActivity {
         adapter.add("");
         listView.setAdapter(adapter);
     }
+    public void upload_Clicked(View view){
+        updateScoutData();
+        updateSuperData();
+    }
     public void sendData(View view) {
         try {
             File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
@@ -86,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
 
             file.println(user_name + "\n" + foul_points + "\n" + alliance);
             Toast.makeText(context, "Sent to file",  Toast.LENGTH_SHORT).show();
-            updateList();
+            updateSuperData();
             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
             myFirebaseRef.child("Super Scout Data").child("Data").setValue(user_name + "\n" + foul_points + "\n" + alliance);
             System.out.println("sent to firebase");
@@ -120,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void updateList(){
+    public void updateSuperData(){
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -141,6 +145,28 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+    public void updateScoutData(){
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+                if (!scoutFile.mkdir()) {
+                    Log.i("File Info", "Failed to make Directory. Unimportant");
+                }
+                File[] files = scoutFile.listFiles();
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+                for (File tmpFile : files) {
+                    adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                }
+                ListView listView = (ListView)context.findViewById(R.id.view_files_received);
+                listView.setAdapter(adapter);
+            }
+        });
+
+
+
+    }
+
 }
 
 

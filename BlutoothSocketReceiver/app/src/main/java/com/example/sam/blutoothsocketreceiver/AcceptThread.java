@@ -79,7 +79,7 @@ import org.json.JSONObject;
                             System.out.println(data);
                             file.println(text);
                             System.out.println(text);
-                            updateList();
+                            updateScoutData();
                             if (file.checkError()){
                                 toasts("Failed to write to file");
 
@@ -159,27 +159,27 @@ import org.json.JSONObject;
                 }
             });
         }
-        public void updateList(){
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
-                    if (!dir.mkdir()) {
-                        Log.i("File Info", "Failed to make Directory. Unimportant");
-                    }
-                    File[] files = dir.listFiles();
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-                    for (File tmpFile : files) {
-                        adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
-                    }
-                    ListView listView = (ListView)context.findViewById(R.id.view_files_received);
-                    listView.setAdapter(adapter);
+            public void updateScoutData(){
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+                if (!scoutFile.mkdir()) {
+                    Log.i("File Info", "Failed to make Directory. Unimportant");
                 }
-            });
+                File[] files = scoutFile.listFiles();
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+                for (File tmpFile : files) {
+                    adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                }
+                ListView listView = (ListView)context.findViewById(R.id.view_files_received);
+                listView.setAdapter(adapter);
+            }
+        });
 
 
 
-        }
+    }
 
     }
 
