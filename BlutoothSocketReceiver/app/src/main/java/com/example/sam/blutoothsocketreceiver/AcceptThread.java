@@ -52,7 +52,7 @@ import org.json.JSONObject;
                         File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
                         dir.mkdir();
                         //can delete when doing the actual thing
-                        file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+                        file = new PrintWriter(new FileOutputStream(new File(dir, "Scout_data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
                     } catch (IOException IOE) {
                         Log.e("File error", "Failed to open File");
                         return;
@@ -112,8 +112,7 @@ import org.json.JSONObject;
                             JSONObject jsonObject = new JSONObject();
 
                             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-                            myFirebaseRef.child("Mass String Data").child("Byte Size").setValue(Integer.toString(size));
-                            myFirebaseRef.child("Mass String Data").child("File name").setValue("Sent_Data.txt");
+                            myFirebaseRef.child("Scouts Data").child("Byte Size").setValue(Integer.toString(size));
                             myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
                             try {
 
@@ -121,6 +120,7 @@ import org.json.JSONObject;
 
                             }catch(JSONException JE){
                                 toasts("Failed to convert data to JSON");
+                                return;
                             }
 
                             System.out.println(" Data Sent to Firebase");

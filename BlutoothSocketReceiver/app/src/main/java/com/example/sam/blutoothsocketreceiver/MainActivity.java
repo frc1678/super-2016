@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
             File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
             dir.mkdir();
             //can delete when doing the actual thing
-            file = new PrintWriter(new FileOutputStream(new File(dir, "Send-Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+            file = new PrintWriter(new FileOutputStream(new File(dir, "Super_Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
         } catch (IOException IOE) {
             Log.e("File error", "Failed to open File");
             return;
