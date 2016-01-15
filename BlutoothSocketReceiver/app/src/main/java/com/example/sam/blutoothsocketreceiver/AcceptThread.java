@@ -109,14 +109,14 @@ import org.json.JSONObject;
                                     Toast.makeText(context, "Data trasnfer success", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            JSONObject jsonObject = new JSONObject();
+
 
                             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
                             myFirebaseRef.child("Scouts Data").child("Byte Size").setValue(Integer.toString(size));
                             myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
                             try {
 
-                                myFirebaseRef.child("JSON file").setValue( jsonObject.getJSONObject(text));
+                                myFirebaseRef.child("JSON file").setValue( new JSONObject(text));
 
                             }catch(JSONException JE){
                                 toasts("Failed to convert data to JSON");

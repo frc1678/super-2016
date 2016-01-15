@@ -99,6 +99,8 @@ public class MainActivity extends ActionBarActivity {
             alliance_score.setText("");
             System.out.println("cleared edittext");
         }
+        Intent intent = new Intent(this, FieldSetUp.class);
+        startActivity(intent);
     }
 
 
