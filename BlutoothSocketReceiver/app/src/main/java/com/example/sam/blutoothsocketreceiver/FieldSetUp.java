@@ -46,7 +46,6 @@ public class FieldSetUp extends ActionBarActivity {
         defenses.add(6, "R.W");
         defenses.add(7, "M.T");
 
-
             LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
             layout.setOrientation(LinearLayout.VERTICAL);
             for (int i = 0; i < 4; i++) {
@@ -64,14 +63,17 @@ public class FieldSetUp extends ActionBarActivity {
                     defenseButton.setText(defenses.get(j).toString());
                     defenseButton.setId(j);
                     columns.addView(defenseButton);
-
-
                 }
                 layout.addView(column_number);
                 layout.addView(columns);
                 System.out.println("10");
             }
+
         }
+    public void nextClicked(View view){
+        Intent next = new Intent(this,Super_Scouting.class);
+        startActivity(next);
+    }
 
 
 

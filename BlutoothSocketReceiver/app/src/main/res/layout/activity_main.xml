@@ -12,46 +12,56 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true">
-        <TextView
-            android:text="Name:"
-            android:layout_width="wrap_content"
+        <Switch
+            android:layout_width="237dp"
             android:layout_height="wrap_content"
-            android:id="@+id/nameText"/>
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/userName"
-            android:layout_below="@+id/nameText"/>
-        <TextView
-            android:text="Total Foul Points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/foul_Point_Text"
-            android:layout_below="@+id/userName"
-            android:inputType="number"/>
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/foul_Points"
-            android:layout_below="@id/foul_Point_Text"/>
-        <TextView
-            android:text="Alliance Score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/alliance_score_text"
-            android:layout_below="@+id/foul_Points"/>
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scoreEdit"
-            android:layout_below="@id/alliance_score_text"/>
+            android:text="Blue Alliance"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#0000FF"
+            android:id="@+id/Alliance_Switch"
+            android:layout_below="@+id/scrollView"
+            android:layout_centerHorizontal="true"
+            android:checked="false"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_marginTop="40dp"></ScrollView>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
-            android:layout_below="@+id/scoreEdit"
-            android:layout_centerHorizontal="true"
-            android:onClick="sendData"/>
+            android:onClick="sendData"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/scrollView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <EditText
+                android:id="@+id/user_Name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="Name"
+                android:textSize="25dp"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="example"
+                android:textSize="25dp"/>
+
+        </LinearLayout>
+
+
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="0dp"

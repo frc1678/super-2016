@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +34,8 @@ public class MainActivity extends ActionBarActivity {
     Activity context;
     TextView changing;
     PrintWriter file;
-    EditText name;
-    EditText foul;
-    EditText alliance_score;
-    String user_name;
-    String foul_points;
-    String alliance;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,21 +45,34 @@ public class MainActivity extends ActionBarActivity {
         accept_loop loop = new accept_loop(context);
         loop.start();
         Firebase.setAndroidContext(this);
-        changing = (TextView)findViewById(R.id.text);
+        changing = (TextView) findViewById(R.id.text);
         //Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
         myFirebaseRef.keepSynced(true);
-        name = (EditText)findViewById(R.id.userName);
-        foul = (EditText)findViewById(R.id.foul_Points);
-        alliance_score = (EditText)findViewById(R.id.scoreEdit);
         file = null;
-    }
+        final Switch allianceColor = (Switch) findViewById(R.id.Alliance_Switch);
+            allianceColor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        allianceColor.setText("Red Alliance");
+                        allianceColor.setTextColor(Color.RED);
+                    } else {
+                        allianceColor.setText("Blue Alliance");
+                        allianceColor.setTextColor(Color.BLUE);
+                    }
+                }
+
+            });
+        }
 
     public void deleteAllFiles(View view){
         ListView listView = (ListView)findViewById(R.id.view_files_received);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add("");
         listView.setAdapter(adapter);
+
     }
     public void upload_Clicked(View view){
         updateScoutData();
@@ -77,28 +89,14 @@ public class MainActivity extends ActionBarActivity {
             return;
         }
 
-        user_name = name.getText().toString();
-        foul_points = foul.getText().toString();
-        alliance = alliance_score.getText().toString();
-        if (user_name == "") {
-            Toast.makeText(context, "You forgot Name input!", Toast.LENGTH_SHORT).show();
-        } else if (foul_points == "") {
-            Toast.makeText(context, "You forgot foul points!", Toast.LENGTH_SHORT).show();
-        } else if (alliance == "") {
-            Toast.makeText(context, "You forgot alliance score!", Toast.LENGTH_SHORT).show();
-        } else {
-
-            file.println(user_name + "\n" + foul_points + "\n" + alliance);
+            file.println();
             Toast.makeText(context, "Sent to file",  Toast.LENGTH_SHORT).show();
             updateSuperData();
             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-            myFirebaseRef.child("Super Scout Data").child("Data").setValue(user_name + "\n" + foul_points + "\n" + alliance);
+            myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
             System.out.println("sent to firebase");
-            name.setText("");
-            foul.setText("");
-            alliance_score.setText("");
+        ///////////////////////////////////////////
             System.out.println("cleared edittext");
-        }
         Intent intent = new Intent(this, FieldSetUp.class);
         startActivity(intent);
     }
