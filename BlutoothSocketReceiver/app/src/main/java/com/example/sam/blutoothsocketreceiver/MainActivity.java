@@ -34,6 +34,10 @@ public class MainActivity extends ActionBarActivity {
     Activity context;
     TextView changing;
     PrintWriter file;
+    EditText matchNumber;
+    EditText teamNumberOne;
+    EditText teamNumberTwo;
+    EditText teamNumberThree;
 
 
     @Override
@@ -50,21 +54,10 @@ public class MainActivity extends ActionBarActivity {
         Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
         myFirebaseRef.keepSynced(true);
         file = null;
-        final Switch allianceColor = (Switch) findViewById(R.id.Alliance_Switch);
-            allianceColor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        allianceColor.setText("Red Alliance");
-                        allianceColor.setTextColor(Color.RED);
-                    } else {
-                        allianceColor.setText("Blue Alliance");
-                        allianceColor.setTextColor(Color.BLUE);
-                    }
-                }
-
-            });
+        matchNumber = (EditText)findViewById(R.id.matchNumber);
+        teamNumberOne = (EditText)findViewById(R.id.teamOneNumber);
+        teamNumberTwo = (EditText)findViewById(R.id.teamTwoNumber);
+        teamNumberThree = (EditText)findViewById(R.id.teamThreeNumber);
         }
 
     public void deleteAllFiles(View view){
@@ -83,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
             File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
             dir.mkdir();
             //can delete when doing the actual thing
-            file = new PrintWriter(new FileOutputStream(new File(dir, "Super_Data.txt" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+            file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
         } catch (IOException IOE) {
             Log.e("File error", "Failed to open File");
             return;
@@ -98,6 +91,8 @@ public class MainActivity extends ActionBarActivity {
         ///////////////////////////////////////////
             System.out.println("cleared edittext");
         Intent intent = new Intent(this, FieldSetUp.class);
+        intent.putExtra("MATCH_NUMBER", matchNumber.getText().toString());
+
         startActivity(intent);
     }
 

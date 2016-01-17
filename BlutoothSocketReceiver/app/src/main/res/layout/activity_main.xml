@@ -12,52 +12,63 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true">
-        <Switch
-            android:layout_width="237dp"
+        <EditText
+            android:id="@+id/matchNumber"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Blue Alliance"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:textColor="#0000FF"
-            android:id="@+id/Alliance_Switch"
-            android:layout_below="@+id/scrollView"
-            android:layout_centerHorizontal="true"
-            android:checked="false"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"/>
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_marginTop="40dp"></ScrollView>
+            android:hint="Match #"
+            android:textSize="25sp"/>
+
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
             android:onClick="sendData"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:id="@+id/button" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/scrollView"
+            android:layout_below="@+id/matchNumber"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-
-            <EditText
-                android:id="@+id/user_Name"
-                android:layout_width="fill_parent"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout">
+            <TextView
+                android:id="@+id/allianceName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:hint="Name"
-                android:textSize="25dp"/>
+                android:text="Blue Alliance"
+                android:textColor="#0000FF"
+                android:textSize="30dp"
+                android:layout_marginTop="30dp"/>
             <EditText
-                android:layout_width="fill_parent"
+                android:id="@+id/teamOneNumber"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="example"
-                android:textSize="25dp"/>
+                android:hint="Team1 #"
+                android:textSize="25dp"
+                android:inputType="number"
+                android:layout_marginTop="25dp"/>
+            <EditText
+                android:id="@+id/teamTwoNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Team2 #"
+                android:textSize="25dp"
+                android:inputType="number"
+                android:layout_marginTop="25dp"/>
+            <EditText
+                android:id="@+id/teamThreeNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Team3 #"
+                android:textSize="25dp"
+                android:inputType="number"
+                android:layout_marginTop="25dp"/>
 
         </LinearLayout>
 

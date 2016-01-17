@@ -23,6 +23,9 @@
         </activity>
         <activity android:name=".FieldSetUp">
         </activity>
+        <activity android:name=".Super_Scouting">
+
+        </activity>
     </application>
 
 </manifest>

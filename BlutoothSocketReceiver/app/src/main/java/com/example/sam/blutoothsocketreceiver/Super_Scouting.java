@@ -1,33 +1,24 @@
 package com.example.sam.blutoothsocketreceiver;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.firebase.client.Firebase;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Super_Scouting extends ActionBarActivity {
-
+    TextView teamNumber1;
+    TextView teamNumber2;
+    TextView teamNumber3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +26,58 @@ public class Super_Scouting extends ActionBarActivity {
         setContentView(R.layout.super_scouting);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent next = getIntent();
+        teamNumber1 = (TextView) findViewById(R.id.team1);
+        teamNumber2 = (TextView) findViewById(R.id.team2);
+        teamNumber3 = (TextView) findViewById(R.id.team3);
+
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
+        RelativeLayout teamOneRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam1);
+        RelativeLayout teamTwoRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam2);
+        RelativeLayout teamThreeRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam3);
+
+        View anchor = teamNumber1;
+        View anchor2 = teamNumber2;
+        View anchor3 = teamNumber3;
+        for (String title : data) {
+            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            View counter = createCounter(title);
+            counter.setId(1 + data.indexOf(title));
+            param.addRule(RelativeLayout.BELOW, anchor.getId());
+            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            counter.setLayoutParams(param);
+            teamOneRelativeLayout.addView(counter);
+            anchor = counter;
+        }
+        for (String title : data) {
+            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            View counter = createCounter(title);
+            counter.setId(2 + data.indexOf(title));
+            param.addRule(RelativeLayout.BELOW, anchor2.getId());
+            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            counter.setLayoutParams(param);
+            teamTwoRelativeLayout.addView(counter);
+            anchor2 = counter;
+        }
+        for (String title : data) {
+            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            View counter = createCounter(title);
+            counter.setId(2 + data.indexOf(title));
+            param.addRule(RelativeLayout.BELOW, anchor3.getId());
+            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            counter.setLayoutParams(param);
+            teamThreeRelativeLayout.addView(counter);
+            anchor3 = counter;
+        }
     }
 
+    private View createCounter(String title) {
 
+        LayoutInflater inflater = getLayoutInflater();
+        View counter = inflater.inflate(R.layout.counter, null);
+        TextView dataNameTextView = (TextView)counter.findViewById(R.id.dataName);
+        dataNameTextView.setText(title);
+        return counter;
+    }
 
 
 
