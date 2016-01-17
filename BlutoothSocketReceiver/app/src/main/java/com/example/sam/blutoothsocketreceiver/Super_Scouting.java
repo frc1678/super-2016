@@ -2,10 +2,8 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +17,10 @@ public class Super_Scouting extends ActionBarActivity {
     TextView teamNumber1;
     TextView teamNumber2;
     TextView teamNumber3;
+    String matchNumber;
+    String teamNumberOne;
+    String teamNumberTwo;
+    String teamNumberThree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,16 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
 
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
+        matchNumber = (String) savedInstanceState.getSerializable("MATCH_NUMBER");
+        teamNumberOne = (String) savedInstanceState.getSerializable("TEAM_NUMBER_ONE");
+        teamNumberTwo = (String) savedInstanceState.getSerializable("TEAM_NUMBER_TWO");
+        teamNumberThree = (String) savedInstanceState.getSerializable("TEAM_NUMBER_THREE");
+
+        teamNumber1.setText(teamNumberOne);
+        teamNumber2.setText(teamNumberTwo);
+        teamNumber3.setText(teamNumberThree);
+        
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control", "Cross Eff."));
         RelativeLayout teamOneRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam1);
         RelativeLayout teamTwoRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam2);
         RelativeLayout teamThreeRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam3);

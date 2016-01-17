@@ -26,18 +26,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class FieldSetUp extends ActionBarActivity {
-    Button button;
+    String matchNumber;
+    String teamNumberOne;
+    String teamNumberTwo;
+    String teamNumberThree;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fieldsetup);
         Intent intent = getIntent();
+        matchNumber = (String) savedInstanceState.getSerializable("MATCH_NUMBER");
+        teamNumberOne = (String) savedInstanceState.getSerializable("TEAM_NUMBER_ONE");
+        teamNumberTwo = (String) savedInstanceState.getSerializable("TEAM_NUMBER_TWO");
+        teamNumberThree = (String) savedInstanceState.getSerializable("TEAM_NUMBER_THREE");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        ArrayList<String> defenses = new ArrayList<>();
-        defenses.add(0, "P.C");
+        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("P.C", "S.P", "D.B", "C.D.F", "R.T", "R.P", "R.W", "M.T"));
+        /*defenses.add(0, "P.C");
         defenses.add(1, "S.P");
         defenses.add(2, "D.B");
         defenses.add(3, "C.D.F");
@@ -45,7 +53,7 @@ public class FieldSetUp extends ActionBarActivity {
         defenses.add(5, "R.P");
         defenses.add(6, "R.W");
         defenses.add(7, "M.T");
-
+*/
             LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
             layout.setOrientation(LinearLayout.VERTICAL);
             for (int i = 0; i < 4; i++) {
@@ -70,12 +78,6 @@ public class FieldSetUp extends ActionBarActivity {
             }
 
         }
-    public void nextClicked(View view){
-        Intent next = new Intent(this,Super_Scouting.class);
-        startActivity(next);
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,8 +95,14 @@ public class FieldSetUp extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent next = new Intent(this,Super_Scouting.class);
+            next.putExtra("MATCH_NUMBER", matchNumber.toString());
+            next.putExtra("TEAM_NUMBER_ONE", teamNumberOne);
+            next.putExtra("TEAM_NUMBER_TWO", teamNumberTwo);
+            next.putExtra("TEAM_NUMBER_THREE", teamNumberThree);
+            startActivity(next);
         }
+
 
         return super.onOptionsItemSelected(item);
     }

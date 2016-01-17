@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberOne;
     EditText teamNumberTwo;
     EditText teamNumberThree;
+    File dir;
 
 
     @Override
@@ -49,11 +50,11 @@ public class MainActivity extends ActionBarActivity {
         accept_loop loop = new accept_loop(context);
         loop.start();
         Firebase.setAndroidContext(this);
-        changing = (TextView) findViewById(R.id.text);
-        //Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
         myFirebaseRef.keepSynced(true);
+        dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
         file = null;
+        changing = (TextView) findViewById(R.id.text);
         matchNumber = (EditText)findViewById(R.id.matchNumber);
         teamNumberOne = (EditText)findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText)findViewById(R.id.teamTwoNumber);
@@ -65,6 +66,7 @@ public class MainActivity extends ActionBarActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         adapter.add("");
         listView.setAdapter(adapter);
+        dir.delete();
 
     }
     public void upload_Clicked(View view){
@@ -73,7 +75,6 @@ public class MainActivity extends ActionBarActivity {
     }
     public void sendData(View view) {
         try {
-            File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
             dir.mkdir();
             //can delete when doing the actual thing
             file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
@@ -83,16 +84,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
             file.println();
-            Toast.makeText(context, "Sent to file",  Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
             updateSuperData();
             Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
             myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
             System.out.println("sent to firebase");
-        ///////////////////////////////////////////
-            System.out.println("cleared edittext");
         Intent intent = new Intent(this, FieldSetUp.class);
         intent.putExtra("MATCH_NUMBER", matchNumber.getText().toString());
+        intent.putExtra("TEAM_NUMBER_ONE", teamNumberOne.getText().toString());
+        intent.putExtra("TEAM_NUMBER_TWO", teamNumberTwo.getText().toString());
+        intent.putExtra("TEAM_NUMBER_THREE", teamNumberThree.getText().toString());
 
+        matchNumber.setText("");
+        teamNumberOne.setText("");
+        teamNumberTwo.setText("");
+        teamNumberThree.setText("");
         startActivity(intent);
     }
 

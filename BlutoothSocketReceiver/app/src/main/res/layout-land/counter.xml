@@ -8,14 +8,14 @@
     <TextView
         android:id="@+id/dataName"
         android:text="Data Name"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"/>
     <Button
         android:id="@+id/minusButton"
         android:text="-"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:layout_below="@+id/dataName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -23,7 +23,7 @@
     <Button
         android:id="@+id/plusButton"
         android:text="+"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:layout_marginLeft="150dp"
         android:layout_below="@+id/dataName"
         android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"/>
     </RelativeLayout>
