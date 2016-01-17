@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberOne;
     EditText teamNumberTwo;
     EditText teamNumberThree;
+    TextView alliance;
     File dir;
 
 
@@ -59,49 +60,10 @@ public class MainActivity extends ActionBarActivity {
         teamNumberOne = (EditText)findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText)findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText)findViewById(R.id.teamThreeNumber);
-        }
-
-    public void deleteAllFiles(View view){
-        ListView listView = (ListView)findViewById(R.id.view_files_received);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-        adapter.add("");
-        listView.setAdapter(adapter);
-        dir.delete();
-
-    }
-    public void upload_Clicked(View view){
-        updateScoutData();
+        alliance = (TextView)findViewById(R.id.allianceName);
         updateSuperData();
-    }
-    public void sendData(View view) {
-        try {
-            dir.mkdir();
-            //can delete when doing the actual thing
-            file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
-        } catch (IOException IOE) {
-            Log.e("File error", "Failed to open File");
-            return;
+        updateScoutData();
         }
-
-            file.println();
-            Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
-            updateSuperData();
-            Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-            myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
-            System.out.println("sent to firebase");
-        Intent intent = new Intent(this, FieldSetUp.class);
-        intent.putExtra("matchNumber", matchNumber.getText().toString());
-        intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
-        intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
-        intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
-        /*matchNumber.setText("");
-        teamNumberOne.setText("");
-        teamNumberTwo.setText("");
-        teamNumberThree.setText("");*/
-        startActivity(intent);
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,8 +80,29 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.schedule) {
-            return true;
+        if (id == R.id.scout) {
+            try {
+                dir.mkdir();
+                //can delete when doing the actual thing
+                file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+            } catch (IOException IOE) {
+                Log.e("File error", "Failed to open File");
+                return false;
+            }
+
+            file.println();
+            Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
+            updateSuperData();
+            Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
+            myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
+            System.out.println("sent to firebase");
+            Intent intent = new Intent(this, FieldSetUp.class);
+            intent.putExtra("matchNumber", matchNumber.getText().toString());
+            intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
+            intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
+            intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
+            intent.putExtra("alliance", alliance.getText().toString());
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

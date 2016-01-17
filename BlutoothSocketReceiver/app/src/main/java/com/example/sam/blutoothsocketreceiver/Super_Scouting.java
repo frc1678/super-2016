@@ -2,6 +2,7 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class Super_Scouting extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String defensesOnField;
+    String alliance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +37,19 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumberOne = next.getExtras().getString("teamNumberOne");
         teamNumberTwo = next.getExtras().getString("teamNumberTwo");
         teamNumberThree = next.getExtras().getString("teamNumberThree");
+        alliance = next.getExtras().getString("alliance");
 
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
 
         teamNumber1.setText(teamNumberOne);
+        teamNumber1.setTextColor(Color.BLUE);
         teamNumber2.setText(teamNumberTwo);
+        teamNumber2.setTextColor(Color.BLUE);
         teamNumber3.setText(teamNumberThree);
+        teamNumber3.setTextColor(Color.BLUE);
+
 
         ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control", "Cross Eff."));
         RelativeLayout teamOneRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam1);

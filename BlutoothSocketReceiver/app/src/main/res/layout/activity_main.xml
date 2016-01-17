@@ -20,15 +20,6 @@
             android:textSize="25sp"/>
 
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
-            android:onClick="sendData"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/button" />
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -44,6 +35,7 @@
                 android:text="Blue Alliance"
                 android:textColor="#0000FF"
                 android:textSize="30dp"
+                android:textStyle="bold"
                 android:layout_marginTop="30dp"/>
             <EditText
                 android:id="@+id/teamOneNumber"
@@ -83,30 +75,10 @@
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/view_files_received"
-            android:layout_above="@+id/deleteAll">
+            android:id="@+id/view_files_received">
 
         </ListView>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="delete all"
-            android:id="@+id/deleteAll"
-            android:onClick="deleteAllFiles"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload"
-            android:id="@+id/Upload_File"
-            android:layout_alignTop="@+id/deleteAll"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:clickable="true"
-            android:onClick="upload_Clicked"/>
     </RelativeLayout>
 </LinearLayout>
 

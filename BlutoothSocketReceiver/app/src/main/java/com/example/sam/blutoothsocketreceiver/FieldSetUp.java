@@ -40,6 +40,7 @@ public class FieldSetUp extends ActionBarActivity {
     String teamOneNumber;
     String teamTwoNumber;
     String teamThreeNumber;
+    String alliance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,8 @@ public class FieldSetUp extends ActionBarActivity {
         teamOneNumber = intent.getExtras().getString("teamNumberOne");
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
+        alliance = intent.getExtras().getString("alliance");
+
         toggleButtonList = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         ArrayList<String> defenses = new ArrayList<>(Arrays.asList("P.C", "S.P", "D.B", "C.D.F", "R.T", "R.P", "R.W", "M.T"));
@@ -113,6 +116,7 @@ public class FieldSetUp extends ActionBarActivity {
             next.putExtra("teamNumberOne", teamOneNumber);
             next.putExtra("teamNumberTwo", teamTwoNumber);
             next.putExtra("teamNumberThree", teamThreeNumber);
+            next.putExtra("alliance", alliance);
             System.out.println(data.toString());
             startActivity(next);
 
