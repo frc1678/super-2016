@@ -65,6 +65,7 @@ public class Super_Scouting extends ActionBarActivity {
         for(int k = 0; k < defenses.size(); k++){
             data.add("Cross Eff." +" " + defenses.get(k));
         }
+        data.add("Cross Eff." + " " + "Low Bar");
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);

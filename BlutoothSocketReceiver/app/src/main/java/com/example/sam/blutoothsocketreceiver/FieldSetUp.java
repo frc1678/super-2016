@@ -62,7 +62,7 @@ public class FieldSetUp extends ActionBarActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         for (int i = 0; i < 4; i++) {
             TextView column_number = new TextView(this);
-            column_number.setText(Integer.toString(i + 1));
+            column_number.setText("Defense" + " " + Integer.toString(i + 1));
             LinearLayout columns = new LinearLayout(this);
             columns.setOrientation(LinearLayout.HORIZONTAL);
             columns.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));

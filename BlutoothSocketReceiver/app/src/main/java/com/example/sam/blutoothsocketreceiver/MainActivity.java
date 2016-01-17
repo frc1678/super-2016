@@ -89,20 +89,28 @@ public class MainActivity extends ActionBarActivity {
                 Log.e("File error", "Failed to open File");
                 return false;
             }
-
-            file.println();
-            Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
-            updateSuperData();
-            Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
+            /*Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
             myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
-            System.out.println("sent to firebase");
-            Intent intent = new Intent(this, FieldSetUp.class);
-            intent.putExtra("matchNumber", matchNumber.getText().toString());
-            intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
-            intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
-            intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
-            intent.putExtra("alliance", alliance.getText().toString());
-            startActivity(intent);
+            System.out.println("sent to firebase");*/
+            if (matchNumber.getText().toString().equals("")) {
+                Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
+            } else if (teamNumberOne.getText().toString().equals("")) {
+                Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
+            } else if (teamNumberTwo.getText().toString().equals("")) {
+                Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
+            } else if (teamNumberThree.getText().toString().equals("")) {
+                Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
+            } else {
+                file.println();
+                Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, FieldSetUp.class);
+                intent.putExtra("matchNumber", matchNumber.getText().toString());
+                intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
+                intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
+                intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
+                intent.putExtra("alliance", alliance.getText().toString());
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);
