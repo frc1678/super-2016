@@ -17,8 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.firebase.client.Firebase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,61 +32,58 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class FieldSetUp extends ActionBarActivity {
-    String matchNumber;
-    String teamNumberOne;
-    String teamNumberTwo;
-    String teamNumberThree;
+    List<ToggleButton> toggleButtonList;
+    String matchName;
+    String teamOneNumber;
+    String teamTwoNumber;
+    String teamThreeNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fieldsetup);
         Intent intent = getIntent();
-        matchNumber = (String) savedInstanceState.getSerializable("MATCH_NUMBER");
-        teamNumberOne = (String) savedInstanceState.getSerializable("TEAM_NUMBER_ONE");
-        teamNumberTwo = (String) savedInstanceState.getSerializable("TEAM_NUMBER_TWO");
-        teamNumberThree = (String) savedInstanceState.getSerializable("TEAM_NUMBER_THREE");
+        matchName = intent.getExtras().getString("matchNumber");
+        teamOneNumber = intent.getExtras().getString("teamNumberOne");
+        teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
+        teamThreeNumber = intent.getExtras().getString("teamNumberThree");
+        toggleButtonList = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         ArrayList<String> defenses = new ArrayList<>(Arrays.asList("P.C", "S.P", "D.B", "C.D.F", "R.T", "R.P", "R.W", "M.T"));
-        /*defenses.add(0, "P.C");
-        defenses.add(1, "S.P");
-        defenses.add(2, "D.B");
-        defenses.add(3, "C.D.F");
-        defenses.add(4, "R.T");
-        defenses.add(5, "R.P");
-        defenses.add(6, "R.W");
-        defenses.add(7, "M.T");
-*/
-            LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            for (int i = 0; i < 4; i++) {
-                TextView column_number = new TextView(this);
-                column_number.setText(Integer.toString(i + 1));
-                column_number.setId(i);
-                LinearLayout columns = new LinearLayout(this);
-                columns.setOrientation(LinearLayout.HORIZONTAL);
-                columns.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-                column_number.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-                for (int j = 0; j < 7; j++) {
-                    Button defenseButton = new Button(this);
-                    defenseButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-                    defenseButton.setText(defenses.get(j).toString());
-                    defenseButton.setId(j);
-                    columns.addView(defenseButton);
-                }
-                layout.addView(column_number);
-                layout.addView(columns);
-                System.out.println("10");
+        LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        for (int i = 0; i < 4; i++) {
+            TextView column_number = new TextView(this);
+            column_number.setText(Integer.toString(i + 1));
+            LinearLayout columns = new LinearLayout(this);
+            columns.setOrientation(LinearLayout.HORIZONTAL);
+            columns.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            column_number.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            for (int j = 0; j < 7; j++) {
+                ToggleButton defenseButton = new ToggleButton(this);
+                defenseButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                defenseButton.setText(defenses.get(j).toString());
+                defenseButton.setTextOn(defenses.get(j).toString());
+                defenseButton.setTextOff(defenses.get(j).toString());
+                columns.addView(defenseButton);
+                toggleButtonList.add(defenseButton);
+
             }
-
+            layout.addView(column_number);
+            layout.addView(columns);
+            System.out.println("10");
         }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.superdata, menu);
         return true;
     }
 
@@ -94,19 +95,32 @@ public class FieldSetUp extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent next = new Intent(this,Super_Scouting.class);
-            next.putExtra("MATCH_NUMBER", matchNumber.toString());
-            next.putExtra("TEAM_NUMBER_ONE", teamNumberOne);
-            next.putExtra("TEAM_NUMBER_TWO", teamNumberTwo);
-            next.putExtra("TEAM_NUMBER_THREE", teamNumberThree);
+        if (id == R.id.nextButton) {
+            JSONObject data = new JSONObject();
+            Intent next = new Intent(this, Super_Scouting.class);
+            for(int i = 0; i < toggleButtonList.size(); i++){
+                if(toggleButtonList.get(i).isChecked()){
+                    try {
+                        data.put("defenseChecked", toggleButtonList.get(i).getText().toString());
+                    }catch (JSONException JE){
+                        Log.e("check", "failed to convert to json object");
+                    }
+
+                }
+            }
+            next.putExtra("defenseChecked", data.toString());
+            next.putExtra("matchNumber", matchName);
+            next.putExtra("teamNumberOne", teamOneNumber);
+            next.putExtra("teamNumberTwo", teamTwoNumber);
+            next.putExtra("teamNumberThree", teamThreeNumber);
+            System.out.println(data.toString());
             startActivity(next);
+
+        }
+            return super.onOptionsItemSelected(item);
         }
 
-
-        return super.onOptionsItemSelected(item);
     }
 
-}
 
 

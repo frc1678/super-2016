@@ -90,15 +90,14 @@ public class MainActivity extends ActionBarActivity {
             myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
             System.out.println("sent to firebase");
         Intent intent = new Intent(this, FieldSetUp.class);
-        intent.putExtra("MATCH_NUMBER", matchNumber.getText().toString());
-        intent.putExtra("TEAM_NUMBER_ONE", teamNumberOne.getText().toString());
-        intent.putExtra("TEAM_NUMBER_TWO", teamNumberTwo.getText().toString());
-        intent.putExtra("TEAM_NUMBER_THREE", teamNumberThree.getText().toString());
-
-        matchNumber.setText("");
+        intent.putExtra("matchNumber", matchNumber.getText().toString());
+        intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
+        intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
+        intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
+        /*matchNumber.setText("");
         teamNumberOne.setText("");
         teamNumberTwo.setText("");
-        teamNumberThree.setText("");
+        teamNumberThree.setText("");*/
         startActivity(intent);
     }
 
@@ -107,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.schedule, menu);
         return true;
     }
 
@@ -119,7 +118,7 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.schedule) {
             return true;
         }
 
