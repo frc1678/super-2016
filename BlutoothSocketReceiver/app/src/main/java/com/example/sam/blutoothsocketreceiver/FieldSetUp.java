@@ -41,6 +41,7 @@ public class FieldSetUp extends ActionBarActivity {
     String teamTwoNumber;
     String teamThreeNumber;
     String alliance;
+    ArrayList <String> defensesPicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class FieldSetUp extends ActionBarActivity {
         alliance = intent.getExtras().getString("alliance");
 
         toggleButtonList = new ArrayList<>();
+        defensesPicked = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         ArrayList<String> defenses = new ArrayList<>(Arrays.asList("P.C", "S.P", "D.B", "C.D.F", "R.T", "R.P", "R.W", "M.T"));
 
@@ -99,25 +101,21 @@ public class FieldSetUp extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.nextButton) {
-            JSONObject data = new JSONObject();
             Intent next = new Intent(this, Super_Scouting.class);
             for(int i = 0; i < toggleButtonList.size(); i++){
                 if(toggleButtonList.get(i).isChecked()){
-                    try {
-                        data.put("defenseChecked", toggleButtonList.get(i).getText().toString());
-                    }catch (JSONException JE){
-                        Log.e("check", "failed to convert to json object");
-                    }
-
+                    defensesPicked.add(toggleButtonList.get(i).getText().toString());
                 }
             }
-            next.putExtra("defenseChecked", data.toString());
+            next.putExtra("firstDefensePicked", defensesPicked.get(0));
+            next.putExtra("secondDefensePicked", defensesPicked.get(1));
+            next.putExtra("thirdDefensePicked", defensesPicked.get(2));
+            next.putExtra("fourthDefensePicked", defensesPicked.get(3));
             next.putExtra("matchNumber", matchName);
             next.putExtra("teamNumberOne", teamOneNumber);
             next.putExtra("teamNumberTwo", teamTwoNumber);
             next.putExtra("teamNumberThree", teamThreeNumber);
             next.putExtra("alliance", alliance);
-            System.out.println(data.toString());
             startActivity(next);
 
         }

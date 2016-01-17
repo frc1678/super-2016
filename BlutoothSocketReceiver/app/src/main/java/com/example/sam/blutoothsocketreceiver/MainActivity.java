@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.schedule, menu);
+        getMenuInflater().inflate(R.menu.scout, menu);
         return true;
     }
 
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
             try {
                 dir.mkdir();
                 //can delete when doing the actual thing
-                file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+                file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
             } catch (IOException IOE) {
                 Log.e("File error", "Failed to open File");
                 return false;

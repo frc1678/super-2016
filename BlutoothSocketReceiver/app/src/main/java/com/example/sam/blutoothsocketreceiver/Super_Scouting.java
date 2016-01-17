@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -23,8 +24,12 @@ public class Super_Scouting extends ActionBarActivity {
     String teamNumberOne;
     String teamNumberTwo;
     String teamNumberThree;
-    String defensesOnField;
+    String firstDefense;
+    String secondDefense;
+    String thirdDefense;
+    String fourthDefense;
     String alliance;
+    ArrayList <String> defenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +37,17 @@ public class Super_Scouting extends ActionBarActivity {
         setContentView(R.layout.super_scouting);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent next = getIntent();
-        defensesOnField = next.getExtras().getString("defensesChecked");
+
         matchNumber = next.getExtras().getString("matchNumber");
         teamNumberOne = next.getExtras().getString("teamNumberOne");
         teamNumberTwo = next.getExtras().getString("teamNumberTwo");
         teamNumberThree = next.getExtras().getString("teamNumberThree");
         alliance = next.getExtras().getString("alliance");
+        firstDefense = next.getExtras().getString("firstDefensePicked");
+        secondDefense = next.getExtras().getString("secondDefensePicked");
+        thirdDefense = next.getExtras().getString("thirdDefensePicked");
+        fourthDefense = next.getExtras().getString("fourthDefensePicked");
+        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
 
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
@@ -51,44 +61,35 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber3.setTextColor(Color.BLUE);
 
 
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control", "Cross Eff."));
-        RelativeLayout teamOneRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam1);
-        RelativeLayout teamTwoRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam2);
-        RelativeLayout teamThreeRelativeLayout = (RelativeLayout) findViewById(R.id.scoutTeam3);
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
+        for(int k = 0; k < defenses.size(); k++){
+            data.add("Cross Eff." +" " + defenses.get(k));
+        }
+        LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
+        LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
+        LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
 
-        View anchor = teamNumber1;
-        View anchor2 = teamNumber2;
-        View anchor3 = teamNumber3;
 
         for (String title : data) {
-            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
             counter.setId(1 + data.indexOf(title));
-            param.addRule(RelativeLayout.BELOW, anchor.getId());
-            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
             counter.setLayoutParams(param);
             teamOneRelativeLayout.addView(counter);
-            anchor = counter;
         }
         for (String title : data) {
-            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
             counter.setId(2 + data.indexOf(title));
-            param.addRule(RelativeLayout.BELOW, anchor2.getId());
-            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
             counter.setLayoutParams(param);
             teamTwoRelativeLayout.addView(counter);
-            anchor2 = counter;
         }
         for (String title : data) {
-            RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
             counter.setId(2 + data.indexOf(title));
-            param.addRule(RelativeLayout.BELOW, anchor3.getId());
-            param.addRule(RelativeLayout.CENTER_HORIZONTAL);
             counter.setLayoutParams(param);
             teamThreeRelativeLayout.addView(counter);
-            anchor3 = counter;
         }
     }
 
