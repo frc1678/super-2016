@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -84,12 +85,41 @@ public class Super_Scouting extends ActionBarActivity {
         }
     }
 
+
     private View createCounter(String title) {
 
         LayoutInflater inflater = getLayoutInflater();
         View counter = inflater.inflate(R.layout.counter, null);
         TextView dataNameTextView = (TextView)counter.findViewById(R.id.dataName);
         dataNameTextView.setText(title);
+        final TextView incrementor = (TextView) counter.findViewById(R.id.scoreCounter);
+        Button plusButton = (Button)counter.findViewById(R.id.plusButton);
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(incrementor.getText().toString());
+                current++;
+                if(current > 3){
+                    incrementor.setText(Integer.toString(3));
+                }else {
+                    incrementor.setText(Integer.toString(current));
+                }
+            }
+        });
+        Button minusButton = (Button)counter.findViewById(R.id.minusButton);
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(incrementor.getText().toString());
+                current--;
+                if (current < 0) {
+                    incrementor.setText(Integer.toString(0));
+                }else{
+                    incrementor.setText(Integer.toString(current));
+                }
+
+            }
+        });
         return counter;
     }
 
