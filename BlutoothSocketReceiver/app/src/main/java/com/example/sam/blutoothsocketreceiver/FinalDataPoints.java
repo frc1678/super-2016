@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import java.util.ArrayList;
 
 public class FinalDataPoints extends ActionBarActivity {
     String numberOfMatch;
@@ -18,6 +20,13 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String alliance;
+    ArrayList <String> teamOneDataName;
+    ArrayList <String> teamOneDataScore;
+    ArrayList <String> teamTwoDataName;
+    ArrayList <String> teamTwoDataScore;
+    ArrayList <String> teamThreeDataName;
+    ArrayList <String> teamThreeDataScore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +38,13 @@ public class FinalDataPoints extends ActionBarActivity {
         teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
         teamNumberThree = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
+        teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
+        teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
+        teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
+        teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
+        teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
+        teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+
     }
 
     @Override
@@ -63,12 +79,20 @@ public class FinalDataPoints extends ActionBarActivity {
                     toast.show();
                 }
             };
-
+            Log.e("dataNames", teamOneDataName.get(0));
+            Log.e("matchNUmber", numberOfMatch);
+            Log.e("team1", teamNumberOne);
+            Log.e("Key", (teamNumberOne + "Q" + numberOfMatch));
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-            firebaseRef.child("/teamInMatchDatas").child("114Q7").child("teamNumber").setValue(111);
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamName").setValue(teamNumberOne);
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            for (int i = 0; i < teamOneDataName.size(); i++){
+                firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+
+            }
             /*firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(1);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(1);*/
-            Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
 
 
         }

@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:text="Scale"
         android:textSize="20sp"
-        android:layout_below="@id/didScaleTextView"
+        android:layout_below="@id/didCaptureTextView"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

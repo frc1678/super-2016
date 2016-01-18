@@ -82,7 +82,6 @@ public class FieldSetUp extends ActionBarActivity {
             }
             layout.addView(column_number);
             layout.addView(columns);
-            System.out.println("10");
         }
 
     }

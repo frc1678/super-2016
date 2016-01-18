@@ -87,10 +87,10 @@ public class Super_Scouting extends ActionBarActivity {
         teamThreeDataScore = new ArrayList<>();
 
         ArrayList<String> data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
-        for(int k = 0; k < defenses.size(); k++){
+        /*for(int k = 0; k < defenses.size(); k++){
             data.add("Cross Eff." +" " + defenses.get(k));
         }
-        data.add("Cross Eff." + " " + "Low Bar");
+        data.add("Cross Eff." + " " + "Low Bar");*/
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
@@ -186,24 +186,27 @@ public class Super_Scouting extends ActionBarActivity {
             LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
             for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
                 View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
-                dataNameOne = (teamOneLayout.findViewById(R.id.dataName).toString());
-                ranksOfOne = (teamOneLayout.findViewById(R.id.scoreCounter).toString());
-                teamOneDataName.add(dataNameOne);
-                teamOneDataScore.add(ranksOfOne);
+                TextView nameOfData1 = (TextView)teamOneLayout.findViewById(R.id.dataName);
+                TextView scoreOfData1 = (TextView)teamOneLayout.findViewById(R.id.scoreCounter);
+                teamOneDataName.add((nameOfData1.getText().toString()));
+                teamOneDataScore.add(scoreOfData1.getText().toString());
+
             }
             for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
                 View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
-                dataNameTwo = (teamTwoLayout.findViewById(R.id.dataName).toString());
-                ranksOfTwo = (teamTwoLayout.findViewById(R.id.scoreCounter).toString());
-                teamTwoDataName.add(dataNameTwo);
-                teamTwoDataScore.add(ranksOfTwo);
+                TextView nameOfData2 = (TextView)teamTwoLayout.findViewById(R.id.dataName);
+                TextView scoreOfData2 = (TextView)teamTwoLayout.findViewById(R.id.scoreCounter);
+                teamTwoDataName.add(nameOfData2.getText().toString());
+                teamTwoDataScore.add(scoreOfData2.getText().toString());
+
             }
             for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
                 View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
-                dataNameThree = (teamThreeLayout.findViewById(R.id.dataName).toString());
-                ranksOfThree = (teamThreeLayout.findViewById(R.id.scoreCounter).toString());
-                teamThreeDataName.add(dataNameThree);
-                teamThreeDataScore.add(ranksOfThree);
+                TextView nameOfData3 = (TextView)teamThreeLayout.findViewById(R.id.dataName);
+                TextView scoreOfData3 = (TextView)teamThreeLayout.findViewById(R.id.scoreCounter);
+                teamThreeDataName.add(nameOfData3.getText().toString());
+                teamThreeDataScore.add(scoreOfData3.getText().toString());
+
             }
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
             intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
