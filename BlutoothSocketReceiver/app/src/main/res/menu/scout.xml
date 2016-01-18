@@ -6,4 +6,17 @@
         android:id ="@+id/scout"
         android:title="scout"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_settings"
+        app:showAsAction="always"
+        android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/action_fetch_data"
+                android:title="Fetch Schedule Data"/>
+            <item
+                android:id="@+id/action_override"
+                android:title="Override Match and Team Number"/>
+        </menu>
+    </item>
 </menu>

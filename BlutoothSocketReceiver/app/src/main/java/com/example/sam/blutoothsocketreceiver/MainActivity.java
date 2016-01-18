@@ -56,14 +56,25 @@ public class MainActivity extends ActionBarActivity {
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
         file = null;
         changing = (TextView) findViewById(R.id.text);
-        matchNumber = (EditText)findViewById(R.id.matchNumber);
-        teamNumberOne = (EditText)findViewById(R.id.teamOneNumber);
-        teamNumberTwo = (EditText)findViewById(R.id.teamTwoNumber);
-        teamNumberThree = (EditText)findViewById(R.id.teamThreeNumber);
-        alliance = (TextView)findViewById(R.id.allianceName);
+        matchNumber = (EditText) findViewById(R.id.matchNumber);
+        teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
+        teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
+        teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
+        alliance = (TextView) findViewById(R.id.allianceName);
+
+        matchNumber.setText("Q1");
+        teamNumberOne.setText("1678");
+        teamNumberTwo.setText("971");
+        teamNumberThree.setText("118");
+
+        matchNumber.setFocusable(false);
+        teamNumberOne.setFocusable(false);
+        teamNumberTwo.setFocusable(false);
+        teamNumberThree.setFocusable(false);
+
         updateSuperData();
         updateScoutData();
-        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,10 +122,19 @@ public class MainActivity extends ActionBarActivity {
                 intent.putExtra("alliance", alliance.getText().toString());
                 startActivity(intent);
             }
+            if (id == R.id.action_fetch_data) {
+                return true;
+            } else if (id == R.id.action_override) {
+                matchNumber.setFocusableInTouchMode(true);
+                teamNumberOne.setFocusableInTouchMode(true);
+                teamNumberTwo.setFocusableInTouchMode(true);
+                teamNumberThree.setFocusableInTouchMode(true);
+            }
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+            return super.onOptionsItemSelected(item);
+        }
+
     public void updateSuperData(){
         context.runOnUiThread(new Runnable() {
             @Override

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -29,7 +30,15 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
+    String scoreNameOne;
+    String scoreOne;
+    String scoreNameTwo;
+    String scoreTwo;
+    String scoreNameThree;
+    String scoreThree;
     ArrayList <String> defenses;
+    ArrayList <String> dataScore;
+    JSONObject object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class Super_Scouting extends ActionBarActivity {
         setContentView(R.layout.super_scouting);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent next = getIntent();
+        object = new JSONObject();
 
         matchNumber = next.getExtras().getString("matchNumber");
         teamNumberOne = next.getExtras().getString("teamNumberOne");
@@ -48,6 +58,7 @@ public class Super_Scouting extends ActionBarActivity {
         thirdDefense = next.getExtras().getString("thirdDefensePicked");
         fourthDefense = next.getExtras().getString("fourthDefensePicked");
         defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
+        dataScore = new ArrayList<>();
 
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
@@ -150,7 +161,24 @@ public class Super_Scouting extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.submit) {
-            return true;
+            LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
+            LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
+            LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+            for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
+                View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
+                scoreNameOne = (teamOneLayout.findViewById(R.id.dataName).toString());
+                scoreOne = (teamOneLayout.findViewById(R.id.scoreCounter).toString());
+            }
+            for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
+                View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
+                scoreNameTwo = (teamTwoLayout.findViewById(R.id.dataName).toString());
+                scoreTwo = (teamTwoLayout.findViewById(R.id.scoreCounter).toString());
+            }
+            for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
+                View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
+                scoreNameThree = (teamThreeLayout.findViewById(R.id.dataName).toString());
+                scoreThree = (teamThreeLayout.findViewById(R.id.scoreCounter).toString());
+            }
         }
 
         return super.onOptionsItemSelected(item);
