@@ -28,6 +28,9 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList <String> teamTwoDataScore;
     ArrayList <String> teamThreeDataName;
     ArrayList <String> teamThreeDataScore;
+   /* ArrayList <String> teamOneDefenseEff;
+    ArrayList <String> teamTwoDefenseEff;
+    ArrayList <String> teamThreeDefenseEff;*/
     EditText allianceScore;
     ToggleButton captureCheck;
 
@@ -52,6 +55,10 @@ public class FinalDataPoints extends ActionBarActivity {
         allianceScore = (EditText)findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton)findViewById(R.id.captureToggleButton);
 
+        /*teamOneDefenseEff = new ArrayList<>();
+        teamTwoDefenseEff = new ArrayList<>();
+        teamThreeDefenseEff = new ArrayList<>();
+*/
     }
 
     @Override
@@ -102,6 +109,10 @@ public class FinalDataPoints extends ActionBarActivity {
             }
             for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+            }
+            for (int i = 5; i < 9; i++){
+                String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff", "")).toLowerCase();
+                firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(teamOneDataScore.get(i));
             }
             if(captureCheck.isChecked()){
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");

@@ -57,7 +57,7 @@ public class FieldSetUp extends ActionBarActivity {
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("P.C", "S.P", "D.B", "C.D.F", "R.T", "R.P", "R.W", "M.T"));
+        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("PC", "SP", "DB", "CDF", "RT", "RP", "RW", "MT"));
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
         layout.setOrientation(LinearLayout.VERTICAL);
