@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -20,6 +21,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String alliance;
+    EditText allianceScore;
     ArrayList <String> teamOneDataName;
     ArrayList <String> teamOneDataScore;
     ArrayList <String> teamTwoDataName;
@@ -44,6 +46,8 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+
+        allianceScore = (EditText)findViewById(R.id.finalScoreEditText);
 
     }
 
@@ -86,13 +90,13 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
-            for (int i = 0; i < teamOneDataName.size(); i++){
+            for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             }
-            for (int i = 0; i < teamTwoDataName.size(); i++){
+            for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
             }
-            for (int i = 0; i < teamThreeDataName.size(); i++){
+            for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
             /*firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(1);

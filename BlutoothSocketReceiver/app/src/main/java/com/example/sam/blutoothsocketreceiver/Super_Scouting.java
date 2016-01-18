@@ -87,10 +87,10 @@ public class Super_Scouting extends ActionBarActivity {
         teamThreeDataScore = new ArrayList<>();
 
         ArrayList<String> data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
-        /*for(int k = 0; k < defenses.size(); k++){
-            data.add("Cross Eff." +" " + defenses.get(k));
+        for(int k = 0; k < defenses.size(); k++){
+            data.add("Cross Eff" +" " + defenses.get(k));
         }
-        data.add("Cross Eff." + " " + "Low Bar");*/
+        data.add("Cross Eff" + " " + "Low Bar");
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
