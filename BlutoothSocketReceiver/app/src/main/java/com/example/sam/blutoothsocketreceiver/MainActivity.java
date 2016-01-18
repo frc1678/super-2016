@@ -65,10 +65,20 @@ public class MainActivity extends ActionBarActivity {
         /*matchNumber.setFocusable(false);
         teamNumberOne.setFocusable(false);
         teamNumberTwo.setFocusable(false);
-        teamNumberThree.setFocusable(false);
-*/
+        teamNumberThree.setFocusable(false);*/
+        numberOfMatch.setText("12");
+        teamNumberOne.setText("1678");
+        teamNumberTwo.setText("1072");
+        teamNumberThree.setText("1868");
         updateSuperData();
         updateScoutData();
+    }
+
+    public void getScoutData(View view){
+        updateScoutData();
+    }
+    public void getSuperData(View view){
+        updateSuperData();
     }
 
     @Override

@@ -76,9 +76,23 @@
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/view_files_received">
-
-        </ListView>
+            android:id="@+id/view_files_received"
+            android:layout_above="@+id/scoutData"/>
+        <Button
+            android:id="@+id/scoutData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="scout data"
+            android:onClick="getScoutData"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:text = "super data"
+            android:onClick="getSuperData"/>
 
     </RelativeLayout>
 </LinearLayout>

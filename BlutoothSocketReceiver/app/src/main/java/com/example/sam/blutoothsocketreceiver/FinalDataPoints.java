@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -21,13 +22,14 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String alliance;
-    EditText allianceScore;
     ArrayList <String> teamOneDataName;
     ArrayList <String> teamOneDataScore;
     ArrayList <String> teamTwoDataName;
     ArrayList <String> teamTwoDataScore;
     ArrayList <String> teamThreeDataName;
     ArrayList <String> teamThreeDataScore;
+    EditText allianceScore;
+    ToggleButton captureCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class FinalDataPoints extends ActionBarActivity {
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
 
         allianceScore = (EditText)findViewById(R.id.finalScoreEditText);
+        captureCheck = (ToggleButton)findViewById(R.id.captureToggleButton);
 
     }
 
@@ -90,6 +93,7 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
             for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             }
@@ -99,8 +103,9 @@ public class FinalDataPoints extends ActionBarActivity {
             for (int i = 0; i < 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
-            /*firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(1);
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(1);*/
+            if(captureCheck.isChecked()){
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
+            }
                 Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
 
 

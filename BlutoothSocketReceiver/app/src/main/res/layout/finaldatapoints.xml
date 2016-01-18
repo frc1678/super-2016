@@ -39,6 +39,8 @@
         android:text="Scale"
         android:textSize="20sp"
         android:layout_below="@id/didCaptureTextView"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:checked="false"
+        android:id="@+id/captureToggleButton" />
 
 </RelativeLayout>
