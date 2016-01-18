@@ -84,11 +84,16 @@ public class FinalDataPoints extends ActionBarActivity {
             Log.e("team1", teamNumberOne);
             Log.e("Key", (teamNumberOne + "Q" + numberOfMatch));
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamName").setValue(teamNumberOne);
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             for (int i = 0; i < teamOneDataName.size(); i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
-
+            }
+            for (int i = 0; i < teamTwoDataName.size(); i++){
+                firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+            }
+            for (int i = 0; i < teamThreeDataName.size(); i++){
+                firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
             /*firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(1);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(1);*/
