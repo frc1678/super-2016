@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".Super_Scouting">
         </activity>
+        <activity android:name=".FinalDataPoints">
+        </activity>
     </application>
 
 </manifest>

@@ -36,7 +36,7 @@ import java.util.List;
 
 public class FieldSetUp extends ActionBarActivity {
     List<ToggleButton> toggleButtonList;
-    String matchName;
+    String numberOfMatch;
     String teamOneNumber;
     String teamTwoNumber;
     String teamThreeNumber;
@@ -47,7 +47,7 @@ public class FieldSetUp extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fieldsetup);
         Intent intent = getIntent();
-        matchName = intent.getExtras().getString("matchNumber");
+        numberOfMatch = intent.getExtras().getString("matchNumber");
         teamOneNumber = intent.getExtras().getString("teamNumberOne");
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
@@ -111,7 +111,7 @@ public class FieldSetUp extends ActionBarActivity {
             next.putExtra("secondDefensePicked", defensesPicked.get(1));
             next.putExtra("thirdDefensePicked", defensesPicked.get(2));
             next.putExtra("fourthDefensePicked", defensesPicked.get(3));
-            next.putExtra("matchNumber", matchName);
+            next.putExtra("matchNumber", numberOfMatch);
             next.putExtra("teamNumberOne", teamOneNumber);
             next.putExtra("teamNumberTwo", teamTwoNumber);
             next.putExtra("teamNumberThree", teamThreeNumber);

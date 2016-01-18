@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
     Activity context;
     TextView changing;
     PrintWriter file;
-    EditText matchNumber;
+    EditText numberOfMatch;
     EditText teamNumberOne;
     EditText teamNumberTwo;
     EditText teamNumberThree;
@@ -56,22 +56,22 @@ public class MainActivity extends ActionBarActivity {
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
         file = null;
         changing = (TextView) findViewById(R.id.text);
-        matchNumber = (EditText) findViewById(R.id.matchNumber);
+        numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
 
-        matchNumber.setText("Q1");
+        /*matchNumber.setText("Q1");
         teamNumberOne.setText("1678");
         teamNumberTwo.setText("971");
-        teamNumberThree.setText("118");
+        teamNumberThree.setText("118");*/
 
-        matchNumber.setFocusable(false);
+        /*matchNumber.setFocusable(false);
         teamNumberOne.setFocusable(false);
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);
-
+*/
         updateSuperData();
         updateScoutData();
     }
@@ -95,15 +95,13 @@ public class MainActivity extends ActionBarActivity {
             try {
                 dir.mkdir();
                 //can delete when doing the actual thing
-                file = new PrintWriter(new FileOutputStream(new File(dir, matchNumber.getText().toString() + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
+                file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + numberOfMatch.getText().toString() + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
             } catch (IOException IOE) {
                 Log.e("File error", "Failed to open File");
                 return false;
             }
-            /*Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-            myFirebaseRef.child("Super Scout Data").child("Data").setValue("");
-            System.out.println("sent to firebase");*/
-            if (matchNumber.getText().toString().equals("")) {
+
+            if (numberOfMatch.getText().toString().equals("")) {
                 Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
             } else if (teamNumberOne.getText().toString().equals("")) {
                 Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
@@ -113,9 +111,10 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
             } else {
                 file.println();
+                updateSuperData();
                 Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FieldSetUp.class);
-                intent.putExtra("matchNumber", matchNumber.getText().toString());
+                intent.putExtra("matchNumber", numberOfMatch.getText().toString());
                 intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
                 intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
                 intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
@@ -125,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
             if (id == R.id.action_fetch_data) {
                 return true;
             } else if (id == R.id.action_override) {
-                matchNumber.setFocusableInTouchMode(true);
+                numberOfMatch.setFocusableInTouchMode(true);
                 teamNumberOne.setFocusableInTouchMode(true);
                 teamNumberTwo.setFocusableInTouchMode(true);
                 teamNumberThree.setFocusableInTouchMode(true);

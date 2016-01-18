@@ -1,5 +1,6 @@
 package com.example.sam.blutoothsocketreceiver;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -21,7 +22,7 @@ public class Super_Scouting extends ActionBarActivity {
     TextView teamNumber1;
     TextView teamNumber2;
     TextView teamNumber3;
-    String matchNumber;
+    String numberOfMatch;
     String teamNumberOne;
     String teamNumberTwo;
     String teamNumberThree;
@@ -30,12 +31,6 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
-    String scoreNameOne;
-    String scoreOne;
-    String scoreNameTwo;
-    String scoreTwo;
-    String scoreNameThree;
-    String scoreThree;
     ArrayList <String> defenses;
     ArrayList <String> dataScore;
     JSONObject object;
@@ -48,7 +43,7 @@ public class Super_Scouting extends ActionBarActivity {
         Intent next = getIntent();
         object = new JSONObject();
 
-        matchNumber = next.getExtras().getString("matchNumber");
+        numberOfMatch = next.getExtras().getString("matchNumber");
         teamNumberOne = next.getExtras().getString("teamNumberOne");
         teamNumberTwo = next.getExtras().getString("teamNumberTwo");
         teamNumberThree = next.getExtras().getString("teamNumberThree");
@@ -72,7 +67,7 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber3.setTextColor(Color.BLUE);
 
 
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
         for(int k = 0; k < defenses.size(); k++){
             data.add("Cross Eff." +" " + defenses.get(k));
         }
@@ -148,7 +143,7 @@ public class Super_Scouting extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.submit, menu);
+        getMenuInflater().inflate(R.menu.finaldata, menu);
         return true;
     }
 
@@ -160,25 +155,14 @@ public class Super_Scouting extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.submit) {
-            LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
-            LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
-            LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
-            for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
-                View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
-                scoreNameOne = (teamOneLayout.findViewById(R.id.dataName).toString());
-                scoreOne = (teamOneLayout.findViewById(R.id.scoreCounter).toString());
-            }
-            for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
-                View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
-                scoreNameTwo = (teamTwoLayout.findViewById(R.id.dataName).toString());
-                scoreTwo = (teamTwoLayout.findViewById(R.id.scoreCounter).toString());
-            }
-            for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
-                View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
-                scoreNameThree = (teamThreeLayout.findViewById(R.id.dataName).toString());
-                scoreThree = (teamThreeLayout.findViewById(R.id.scoreCounter).toString());
-            }
+        if (id == R.id.finalNext) {
+            Intent intent = new Intent(this, FinalDataPoints.class);
+            intent.putExtra("matchNumber", numberOfMatch);
+            intent.putExtra("teamNumberOne", teamNumberOne);
+            intent.putExtra("teamNumberTwo", teamNumberTwo);
+            intent.putExtra("teamNumberThree", teamNumberThree);
+            intent.putExtra("alliance", alliance);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

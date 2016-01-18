@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/Submit"
-        android:title="Submit"
+        android:id="@+id/finalNext"
+        android:title="Next >>"
         app:showAsAction = "always"/>
 </menu>
