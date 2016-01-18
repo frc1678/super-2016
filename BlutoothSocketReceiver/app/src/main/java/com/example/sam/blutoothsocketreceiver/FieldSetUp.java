@@ -47,6 +47,7 @@ public class FieldSetUp extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fieldsetup);
         Intent intent = getIntent();
+        //get the data the previous activity passed to this one.
         numberOfMatch = intent.getExtras().getString("matchNumber");
         teamOneNumber = intent.getExtras().getString("teamNumberOne");
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
@@ -60,6 +61,7 @@ public class FieldSetUp extends ActionBarActivity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
         layout.setOrientation(LinearLayout.VERTICAL);
+        //create the 4 by 7 of buttons
         for (int i = 0; i < 4; i++) {
             TextView column_number = new TextView(this);
             column_number.setText("Defense" + " " + Integer.toString(i + 1));

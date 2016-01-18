@@ -20,12 +20,13 @@
         android:layout_below="@id/finalScoreTextView"
         android:layout_centerHorizontal="true"
         android:hint="score"
+        android:inputType="number"
         android:textSize="25sp"/>
     <TextView
-        android:id="@+id/didScaleTextView"
+        android:id="@+id/didCaptureTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "Did Scale"
+        android:text = "Did Capture"
         android:textStyle="bold"
         android:textSize="25sp"
         android:layout_alignParentTop="true"

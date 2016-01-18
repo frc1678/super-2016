@@ -62,11 +62,6 @@ public class MainActivity extends ActionBarActivity {
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
 
-        /*matchNumber.setText("Q1");
-        teamNumberOne.setText("1678");
-        teamNumberTwo.setText("971");
-        teamNumberThree.setText("118");*/
-
         /*matchNumber.setFocusable(false);
         teamNumberOne.setFocusable(false);
         teamNumberTwo.setFocusable(false);
@@ -93,14 +88,15 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.scout) {
             try {
+                //make the directory of the file
                 dir.mkdir();
                 //can delete when doing the actual thing
-                file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + numberOfMatch.getText().toString() + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
+                file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch.getText().toString()) + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
             } catch (IOException IOE) {
                 Log.e("File error", "Failed to open File");
                 return false;
             }
-
+            //check to see if all data inputs were filled out before continuing
             if (numberOfMatch.getText().toString().equals("")) {
                 Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
             } else if (teamNumberOne.getText().toString().equals("")) {
@@ -110,6 +106,7 @@ public class MainActivity extends ActionBarActivity {
             } else if (teamNumberThree.getText().toString().equals("")) {
                 Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
             } else {
+                //write to file
                 file.println();
                 updateSuperData();
                 Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();

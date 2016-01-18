@@ -7,25 +7,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import android.widget.Toast;
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-
 
 public class FinalDataPoints extends ActionBarActivity {
-    String scoreNameOne;
-    String scoreOne;
-    String scoreNameTwo;
-    String scoreTwo;
-    String scoreNameThree;
-    String scoreThree;
     String numberOfMatch;
     String teamNumberOne;
     String teamNumberTwo;
@@ -83,24 +70,6 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(1);*/
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
 
-            LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
-            LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
-            LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
-            for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
-                View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
-                scoreNameOne = (teamOneLayout.findViewById(R.id.dataName).toString());
-                scoreOne = (teamOneLayout.findViewById(R.id.scoreCounter).toString());
-            }
-            for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
-                View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
-                scoreNameTwo = (teamTwoLayout.findViewById(R.id.dataName).toString());
-                scoreTwo = (teamTwoLayout.findViewById(R.id.scoreCounter).toString());
-            }
-            for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
-                View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
-                scoreNameThree = (teamThreeLayout.findViewById(R.id.dataName).toString());
-                scoreThree = (teamThreeLayout.findViewById(R.id.scoreCounter).toString());
-            }
 
         }
         return super.onOptionsItemSelected(item);

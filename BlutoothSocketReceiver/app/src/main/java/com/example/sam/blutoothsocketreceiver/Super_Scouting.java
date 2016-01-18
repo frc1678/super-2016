@@ -1,6 +1,5 @@
 package com.example.sam.blutoothsocketreceiver;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -31,8 +30,21 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
+    String dataNameOne;
+    String ranksOfOne;
+    String dataNameTwo;
+    String ranksOfTwo;
+    String dataNameThree;
+    String ranksOfThree;
     ArrayList <String> defenses;
     ArrayList <String> dataScore;
+    ArrayList <String> teamOneDataName;
+    ArrayList <String> teamOneDataScore;
+    ArrayList <String> teamTwoDataName;
+    ArrayList <String> teamTwoDataScore;
+    ArrayList <String> teamThreeDataName;
+    ArrayList <String> teamThreeDataScore;
+
     JSONObject object;
 
     @Override
@@ -52,8 +64,7 @@ public class Super_Scouting extends ActionBarActivity {
         secondDefense = next.getExtras().getString("secondDefensePicked");
         thirdDefense = next.getExtras().getString("thirdDefensePicked");
         fourthDefense = next.getExtras().getString("fourthDefensePicked");
-        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
-        dataScore = new ArrayList<>();
+
 
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
@@ -66,6 +77,14 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber3.setText(teamNumberThree);
         teamNumber3.setTextColor(Color.BLUE);
 
+        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
+        dataScore = new ArrayList<>();
+        teamOneDataName = new ArrayList<>();
+        teamOneDataScore = new ArrayList<>();
+        teamTwoDataName = new ArrayList<>();
+        teamTwoDataScore = new ArrayList<>();
+        teamThreeDataName = new ArrayList<>();
+        teamThreeDataScore = new ArrayList<>();
 
         ArrayList<String> data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
         for(int k = 0; k < defenses.size(); k++){
@@ -162,6 +181,39 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("teamNumberTwo", teamNumberTwo);
             intent.putExtra("teamNumberThree", teamNumberThree);
             intent.putExtra("alliance", alliance);
+            LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
+            LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
+            LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+            for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
+                View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
+                dataNameOne = (teamOneLayout.findViewById(R.id.dataName).toString());
+                ranksOfOne = (teamOneLayout.findViewById(R.id.scoreCounter).toString());
+                teamOneDataName.add(dataNameOne);
+                teamOneDataScore.add(ranksOfOne);
+            }
+            for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
+                View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
+                dataNameTwo = (teamTwoLayout.findViewById(R.id.dataName).toString());
+                ranksOfTwo = (teamTwoLayout.findViewById(R.id.scoreCounter).toString());
+                teamTwoDataName.add(dataNameTwo);
+                teamTwoDataScore.add(ranksOfTwo);
+            }
+            for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
+                View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
+                dataNameThree = (teamThreeLayout.findViewById(R.id.dataName).toString());
+                ranksOfThree = (teamThreeLayout.findViewById(R.id.scoreCounter).toString());
+                teamThreeDataName.add(dataNameThree);
+                teamThreeDataScore.add(ranksOfThree);
+            }
+            intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
+            intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
+
+            intent.putStringArrayListExtra("dataNameTwo", teamTwoDataName);
+            intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
+
+            intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
+            intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
+
             startActivity(intent);
         }
 
