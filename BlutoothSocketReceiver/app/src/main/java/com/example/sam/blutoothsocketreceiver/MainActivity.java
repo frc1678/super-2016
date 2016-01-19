@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         alliance = (TextView) findViewById(R.id.allianceName);
 
         /*matchNumber.setFocusable(false);
-        teamNumberOne.setFocusable(false);
+        teamNumberOne.setFocusable(false);Su
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);*/
         numberOfMatch.setText("12");
@@ -74,10 +74,11 @@ public class MainActivity extends ActionBarActivity {
         updateScoutData();
     }
 
-    public void getScoutData(View view){
+    public void getScoutData(View view) {
         updateScoutData();
     }
-    public void getSuperData(View view){
+
+    public void getSuperData(View view) {
         updateSuperData();
     }
 
@@ -96,6 +97,15 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.changeAlliance){
+            if(alliance.getText().equals("Blue Alliance")) {
+                alliance.setText("Red Alliance");
+                alliance.setTextColor(Color.RED);
+            }else if(alliance.getText().equals("Red Alliance")){
+                alliance.setText("Blue Alliance");
+                alliance.setTextColor(Color.BLUE);
+            }
+        }
         if (id == R.id.scout) {
             try {
                 //make the directory of the file
@@ -139,7 +149,8 @@ public class MainActivity extends ActionBarActivity {
         }
 
             return super.onOptionsItemSelected(item);
-        }
+    }
+
 
     public void updateSuperData(){
         context.runOnUiThread(new Runnable() {

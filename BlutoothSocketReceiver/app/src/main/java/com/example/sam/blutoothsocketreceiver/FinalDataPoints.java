@@ -93,7 +93,7 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
-            firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+
             for (int i = 0; i <= 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             }
@@ -112,9 +112,16 @@ public class FinalDataPoints extends ActionBarActivity {
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamThreeDefenseEff).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
             if(captureCheck.isChecked()){
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
+                if(alliance.equals("Blue Alliance")) {
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+                }else if(alliance.equals("Red Alliance")){
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue("true");
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+
+                }
             }
-                Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
+                         Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
 
 
         }

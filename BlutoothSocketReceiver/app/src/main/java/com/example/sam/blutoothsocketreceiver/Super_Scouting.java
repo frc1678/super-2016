@@ -69,13 +69,21 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
-
-        teamNumber1.setText(teamNumberOne);
-        teamNumber1.setTextColor(Color.BLUE);
-        teamNumber2.setText(teamNumberTwo);
-        teamNumber2.setTextColor(Color.BLUE);
-        teamNumber3.setText(teamNumberThree);
-        teamNumber3.setTextColor(Color.BLUE);
+        if(alliance.equals("Blue Alliance")) {
+            teamNumber1.setText(teamNumberOne);
+            teamNumber1.setTextColor(Color.BLUE);
+            teamNumber2.setText(teamNumberTwo);
+            teamNumber2.setTextColor(Color.BLUE);
+            teamNumber3.setText(teamNumberThree);
+            teamNumber3.setTextColor(Color.BLUE);
+        }else if(alliance.equals("Red Alliance")){
+            teamNumber1.setText(teamNumberOne);
+            teamNumber1.setTextColor(Color.RED);
+            teamNumber2.setText(teamNumberTwo);
+            teamNumber2.setTextColor(Color.RED);
+            teamNumber3.setText(teamNumberThree);
+            teamNumber3.setTextColor(Color.RED);
+        }
 
         defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
         dataScore = new ArrayList<>();

@@ -17,6 +17,11 @@
             <item
                 android:id="@+id/action_override"
                 android:title="Override Match and Team Number"/>
+            <item
+                android:id="@+id/changeAlliance"
+                android:title="Change Alliance"
+                app:showAsAction = "always"/>
+
         </menu>
     </item>
 </menu>
