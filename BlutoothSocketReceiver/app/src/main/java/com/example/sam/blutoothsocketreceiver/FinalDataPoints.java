@@ -112,7 +112,11 @@ public class FinalDataPoints extends ActionBarActivity {
             }
             for (int i = 5; i < 9; i++){
                 String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff", "")).toLowerCase();
-                firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(teamOneDataScore.get(i));
+                String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff", "").toLowerCase();
+                String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff", "").toLowerCase();
+                firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+                firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamTwoDefenseEff).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+                firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamThreeDefenseEff).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
             if(captureCheck.isChecked()){
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
