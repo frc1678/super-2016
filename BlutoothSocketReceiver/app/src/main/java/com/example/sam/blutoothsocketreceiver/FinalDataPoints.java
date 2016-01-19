@@ -28,9 +28,6 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList <String> teamTwoDataScore;
     ArrayList <String> teamThreeDataName;
     ArrayList <String> teamThreeDataScore;
-   /* ArrayList <String> teamOneDefenseEff;
-    ArrayList <String> teamTwoDefenseEff;
-    ArrayList <String> teamThreeDefenseEff;*/
     EditText allianceScore;
     ToggleButton captureCheck;
 
@@ -55,10 +52,6 @@ public class FinalDataPoints extends ActionBarActivity {
         allianceScore = (EditText)findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton)findViewById(R.id.captureToggleButton);
 
-        /*teamOneDefenseEff = new ArrayList<>();
-        teamTwoDefenseEff = new ArrayList<>();
-        teamThreeDefenseEff = new ArrayList<>();
-*/
     }
 
     @Override
@@ -101,16 +94,16 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i <= 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             }
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i <= 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
             }
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i <= 4; i++){
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             }
-            for (int i = 5; i < 9; i++){
+            for (int i = 5; i <= 9; i++){
                 String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff", "")).toLowerCase();
                 String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff", "").toLowerCase();
                 String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff", "").toLowerCase();
