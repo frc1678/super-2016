@@ -2,12 +2,18 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.shaded.fasterxml.jackson.core.JsonParser;
 
 import org.json.JSONException;
@@ -20,6 +26,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 /**
@@ -33,6 +43,11 @@ import org.json.JSONObject;
         String data;
         TextView changing;
         BluetoothSocket socket;
+        DataSnapshot snapshot;
+        Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+        JSONObject gameSchedule = new JSONObject();
+        JSONObject scoutData = new JSONObject();
+
 
         public AcceptThread(Activity context, BluetoothSocket socket) {
             this.socket = socket;
@@ -66,6 +81,51 @@ import org.json.JSONObject;
                         System.out.println("Failed to read Data");
                     }
                     int size = Integer.parseInt(byteSize);
+                    if (size == -1){
+                        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                                // Do nothing if authenticated
+                            }
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
+                                CharSequence text = "Invalid Permissions.";
+                                int duration = Toast.LENGTH_SHORT;
+
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
+                        };
+                        dataBase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                Map<String, JSONObject> usersMap = (HashMap<String, JSONObject>) snapshot.getValue();
+                                JSONObject databaseJSON = new JSONObject(usersMap);
+                                System.out.println(databaseJSON.toString());
+                                PrintWriter schedule = null;
+                                try {
+                                    File scheduleDir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/match_schedule");
+                                    scheduleDir.mkdir();
+                                    schedule = new PrintWriter(new FileOutputStream(new File(scheduleDir, "Schedule.txt")));
+                                    schedule.println(databaseJSON.toString());
+                                    JSONObject redAllianceNumbers = new JSONObject();
+                                    try {
+                                        redAllianceNumbers.put("red", databaseJSON.get("redAllianceTeamNumbers").toString());
+                                        Log.i("redAllianceNumbers", redAllianceNumbers.toString());
+                                    } catch (JSONException jsonE) {
+                                        Log.e("red alliance", "failed to put to JSONObject");
+                                    }
+                                }catch (IOException ioe){
+                                    Log.e("schedule", "failed to write to schedule file");
+                                }
+                            }
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                System.out.println("The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+
+                    }
                     if (socket != null) {
                         data = "";
                         while (true) {
@@ -110,22 +170,22 @@ import org.json.JSONObject;
                                 }
                             });
 
-
-                            Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
-                            myFirebaseRef.child("Scouts Data").child("Byte Size").setValue(Integer.toString(size));
-                            myFirebaseRef.child("Mass String Data").child("Time sent").setValue(new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
-                            try {
-
-                                myFirebaseRef.child("JSON file").setValue( new JSONObject(text));
+                            /*try {
+                                scoutData = new JSONObject(text);
+                                Iterator<String> keys = scoutData.keys();
+                                if( keys.hasNext() ){
+                                    String scoutKeyName = (String)keys.next();// First key in scout's json object
+                                    //dataBase.child("TeamInMatchDatas").child(scoutKeyName).
+                                }
 
                             }catch(JSONException JE){
-                                toasts("Failed to convert data to JSON");
+                                toasts("Failed to send scout data to firebase");
                                 return;
                             }
 
                             System.out.println(" Data Sent to Firebase");
                             toasts("Sent to Firebase");
-
+*/
                         }
                         System.out.println("end");
                         text("end");
