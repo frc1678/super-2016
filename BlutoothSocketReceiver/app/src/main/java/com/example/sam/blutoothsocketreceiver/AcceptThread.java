@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,7 +46,6 @@ import org.json.JSONObject;
         BluetoothSocket socket;
         DataSnapshot snapshot;
         Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-        JSONObject gameSchedule = new JSONObject();
         JSONObject scoutData = new JSONObject();
 
 
@@ -80,7 +80,7 @@ import org.json.JSONObject;
                         text("Failed to read data");
                         System.out.println("Failed to read Data");
                     }
-                    int size = Integer.parseInt(byteSize);
+                    final int size = Integer.parseInt(byteSize);
                     if (size == -1){
                         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                             @Override
@@ -99,25 +99,41 @@ import org.json.JSONObject;
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                Map<String, JSONObject> usersMap = (HashMap<String, JSONObject>) snapshot.getValue();
-                                JSONObject databaseJSON = new JSONObject(usersMap);
-                                System.out.println(databaseJSON.toString());
+                                ArrayList <String> keyName = new ArrayList<>();
                                 PrintWriter schedule = null;
-                                try {
+                                JSONObject matches = new JSONObject();
+                                Iterator<DataSnapshot> iterator = snapshot.child("Matches").getChildren().iterator();
+
+                                while(iterator.hasNext()) {
+                                    DataSnapshot tmp = iterator.next();
+                                    String matchKeys = tmp.getKey();
+                                    try {
+                                        matches.put(matchKeys, dataBase.child("Matches").child(matchKeys).toString());
+                                    }catch (JSONException JE){
+                                        Log.e("schedule", "Failed to put to matches");
+                                    }
+                                }
+                                
+
+                                /*for(int i = 0; i < snapshot.child("Matches").getChildrenCount(); i++ ){
+                                    String keys = snapshot.child("Matches").getKey();
+                                    keyName.add(keys);
+                                }*/
+                                System.out.println(keyName.toString());
+
+                                /*try {
                                     File scheduleDir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/match_schedule");
                                     scheduleDir.mkdir();
                                     schedule = new PrintWriter(new FileOutputStream(new File(scheduleDir, "Schedule.txt")));
-                                    schedule.println(databaseJSON.toString());
-                                    JSONObject redAllianceNumbers = new JSONObject();
-                                    try {
-                                        redAllianceNumbers.put("red", databaseJSON.get("redAllianceTeamNumbers").toString());
-                                        Log.i("redAllianceNumbers", redAllianceNumbers.toString());
-                                    } catch (JSONException jsonE) {
-                                        Log.e("red alliance", "failed to put to JSONObject");
-                                    }
+                                    schedule.println(snapshot.child("Matches").child("1").child("blueAllianceTeamNumbers").getValue());
+                                    schedule.println(snapshot.child("Matches").child("1").child("redAllianceTeamNumbers").getValue());
+
+                                    System.out.println("Blue alliance team numbers:" + " " + snapshot.child("Matches").child("1").child("blueAllianceTeamNumbers").getValue().toString());
+                                    System.out.println("Red alliance team numbers:" + " " + snapshot.child("Matches").child("1").child("redAllianceTeamNumbers").getValue().toString());
+
                                 }catch (IOException ioe){
                                     Log.e("schedule", "failed to write to schedule file");
-                                }
+                                }*/
                             }
                             @Override
                             public void onCancelled(FirebaseError firebaseError) {
