@@ -42,7 +42,6 @@ import org.json.JSONObject;
         Activity context;
         String byteSize;
         String data;
-        TextView changing;
         BluetoothSocket socket;
         DataSnapshot snapshot;
         JSONObject scoutData = new JSONObject();
@@ -76,7 +75,6 @@ import org.json.JSONObject;
                         //get the bytesize from the first line of the data
                         byteSize = reader.readLine();
                     } catch (IOException e) {
-                        text("Failed to read data");
                         System.out.println("Failed to read Data");
                     }
                     final int size = Integer.parseInt(byteSize);
@@ -99,36 +97,35 @@ import org.json.JSONObject;
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                ArrayList <String> keyName = new ArrayList<>();
-                                PrintWriter schedule = null;
-                                JSONObject matches = new JSONObject();
+                                JSONObject blueTeamNumbers = new JSONObject();
+                                JSONObject redTeamNumbers = new JSONObject();
                                 Iterator<DataSnapshot> iterator = snapshot.child("Matches").getChildren().iterator();
 
                                 while(iterator.hasNext()) {
                                     DataSnapshot tmp = iterator.next();
                                     String matchKeys = tmp.getKey();
                                     try {
-                                        matches.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").toString());
+                                        blueTeamNumbers.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").getValue());
+                                        redTeamNumbers.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("redAllianceTeamNumbers").getValue());
                                     }catch (JSONException JE){
                                         Log.e("schedule", "Failed to put to matches");
                                     }
                                 }
+                                try {
+                                    PrintWriter out;
+                                    out = new PrintWriter(socket.getOutputStream(), true);
+                                    out.println(blueTeamNumbers);
+                                    out.flush();
+                                    out.println(redTeamNumbers);
+                                    out.flush();
+                                    toasts("Schedule sent to Scout");
 
-                                System.out.println(matches.toString());
-
-                                /*try {
-                                    File scheduleDir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/match_schedule");
-                                    scheduleDir.mkdir();
-                                    schedule = new PrintWriter(new FileOutputStream(new File(scheduleDir, "Schedule.txt")));
-                                    schedule.println(snapshot.child("Matches").child("1").child("blueAllianceTeamNumbers").getValue());
-                                    schedule.println(snapshot.child("Matches").child("1").child("redAllianceTeamNumbers").getValue());
-
-                                    System.out.println("Blue alliance team numbers:" + " " + snapshot.child("Matches").child("1").child("blueAllianceTeamNumbers").getValue().toString());
-                                    System.out.println("Red alliance team numbers:" + " " + snapshot.child("Matches").child("1").child("redAllianceTeamNumbers").getValue().toString());
-
-                                }catch (IOException ioe){
-                                    Log.e("schedule", "failed to write to schedule file");
-                                }*/
+                                }catch (IOException IOE){
+                                    toasts("Failed to send schedule to scout");
+                                }
+                                /*System.out.println(blueTeamNumbers.toString());
+                                System.out.println(redTeamNumbers.toString());*/
+                                
                             }
                             @Override
                             public void onCancelled(FirebaseError firebaseError) {
@@ -199,29 +196,18 @@ import org.json.JSONObject;
 */
                         }
                         System.out.println("end");
-                        text("end");
                         return;
                     }
                     //file.close();
                     // socket.close();
                 } catch (IOException e) {
                     System.out.println("Failed to handle data");
-                    text("Failed to handle data");
                     Log.getStackTraceString(e);
                     return;
                 }
             }
         }
 
-        public void text(final String change_text) {
-            changing = (TextView)context.findViewById(R.id.text);
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    changing.setText(change_text);
-                }
-            });
-        }
         public void toasts(final String message){
             context.runOnUiThread(new Runnable() {
                 @Override
@@ -241,14 +227,12 @@ import org.json.JSONObject;
                 File[] files = scoutFile.listFiles();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
                 for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                    adapter.add(tmpFile.getName());
                 }
                 ListView listView = (ListView)context.findViewById(R.id.view_files_received);
                 listView.setAdapter(adapter);
             }
         });
-
-
 
     }
 
