@@ -155,7 +155,7 @@ public class MainActivity extends ActionBarActivity {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                 if (!scoutFile.mkdir()) {
                     Log.i("File Info", "Failed to make Directory. Unimportant");
                 }
