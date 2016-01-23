@@ -30,12 +30,6 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
-    String dataNameOne;
-    String ranksOfOne;
-    String dataNameTwo;
-    String ranksOfTwo;
-    String dataNameThree;
-    String ranksOfThree;
     ArrayList <String> defenses;
     ArrayList <String> dataScore;
     ArrayList <String> teamOneDataName;

@@ -45,7 +45,6 @@ import org.json.JSONObject;
         TextView changing;
         BluetoothSocket socket;
         DataSnapshot snapshot;
-        Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
         JSONObject scoutData = new JSONObject();
 
 
@@ -96,6 +95,7 @@ import org.json.JSONObject;
                                 toast.show();
                             }
                         };
+                        final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
@@ -108,18 +108,13 @@ import org.json.JSONObject;
                                     DataSnapshot tmp = iterator.next();
                                     String matchKeys = tmp.getKey();
                                     try {
-                                        matches.put(matchKeys, dataBase.child("Matches").child(matchKeys).toString());
+                                        matches.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").toString());
                                     }catch (JSONException JE){
                                         Log.e("schedule", "Failed to put to matches");
                                     }
                                 }
-                                
 
-                                /*for(int i = 0; i < snapshot.child("Matches").getChildrenCount(); i++ ){
-                                    String keys = snapshot.child("Matches").getKey();
-                                    keyName.add(keys);
-                                }*/
-                                System.out.println(keyName.toString());
+                                System.out.println(matches.toString());
 
                                 /*try {
                                     File scheduleDir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/match_schedule");

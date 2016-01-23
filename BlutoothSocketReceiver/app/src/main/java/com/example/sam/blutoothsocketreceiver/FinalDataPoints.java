@@ -3,18 +3,31 @@ package com.example.sam.blutoothsocketreceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FinalDataPoints extends ActionBarActivity {
     String numberOfMatch;
@@ -22,14 +35,17 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String alliance;
-    ArrayList <String> teamOneDataName;
-    ArrayList <String> teamOneDataScore;
-    ArrayList <String> teamTwoDataName;
-    ArrayList <String> teamTwoDataScore;
-    ArrayList <String> teamThreeDataName;
-    ArrayList <String> teamThreeDataScore;
+    TextView finalScore;
+    ArrayList<String> teamOneDataName;
+    ArrayList<String> teamOneDataScore;
+    ArrayList<String> teamTwoDataName;
+    ArrayList<String> teamTwoDataScore;
+    ArrayList<String> teamThreeDataName;
+    ArrayList<String> teamThreeDataScore;
     EditText allianceScore;
     ToggleButton captureCheck;
+    File dir;
+    PrintWriter file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +58,12 @@ public class FinalDataPoints extends ActionBarActivity {
         teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
         teamNumberThree = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
+        finalScore = (TextView)findViewById(R.id.finalScoreTextView);
+        if(alliance.equals("Blue Alliance")){
+            finalScore.setTextColor(Color.BLUE);
+        }else if(alliance.equals("Red Alliance")){
+            finalScore.setTextColor(Color.RED);
+        }
         teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
         teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
         teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
@@ -49,8 +71,9 @@ public class FinalDataPoints extends ActionBarActivity {
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
 
-        allianceScore = (EditText)findViewById(R.id.finalScoreEditText);
-        captureCheck = (ToggleButton)findViewById(R.id.captureToggleButton);
+        allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
+        captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
+        dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
 
     }
 
@@ -76,6 +99,7 @@ public class FinalDataPoints extends ActionBarActivity {
                 public void onAuthenticated(AuthData authData) {
                     // Do nothing if authenticated
                 }
+
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
                     Context context = getApplicationContext();
@@ -86,47 +110,73 @@ public class FinalDataPoints extends ActionBarActivity {
                     toast.show();
                 }
             };
-            Log.e("dataNames", teamOneDataName.get(0));
-            Log.e("matchNUmber", numberOfMatch);
-            Log.e("team1", teamNumberOne);
-            Log.e("Key", (teamNumberOne + "Q" + numberOfMatch));
+            try {
+
+                file = null;
+                //make the directory of the file
+                dir.mkdir();
+                //can delete when doing the actual thing
+                file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch + " "  + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())))));
+            } catch (IOException IOE) {
+                Log.e("File error", "Failed to open File");
+                return false;
+            }
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberTwo));
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberThree));
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            file.println("Match Number:" + numberOfMatch);
+            file.println("Team 1:" + teamNumberOne);
+            file.println("Team 2" + teamNumberTwo);
+            file.println("Team 3" + teamNumberThree);
 
-            for (int i = 0; i <= 4; i++){
+            for (int i = 0; i <= 4; i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+                file.println(teamOneDataName.get(i) + ":" + teamOneDataScore.get(i));
             }
-            for (int i = 0; i <= 4; i++){
+            for (int i = 0; i <= 4; i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+                file.println(teamTwoDataName.get(i) + ":" + teamTwoDataScore.get(i));
             }
-            for (int i = 0; i <= 4; i++){
+            for (int i = 0; i <= 4; i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+                file.println(teamThreeDataName.get(i) + ":" + teamThreeDataScore.get(i));
             }
-            for (int i = 5; i <= 9; i++){
+            for (int i = 5; i <= 9; i++) {
                 String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff", "")).toLowerCase();
                 String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff", "").toLowerCase();
                 String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff", "").toLowerCase();
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(Integer.parseInt(teamOneDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamTwoDefenseEff).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamThreeDefenseEff).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+                file.println(teamNumberOne + " " + "defense Eff." + ":" + teamOneDataScore.get(i));
+                file.println(teamNumberTwo + " " + "defense Eff." + ":" + teamTwoDataScore.get(i));
+                file.println(teamNumberThree + " " + "defense Eff." + ":" + teamThreeDataScore.get(i));
             }
-            if(captureCheck.isChecked()){
-                if(alliance.equals("Blue Alliance")) {
+            if (captureCheck.isChecked()) {
+                if (alliance.equals("Blue Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-                }else if(alliance.equals("Red Alliance")){
+                    file.println("blueAllianceCapture :" + "true");
+                } else if (alliance.equals("Red Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue("true");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-
+                    file.println("blueAllianceCapture :" + "false");
                 }
             }
-                         Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
 
-
+            Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
+            Intent backToHome = new Intent(this, MainActivity.class);
+            startActivity(backToHome);
         }
-        return super.onOptionsItemSelected(item);
 
+        return super.onOptionsItemSelected(item);
     }
 }
+
+
 

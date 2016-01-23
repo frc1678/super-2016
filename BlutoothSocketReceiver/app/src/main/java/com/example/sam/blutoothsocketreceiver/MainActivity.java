@@ -33,13 +33,11 @@ import com.firebase.client.Firebase;
 public class MainActivity extends ActionBarActivity {
     Activity context;
     TextView changing;
-    PrintWriter file;
     EditText numberOfMatch;
     EditText teamNumberOne;
     EditText teamNumberTwo;
     EditText teamNumberThree;
     TextView alliance;
-    File dir;
 
 
     @Override
@@ -53,25 +51,19 @@ public class MainActivity extends ActionBarActivity {
         Firebase.setAndroidContext(this);
         Firebase myFirebaseRef = new Firebase("https://popping-torch-4659.firebaseio.com");
         myFirebaseRef.keepSynced(true);
-        dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
-        file = null;
         changing = (TextView) findViewById(R.id.text);
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
-
-        /*matchNumber.setFocusable(false);
-        teamNumberOne.setFocusable(false);Su
-        teamNumberTwo.setFocusable(false);
-        teamNumberThree.setFocusable(false);*/
         numberOfMatch.setText("12");
         teamNumberOne.setText("1678");
         teamNumberTwo.setText("1072");
         teamNumberThree.setText("1868");
+        Intent backToHome = getIntent();
         updateSuperData();
-        updateScoutData();
+
     }
 
     public void getScoutData(View view) {
@@ -107,15 +99,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
         if (id == R.id.scout) {
-            try {
-                //make the directory of the file
-                dir.mkdir();
-                //can delete when doing the actual thing
-                file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch.getText().toString()) + " " + new SimpleDateFormat("dd-H:mm:ss").format(new Date()))));
-            } catch (IOException IOE) {
-                Log.e("File error", "Failed to open File");
-                return false;
-            }
+
             //check to see if all data inputs were filled out before continuing
             if (numberOfMatch.getText().toString().equals("")) {
                 Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
@@ -127,9 +111,6 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
             } else {
                 //write to file
-                file.println();
-                updateSuperData();
-                Toast.makeText(context, "Sent to file", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, FieldSetUp.class);
                 intent.putExtra("matchNumber", numberOfMatch.getText().toString());
                 intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
@@ -163,15 +144,12 @@ public class MainActivity extends ActionBarActivity {
                 File[] files = dir.listFiles();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
                 for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                    adapter.add(tmpFile.getName());
                 }
                 ListView listView = (ListView)context.findViewById(R.id.view_files_received);
                 listView.setAdapter(adapter);
             }
         });
-
-
-
     }
     public void updateScoutData(){
         context.runOnUiThread(new Runnable() {
@@ -184,17 +162,14 @@ public class MainActivity extends ActionBarActivity {
                 File[] files = scoutFile.listFiles();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
                 for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName() + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()));
+                    adapter.add(tmpFile.getName());
                 }
                 ListView listView = (ListView)context.findViewById(R.id.view_files_received);
                 listView.setAdapter(adapter);
             }
         });
 
-
-
     }
-
 }
 
 
