@@ -3,6 +3,7 @@ package com.example.sam.blutoothsocketreceiver;
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -42,9 +43,13 @@ import org.json.JSONObject;
     String text;
     String byteSize;
     String data;
-    String key;
+    String firstKey;
+    String keys;
     BluetoothSocket socket;
     DataSnapshot snapshot;
+    JSONObject jsonUnderKey;
+    ArrayList <String> keysInKey;
+    ArrayList <String> valueOfKeys = new ArrayList<>();
 
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
@@ -160,51 +165,53 @@ import org.json.JSONObject;
                         Log.e("Error", "Error message sent");
                         //I the byte size of actual is equal to the byte size received
                     } else {
-                        //can delete when doing actual thing
-                        //file.println(text);
                         out.println("0");
                         out.flush();
-                        context.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, "Data trasnfer success", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        file.println(text);
+                        toasts("Data transfer Success!");
                         toasts("Sent scout data to file");
                         updateScoutData();
                         try {
-                            ArrayList<String> scoutJsonKeys = new ArrayList<>();
                             JSONObject scoutData = new JSONObject(data);
                             System.out.println(scoutData.toString());
                             Iterator getFirstKey = scoutData.keys();
                             while(getFirstKey.hasNext()){
-                                key = (String) getFirstKey.next();
-                                scoutJsonKeys.add(key);
-                                scoutJsonKeys.add(scoutData.keys().next());
+                                firstKey = (String) getFirstKey.next();
+                                try{
+                                    jsonUnderKey = scoutData.getJSONObject(firstKey);
+                                    System.out.println("First Key: " + firstKey);
+                                    System.out.println(jsonUnderKey.toString());
+                                }catch(Exception e){
+                                    Log.e("JSON", "Failed to get first key");
+                                }
                             }
 
-                            System.out.println("Keys:" + " " + scoutJsonKeys.toString());
                         }catch (JSONException JE){
                             Log.e("json Failure", "Failed to convert json string into json object");
                         }
-
-                            /*try {
-                                scoutData = new JSONObject(text);
-                                Iterator<String> keys = scoutData.keys();
-                                if( keys.hasNext() ){
-                                    String scoutKeyName = (String)keys.next();// First key in scout's json object
-                                    //dataBase.child("TeamInMatchDatas").child(scoutKeyName).
-                                }
-
-                            }catch(JSONException JE){
-                                toasts("Failed to send scout data to firebase");
-                                return;
+                        try{
+                            keysInKey = new ArrayList<>();
+                            JSONObject keyNames = new JSONObject(jsonUnderKey.toString());
+                            Iterator getRestOfKeys = keyNames.keys();
+                            while(getRestOfKeys.hasNext()){
+                                keys = (String) getRestOfKeys.next();
+                                keysInKey.add(keys);
                             }
+                            System.out.println("keys in the first key:" + keysInKey.toString());
 
-                            System.out.println(" Data Sent to Firebase");
-                            toasts("Sent to Firebase");
-*/
+                        }catch(JSONException JE){
+                            Log.e("json failure", "Failed to get keys in the first key");
+                        }
+                        valueOfKeys = new ArrayList<>();
+                        for(int i = 0; i < keysInKey.size(); i++){
+                            String nameOfKeys = keysInKey.get(i);
+                            try {
+                                valueOfKeys.add(jsonUnderKey.get(nameOfKeys).toString());
+                            }catch (JSONException JE){
+                                Log.e("json failure", "failed to get value of keys in jsonUnderKey");
+                            }
+                        }
+                        System.out.println(valueOfKeys.toString());
+
                     }
                     System.out.println("end");
                     return;
