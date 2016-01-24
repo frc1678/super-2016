@@ -34,8 +34,11 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberOne;
     String teamNumberTwo;
     String teamNumberThree;
+    String firstDefense;
+    String secondDefense;
+    String thirdDefense;
+    String fourthDefense;
     String alliance;
-    int intMatchNumber;
     TextView finalScore;
     ArrayList<String> teamOneDataName;
     ArrayList<String> teamOneDataScore;
@@ -58,6 +61,10 @@ public class FinalDataPoints extends ActionBarActivity {
         teamNumberOne = intent.getExtras().getString("teamNumberOne");
         teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
         teamNumberThree = intent.getExtras().getString("teamNumberThree");
+        firstDefense = intent.getExtras().getString("firstDefensePicked");
+        secondDefense = intent.getExtras().getString("secondDefensePicked");
+        thirdDefense = intent.getExtras().getString("thirdDefensePicked");
+        fourthDefense = intent.getExtras().getString("fourthDefensePicked");
         alliance = intent.getExtras().getString("alliance");
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         if(alliance.equals("Blue Alliance")){
@@ -129,10 +136,26 @@ public class FinalDataPoints extends ActionBarActivity {
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberThree));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+            if(alliance.equals("Blue Alliance")) {
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(firstDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(secondDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(thirdDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(fourthDefense);
+            }else if(alliance.equals("Red Alliance")){
+                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(firstDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(secondDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(thirdDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(fourthDefense);
+            }
             file.println("Match Number:" + numberOfMatch);
             file.println("Team 1:" + teamNumberOne);
             file.println("Team 2" + teamNumberTwo);
             file.println("Team 3" + teamNumberThree);
+            file.println("first Defense: " + firstDefense);
+            Log.e("second defense", secondDefense);
+            file.println("second Defense: " + secondDefense);
+            file.println("third Defense: " + thirdDefense);
+            file.println("fourth Defense: " + fourthDefense);
 
             for (int i = 0; i <= 4; i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
@@ -171,8 +194,6 @@ public class FinalDataPoints extends ActionBarActivity {
 
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
-            intMatchNumber = Integer.parseInt(numberOfMatch);
-            backToHome.putExtra("nextMatchNumber", Integer.toString(intMatchNumber++));
             backToHome.putExtra("alliance", alliance);
             startActivity(backToHome);
         }

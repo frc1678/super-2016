@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,11 +47,10 @@ import org.json.JSONObject;
     String firstKey;
     String keys;
     BluetoothSocket socket;
-    DataSnapshot snapshot;
     JSONObject jsonUnderKey;
     ArrayList <String> keysInKey;
-    ArrayList <String> valueOfKeys = new ArrayList<>();
-
+    ArrayList <String> valueOfKeys;
+    ArrayList <String> testKeys;
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
@@ -172,7 +172,7 @@ import org.json.JSONObject;
                         updateScoutData();
                         try {
                             JSONObject scoutData = new JSONObject(data);
-                            System.out.println(scoutData.toString());
+                            //System.out.println(scoutData.toString());
                             Iterator getFirstKey = scoutData.keys();
                             while(getFirstKey.hasNext()){
                                 firstKey = (String) getFirstKey.next();
@@ -213,6 +213,10 @@ import org.json.JSONObject;
                         System.out.println(valueOfKeys.toString());
 
                     }
+                    testKeys = new ArrayList<>(Arrays.asList("didScaleTele", "numHighShotsMissedTele", "numHighShotsMissedAuto",
+                            "numHighShotsMadeTele", "didGetDisabled", "numLowShotsMissedTele", "numLowShotsMadeTele", "didGetIncapacitated",
+                            "numBallsKnockedOffMidlineAuto", "didChallengeTele", "numShotsBlockedTele", "numHighShotsMadeAuto", "didReachAuto"));
+
                     System.out.println("end");
                     return;
                 }

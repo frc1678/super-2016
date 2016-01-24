@@ -182,6 +182,10 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("teamNumberOne", teamNumberOne);
             intent.putExtra("teamNumberTwo", teamNumberTwo);
             intent.putExtra("teamNumberThree", teamNumberThree);
+            intent.putExtra("firstDefensePicked", firstDefense);
+            intent.putExtra("secondDefensePicked", secondDefense);
+            intent.putExtra("thirdDefensePicked", thirdDefense);
+            intent.putExtra("fourthDefensePicked", fourthDefense);
             intent.putExtra("alliance", alliance);
             LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
             LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
