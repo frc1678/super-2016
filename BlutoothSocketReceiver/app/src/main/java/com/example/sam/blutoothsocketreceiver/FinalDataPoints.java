@@ -173,7 +173,7 @@ public class FinalDataPoints extends ActionBarActivity {
                 String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff ", "")).toLowerCase();
                 String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff ", "").toLowerCase();
                 String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff ", "").toLowerCase();
-                
+
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(Integer.parseInt(teamOneDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamTwoDefenseEff).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamThreeDefenseEff).setValue(Integer.parseInt(teamThreeDataScore.get(i)));

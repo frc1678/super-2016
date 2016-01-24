@@ -46,6 +46,7 @@ import org.json.JSONObject;
     String data;
     String firstKey;
     String keys;
+    int index;
     BluetoothSocket socket;
     JSONObject jsonUnderKey;
     ArrayList <String> keysInKey;
@@ -169,6 +170,7 @@ import org.json.JSONObject;
                         out.flush();
                         toasts("Data transfer Success!");
                         toasts("Sent scout data to file");
+                        System.out.println(data);
                         updateScoutData();
                         try {
                             JSONObject scoutData = new JSONObject(data);
@@ -216,10 +218,26 @@ import org.json.JSONObject;
                     testKeys = new ArrayList<>(Arrays.asList("didScaleTele", "numHighShotsMissedTele", "numHighShotsMissedAuto",
                             "numHighShotsMadeTele", "didGetDisabled", "numLowShotsMissedTele", "numLowShotsMadeTele", "didGetIncapacitated",
                             "numBallsKnockedOffMidlineAuto", "didChallengeTele", "numShotsBlockedTele", "numHighShotsMadeAuto", "didReachAuto"));
+                    for(int i = 0; i < testKeys.size(); i++){
+                        index = (keysInKey.indexOf(testKeys.get(i)));
+                        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                                // Do nothing if authenticated
+                            }
 
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
+
+                            }
+                        };
+                        final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(index)).setValue(valueOfKeys.get(index));
+                        }
+                    }
                     System.out.println("end");
                     return;
-                }
                 //file.close();
                 // socket.close();
             } catch (IOException e) {
