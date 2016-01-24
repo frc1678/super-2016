@@ -59,10 +59,10 @@ public class Super_Scouting extends ActionBarActivity {
         thirdDefense = next.getExtras().getString("thirdDefensePicked");
         fourthDefense = next.getExtras().getString("fourthDefensePicked");
 
-
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
+
         if(alliance.equals("Blue Alliance")) {
             teamNumber1.setText(teamNumberOne);
             teamNumber1.setTextColor(Color.BLUE);

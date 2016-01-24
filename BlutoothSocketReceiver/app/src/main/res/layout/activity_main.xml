@@ -16,9 +16,9 @@
             android:id="@+id/matchNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Match #"
+            android:text="1"
             android:inputType="number"
-            android:textSize="25sp"/>
+            android:textSize="30sp"/>
 
 
         <LinearLayout

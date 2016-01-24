@@ -38,13 +38,13 @@ import org.json.JSONObject;
  */
 
     public class AcceptThread extends  Thread {
-    String text;
     Activity context;
+    String text;
     String byteSize;
     String data;
+    String key;
     BluetoothSocket socket;
     DataSnapshot snapshot;
-    JSONObject scoutData = new JSONObject();
 
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
@@ -96,6 +96,7 @@ import org.json.JSONObject;
                         }
                     };
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                    dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                     dataBase.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -147,9 +148,6 @@ import org.json.JSONObject;
                         }
                         //append data to the variable "data"
                         data = data.concat(text + "\n");
-                        System.out.println(data);
-
-                        //text(Integer.toString(size));
                     }
                     //data = data.concat("asdf");
                     //if the actual byte size is different from the byte size received..
@@ -164,7 +162,6 @@ import org.json.JSONObject;
                     } else {
                         //can delete when doing actual thing
                         //file.println(text);
-                        System.out.println(text);
                         out.println("0");
                         out.flush();
                         context.runOnUiThread(new Runnable() {
@@ -176,6 +173,21 @@ import org.json.JSONObject;
                         file.println(text);
                         toasts("Sent scout data to file");
                         updateScoutData();
+                        try {
+                            ArrayList<String> scoutJsonKeys = new ArrayList<>();
+                            JSONObject scoutData = new JSONObject(data);
+                            System.out.println(scoutData.toString());
+                            Iterator getFirstKey = scoutData.keys();
+                            while(getFirstKey.hasNext()){
+                                key = (String) getFirstKey.next();
+                                scoutJsonKeys.add(key);
+                                scoutJsonKeys.add(scoutData.keys().next());
+                            }
+
+                            System.out.println("Keys:" + " " + scoutJsonKeys.toString());
+                        }catch (JSONException JE){
+                            Log.e("json Failure", "Failed to convert json string into json object");
+                        }
 
                             /*try {
                                 scoutData = new JSONObject(text);

@@ -35,6 +35,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberTwo;
     String teamNumberThree;
     String alliance;
+    int intMatchNumber;
     TextView finalScore;
     ArrayList<String> teamOneDataName;
     ArrayList<String> teamOneDataScore;
@@ -122,7 +123,6 @@ public class FinalDataPoints extends ActionBarActivity {
                 return false;
             }
             firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberTwo));
@@ -171,9 +171,11 @@ public class FinalDataPoints extends ActionBarActivity {
 
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
+            intMatchNumber = Integer.parseInt(numberOfMatch);
+            backToHome.putExtra("nextMatchNumber", Integer.toString(intMatchNumber++));
+            backToHome.putExtra("alliance", alliance);
             startActivity(backToHome);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

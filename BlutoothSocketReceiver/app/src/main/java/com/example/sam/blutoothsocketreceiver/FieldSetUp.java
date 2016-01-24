@@ -3,6 +3,7 @@ package com.example.sam.blutoothsocketreceiver;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class FieldSetUp extends ActionBarActivity {
     String teamThreeNumber;
     String alliance;
     ArrayList <String> defensesPicked;
+    ToggleButton defenseButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +73,21 @@ public class FieldSetUp extends ActionBarActivity {
             column_number.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
             for (int j = 0; j < 7; j++) {
-                ToggleButton defenseButton = new ToggleButton(this);
+                defenseButton = new ToggleButton(this);
                 defenseButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
                 defenseButton.setText(defenses.get(j).toString());
                 defenseButton.setTextOn(defenses.get(j).toString());
                 defenseButton.setTextOff(defenses.get(j).toString());
+                defenseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                      if(defenseButton.isChecked()){
+                          defenseButton.setBackgroundColor(Color.MAGENTA);
+                      }else{
+
+                      }
+                    }
+                });
                 columns.addView(defenseButton);
                 toggleButtonList.add(defenseButton);
 
