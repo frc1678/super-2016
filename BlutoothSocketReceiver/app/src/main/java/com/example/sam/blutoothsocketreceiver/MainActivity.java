@@ -51,9 +51,7 @@ public class MainActivity extends ActionBarActivity {
     TextView alliance;
     Firebase dataBase;
     String matchNumber;
-    String nextMatch;
     String chosenAlliance;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +136,16 @@ public class MainActivity extends ActionBarActivity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
-*/
+*/      /*Intent backToHome = getIntent();
+        chosenAlliance = backToHome.getStringExtra("alliance");
+        Log.e("chosen alliance", chosenAlliance);
+        if(chosenAlliance.equals("Blue Alliance")){
+            alliance.setText("Blue Allinace");
+            alliance.setTextColor(Color.BLUE);
+        }else if(chosenAlliance.equals("Red Alliance")){
+            alliance.setText("Red Alliance");
+            alliance.setTextColor(Color.RED);
+        }*/
         updateSuperData();
 
     }

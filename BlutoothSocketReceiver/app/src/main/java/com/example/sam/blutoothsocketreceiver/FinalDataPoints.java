@@ -170,9 +170,10 @@ public class FinalDataPoints extends ActionBarActivity {
                 file.println(teamThreeDataName.get(i) + ":" + teamThreeDataScore.get(i));
             }
             for (int i = 5; i <= 9; i++) {
-                String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff", "")).toLowerCase();
-                String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff", "").toLowerCase();
-                String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff", "").toLowerCase();
+                String teamOneDefenseEff = (teamOneDataName.get(i).replace("Cross Eff ", "")).toLowerCase();
+                String teamTwoDefenseEff = (teamTwoDataName.get(i)).replace("Cross Eff ", "").toLowerCase();
+                String teamThreeDefenseEff = (teamThreeDataName.get(i)).replace("Cross Eff ", "").toLowerCase();
+                
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamOneDefenseEff).setValue(Integer.parseInt(teamOneDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamTwoDefenseEff).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
                 firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("rankDefenseCrossingEffectiveness").child(teamThreeDefenseEff).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
@@ -195,6 +196,7 @@ public class FinalDataPoints extends ActionBarActivity {
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
             backToHome.putExtra("alliance", alliance);
+            Log.e("alliance", alliance);
             startActivity(backToHome);
         }
         return super.onOptionsItemSelected(item);
