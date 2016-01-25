@@ -104,19 +104,10 @@ public class FinalDataPoints extends ActionBarActivity {
             Firebase firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
             Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                 @Override
-                public void onAuthenticated(AuthData authData) {
-                    // Do nothing if authenticated
-                }
+                public void onAuthenticated(AuthData authData) {}
 
                 @Override
-                public void onAuthenticationError(FirebaseError firebaseError) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Invalid Permissions.";
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
+                public void onAuthenticationError(FirebaseError firebaseError) {}
             };
             try {
 

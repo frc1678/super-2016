@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -88,18 +89,9 @@ import org.json.JSONObject;
                 if (size == -1) {
                     Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                         @Override
-                        public void onAuthenticated(AuthData authData) {
-                            // Do nothing if authenticated
-                        }
-
+                        public void onAuthenticated(AuthData authData) {}
                         @Override
-                        public void onAuthenticationError(FirebaseError firebaseError) {
-                            CharSequence text = "Invalid Permissions.";
-                            int duration = Toast.LENGTH_SHORT;
-
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                        }
+                        public void onAuthenticationError(FirebaseError firebaseError) {}
                     };
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                     dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
@@ -132,8 +124,6 @@ import org.json.JSONObject;
                             } catch (IOException IOE) {
                                 toasts("Failed to send schedule to scout");
                             }
-                                /*System.out.println(blueTeamNumbers.toString());
-                                System.out.println(redTeamNumbers.toString());*/
 
                         }
 
@@ -155,7 +145,6 @@ import org.json.JSONObject;
                         //append data to the variable "data"
                         data = data.concat(text + "\n");
                     }
-                    //data = data.concat("asdf");
                     //if the actual byte size is different from the byte size received..
                     if (size != data.length()) {
                         //send error message to scout.
@@ -170,7 +159,7 @@ import org.json.JSONObject;
                         out.flush();
                         toasts("Data transfer Success!");
                         toasts("Sent scout data to file");
-                        System.out.println(data);
+                        //System.out.println(data);
                         updateScoutData();
                         try {
                             JSONObject scoutData = new JSONObject(data);
@@ -222,20 +211,24 @@ import org.json.JSONObject;
                         index = (keysInKey.indexOf(testKeys.get(i)));
                         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                             @Override
-                            public void onAuthenticated(AuthData authData) {
-                                // Do nothing if authenticated
-                            }
-
+                            public void onAuthenticated(AuthData authData) {}
                             @Override
-                            public void onAuthenticationError(FirebaseError firebaseError) {
-
-                            }
+                            public void onAuthenticationError(FirebaseError firebaseError) {}
                         };
                         final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(index)).setValue(valueOfKeys.get(index));
                         }
+                    System.out.println(valueOfKeys.get(3));
+                    String s = valueOfKeys.get(3).replace("[", "").replace("]", "");
+                    List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
+                    System.out.println(myList.toString());
+                    System.out.println(myList.size());
+                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                    for(int i = 0; i < myList.size(); i++){
+                        dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(myList.get(i));
                     }
+                }
                     System.out.println("end");
                     return;
                 //file.close();
