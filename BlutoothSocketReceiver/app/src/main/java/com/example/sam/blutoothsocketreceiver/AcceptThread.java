@@ -224,7 +224,14 @@ import org.json.JSONObject;
                     List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
                     System.out.println(myList.toString());
                     System.out.println(myList.size());
+                    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                        @Override
+                        public void onAuthenticated(AuthData authData) {}
+                        @Override
+                        public void onAuthenticationError(FirebaseError firebaseError) {}
+                    };
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                    dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                     for(int i = 0; i < myList.size(); i++){
                         dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(myList.get(i));
                     }
