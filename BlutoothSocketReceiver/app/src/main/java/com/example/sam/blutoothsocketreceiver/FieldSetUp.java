@@ -78,16 +78,7 @@ public class FieldSetUp extends ActionBarActivity {
                 defenseButton.setText(defenses.get(j).toString());
                 defenseButton.setTextOn(defenses.get(j).toString());
                 defenseButton.setTextOff(defenses.get(j).toString());
-                defenseButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                      if(defenseButton.isChecked()){
-                          defenseButton.setBackgroundColor(Color.MAGENTA);
-                      }else{
 
-                      }
-                    }
-                });
                 columns.addView(defenseButton);
                 toggleButtonList.add(defenseButton);
 

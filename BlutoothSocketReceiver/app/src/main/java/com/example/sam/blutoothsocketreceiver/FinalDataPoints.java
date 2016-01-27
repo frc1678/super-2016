@@ -95,7 +95,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
-            Firebase firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
+            final Firebase firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
             Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData) {}
@@ -142,15 +142,15 @@ public class FinalDataPoints extends ActionBarActivity {
             file.println("third Defense: " + thirdDefense);
             file.println("fourth Defense: " + fourthDefense);
 
-            for (int i = 0; i <= teamOneDataName.size(); i++) {
+            for (int i = 0; i < teamOneDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
                 file.println(teamOneDataName.get(i) + ":" + teamOneDataScore.get(i));
             }
-            for (int i = 0; i <= teamTwoDataName.size(); i++) {
+            for (int i = 0; i < teamTwoDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
                 file.println(teamTwoDataName.get(i) + ":" + teamTwoDataScore.get(i));
             }
-            for (int i = 0; i <= teamThreeDataName.size(); i++) {
+            for (int i = 0; i < teamThreeDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
                 file.println(teamThreeDataName.get(i) + ":" + teamThreeDataScore.get(i));
             }
@@ -166,27 +166,35 @@ public class FinalDataPoints extends ActionBarActivity {
                 file.println(teamNumberTwo + " " + "defense Eff." + ":" + teamTwoDataScore.get(i));
                 file.println(teamNumberThree + " " + "defense Eff." + ":" + teamThreeDataScore.get(i));
             }*/
-            if (captureCheck.isChecked()) {
+            //if (captureCheck.isChecked()) {
+            Log.wtf("test", "upload");
                 if (alliance.equals("Blue Alliance")) {
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue("true");
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false", new Firebase.CompletionListener(){
+                               @Override
+                                public void onComplete(FirebaseError firebaseError, Firebase firebaseRef){
+                                   if(firebaseError != null){
+                                       Log.e("Firebase", "error" + firebaseError.getMessage());
+                                   }else{
+                                       Log.e("Firebase", "Success!");
+                                   }
+                               }
+                            });
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                     file.println("blueAllianceCapture :" + "true");
                 } else if (alliance.equals("Red Alliance")) {
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue("true");
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                     file.println("blueAllianceCapture :" + "false");
                 }
-            }
+            //}
 
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
             backToHome.putExtra("alliance", alliance);
+            backToHome.putExtra("number", numberOfMatch);
             Log.e("alliance", alliance);
             startActivity(backToHome);
         }
         return super.onOptionsItemSelected(item);
     }
 }
-
-
-

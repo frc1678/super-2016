@@ -65,11 +65,29 @@ public class MainActivity extends ActionBarActivity {
         dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
         dataBase.keepSynced(true);
 
+        Intent backToHome = getIntent();
+
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
+
+
+        Integer match = 1;
+        if (backToHome.hasExtra("number")) {
+            match = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
+
+            SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
+            editor.putInt("match_number", match);
+            editor.commit();
+        } else {
+            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+            match = prefs.getInt("match_number", 1);
+        }
+
+        numberOfMatch.setText(Integer.toString(match));
+
         matchNumber = numberOfMatch.getText().toString();
 
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
@@ -108,44 +126,17 @@ public class MainActivity extends ActionBarActivity {
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);
 
-        //After sending match data, it goes back to the first activity and updates the data file to the listview
-        /*Intent backToHome = getIntent();
-        nextMatch = backToHome.getStringExtra("nextMatchNumber");
-        chosenAlliance = backToHome.getStringExtra("alliance");
-        numberOfMatch.setText(nextMatch);
-        dataBase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (chosenAlliance.equals("Blue Alliance")) {
-                    alliance.setText("Blue Alliance");
-                    alliance.setTextColor(Color.BLUE);
-                    teamNumberOne.setText(snapshot.child("Matches").child(nextMatch).child("blueAllianceTeamNumbers").child("0").getValue().toString());
-                    teamNumberTwo.setText(snapshot.child("Matches").child(nextMatch).child("blueAllianceTeamNumbers").child("1").getValue().toString());
-                    teamNumberThree.setText(snapshot.child("Matches").child(nextMatch).child("blueAllianceTeamNumbers").child("2").getValue().toString());
-                }else if(chosenAlliance.equals("Red Alliance")){
-                    alliance.setText("Red Alliance");
-                    alliance.setTextColor(Color.RED);
-                    teamNumberOne.setText(snapshot.child("Matches").child(nextMatch).child("redAllianceTeamNumbers").child("0").getValue().toString());
-                    teamNumberTwo.setText(snapshot.child("Matches").child(nextMatch).child("redAllianceTeamNumbers").child("1").getValue().toString());
-                    teamNumberThree.setText(snapshot.child("Matches").child(nextMatch).child("redAllianceTeamNumbers").child("2").getValue().toString());
-                }
+        if (backToHome.hasExtra("alliance")) {
+            chosenAlliance = backToHome.getExtras().getString("alliance"); //.getStringExtra("alliance");
+            Log.e("chosen alliance", chosenAlliance);
+            if(chosenAlliance.equals("Blue Alliance")){
+                alliance.setText("Blue Allinace");
+                alliance.setTextColor(Color.BLUE);
+            }else if(chosenAlliance.equals("Red Alliance")){
+                alliance.setText("Red Alliance");
+                alliance.setTextColor(Color.RED);
             }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
-*/      /*Intent backToHome = getIntent();
-        chosenAlliance = backToHome.getStringExtra("alliance");
-        Log.e("chosen alliance", chosenAlliance);
-        if(chosenAlliance.equals("Blue Alliance")){
-            alliance.setText("Blue Allinace");
-            alliance.setTextColor(Color.BLUE);
-        }else if(chosenAlliance.equals("Red Alliance")){
-            alliance.setText("Red Alliance");
-            alliance.setTextColor(Color.RED);
-        }*/
+        }
         updateSuperData();
 
     }
