@@ -59,7 +59,7 @@ public class FieldSetUp extends ActionBarActivity {
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("PC", "SP", "DB", "CDF", "RT", "RP", "RW", "MT"));
+        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("PC", "CDF", "DB", "SP", "RT", "RW", "RP", "MT"));
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -72,12 +72,25 @@ public class FieldSetUp extends ActionBarActivity {
             columns.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
             column_number.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-            for (int j = 0; j < 7; j++) {
+            for (int j = 0; j <= 7; j++) {
                 defenseButton = new ToggleButton(this);
                 defenseButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
                 defenseButton.setText(defenses.get(j).toString());
                 defenseButton.setTextOn(defenses.get(j).toString());
                 defenseButton.setTextOff(defenses.get(j).toString());
+                defenseButton.setTag(Integer.toString(i));
+                defenseButton.setBackgroundColor(Color.LTGRAY);
+                defenseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (int i = 0; i < ((LinearLayout)v.getParent()).getChildCount(); i++) {
+                            ((ToggleButton)((LinearLayout)v.getParent()).getChildAt(i)).setChecked(false);
+                            ((ToggleButton)((LinearLayout)v.getParent()).getChildAt(i)).setBackgroundColor(Color.LTGRAY);
+                        }
+                        ((ToggleButton)v).setChecked(true);
+                        ((ToggleButton)v).setBackgroundColor(Color.GREEN);
+                    }
+                });
 
                 columns.addView(defenseButton);
                 toggleButtonList.add(defenseButton);
