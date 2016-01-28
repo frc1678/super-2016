@@ -67,13 +67,11 @@ public class MainActivity extends ActionBarActivity {
         dataBase.keepSynced(true);
 
         Intent backToHome = getIntent();
-
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
-
 
         Integer match = 1;
         if (backToHome.hasExtra("number")) {
@@ -86,7 +84,6 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             match = prefs.getInt("match_number", 1);
         }
-
         numberOfMatch.setText(Integer.toString(match));
 
         matchNumber = numberOfMatch.getText().toString();
@@ -96,7 +93,6 @@ public class MainActivity extends ActionBarActivity {
             public void onAuthenticated(AuthData authData) {
                 // Do nothing if authenticated
             }
-
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {
                 CharSequence text = "Please Wait...";
@@ -120,7 +116,6 @@ public class MainActivity extends ActionBarActivity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
-
 
         numberOfMatch.setFocusable(false);
         teamNumberOne.setFocusable(false);
@@ -176,7 +171,6 @@ public class MainActivity extends ActionBarActivity {
                         teamNumberTwo.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("1").getValue().toString());
                         teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("2").getValue().toString());
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         System.out.println("The read failed: " + firebaseError.getMessage());
@@ -244,7 +238,7 @@ public class MainActivity extends ActionBarActivity {
                             teamNumberTwo.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("1").getValue().toString());
                             teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("2").getValue().toString());
                         }catch (FirebaseException FE){
-                            Toast.makeText(context, "Error! does this match exist?", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Error! Does this match exist?", Toast.LENGTH_LONG).show();
                         }
                     }else if(alliance.getText().toString().equals("Red Alliance")){
                         try {
@@ -252,7 +246,7 @@ public class MainActivity extends ActionBarActivity {
                             teamNumberTwo.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("1").getValue().toString());
                             teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("2").getValue().toString());
                         }catch (FirebaseException FE){
-                            Toast.makeText(context, "Error! does this match exist?", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Error! Does this match exist?", Toast.LENGTH_LONG).show();
                         }
                     }
                 }

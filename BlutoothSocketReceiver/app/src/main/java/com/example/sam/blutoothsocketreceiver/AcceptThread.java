@@ -17,6 +17,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.shaded.fasterxml.jackson.core.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -53,6 +54,7 @@ import org.json.JSONObject;
     ArrayList <String> keysInKey;
     ArrayList <String> valueOfKeys;
     ArrayList <String> testKeys;
+    PrintWriter file = null;
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
@@ -68,11 +70,9 @@ import org.json.JSONObject;
                 PrintWriter out;
                 out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter file = null;
                 try {
                     File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                     dir.mkdir();
-                    //can delete when doing the actual thing
                     file = new PrintWriter(new FileOutputStream(new File(dir, "Scout_data" + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
                 } catch (IOException IOE) {
                     Log.e("File error", "Failed to open File");
@@ -106,23 +106,38 @@ import org.json.JSONObject;
                                 DataSnapshot tmp = iterator.next();
                                 String matchKeys = tmp.getKey();
                                 try {
-                                    blueTeamNumbers.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").getValue());
-                                    redTeamNumbers.put(matchKeys, snapshot.child("Matches").child(matchKeys).child("redAllianceTeamNumbers").getValue());
+                                    String blueTeams = snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").getValue().toString();
+                                    String redTeams = snapshot.child("Matches").child(matchKeys).child("redAllianceTeamNumbers").getValue().toString();
+                                    blueTeamNumbers.put(matchKeys, new JSONArray(blueTeams));
+                                    redTeamNumbers.put(matchKeys, new JSONArray(redTeams));
                                 } catch (JSONException JE) {
                                     Log.e("schedule", "Failed to put to matches");
+                                    return;
                                 }
+                            }
+                            System.out.println(blueTeamNumbers.toString());
+                            System.out.println(redTeamNumbers.toString());
+
+                            JSONObject data = new JSONObject();
+                            try {
+                                data.put("redTeamNumbers", redTeamNumbers);
+                                data.put("blueTeamNumbers", blueTeamNumbers);
+                            }catch (JSONException JE){
+                                Log.e("JSON Error", "Failed to put redTeamNumbers and blueTeamNumbers to data");
+                                return;
                             }
                             try {
                                 PrintWriter out;
                                 out = new PrintWriter(socket.getOutputStream(), true);
-                                out.println(blueTeamNumbers.toString());
-                                out.flush();
-                                out.println(redTeamNumbers.toString());
+                                out.println(data.toString().length());
+                                out.println(data.toString());
+                                out.println("\0");
                                 out.flush();
                                 toasts("Schedule sent to Scout");
 
                             } catch (IOException IOE) {
                                 toasts("Failed to send schedule to scout");
+                                return;
                             }
 
                         }
@@ -261,7 +276,7 @@ import org.json.JSONObject;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/MassStringText");
+                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                 if (!scoutFile.mkdir()) {
                     Log.i("File Info", "Failed to make Directory. Unimportant");
                 }
