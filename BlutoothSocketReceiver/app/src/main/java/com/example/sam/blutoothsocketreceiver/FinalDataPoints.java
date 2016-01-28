@@ -39,6 +39,9 @@ public class FinalDataPoints extends ActionBarActivity {
     String alliance;
     TextView finalScore;
     JSONObject superExternalData;
+    JSONObject teamOneJson;
+    JSONObject teamTwoJson;
+    JSONObject teamThreeJson;
     ArrayList<String> teamOneDataName;
     ArrayList<String> teamOneDataScore;
     ArrayList<String> teamTwoDataName;
@@ -67,6 +70,9 @@ public class FinalDataPoints extends ActionBarActivity {
         alliance = intent.getExtras().getString("alliance");
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         superExternalData = new JSONObject();
+        teamOneJson = new JSONObject();
+        teamTwoJson = new JSONObject();
+        teamThreeJson = new JSONObject();
         if(alliance.equals("Blue Alliance")){
             finalScore.setTextColor(Color.BLUE);
         }else if(alliance.equals("Red Alliance")){
@@ -143,13 +149,14 @@ public class FinalDataPoints extends ActionBarActivity {
             }
             try {
                 superExternalData.put("matchNumber", numberOfMatch);
-                superExternalData.put("teamOne", teamNumberOne);
-                superExternalData.put("teamTwo", teamNumberTwo);
-                superExternalData.put("teamThree", teamNumberThree);
                 superExternalData.put("defenseOne", firstDefense);
                 superExternalData.put("defenseTwo", secondDefense);
                 superExternalData.put("defenseThree", thirdDefense);
                 superExternalData.put("defenseFour", fourthDefense);
+                superExternalData.put("allianceScore", allianceScore.getText().toString());
+                superExternalData.put("teamOne", teamOneJson);
+                superExternalData.put("teamTwo", teamTwoJson);
+                superExternalData.put("teamThree", teamThreeJson);
 
             }catch(JSONException JE){
                 Log.e("JSON Error", "couldn't put keys and values in json object");
@@ -157,29 +164,41 @@ public class FinalDataPoints extends ActionBarActivity {
 
             for (int i = 0; i < teamOneDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
-                file.println(teamOneDataName.get(i) + ":" + teamOneDataScore.get(i));
+                try {
+                    teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
+                }catch (JSONException JE){
+                    Log.e("JSON ERROR", "teamOne");
+                }
             }
             for (int i = 0; i < teamTwoDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
-                file.println(teamTwoDataName.get(i) + ":" + teamTwoDataScore.get(i));
+                try {
+                    teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
+                }catch (JSONException JE){
+                    Log.e("JSON ERROR", "teamTwo");
+                }
             }
             for (int i = 0; i < teamThreeDataName.size(); i++) {
                 firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
-                file.println(teamThreeDataName.get(i) + ":" + teamThreeDataScore.get(i));
+                try {
+                    teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
+                }catch (JSONException JE){
+                    Log.e("JSON ERROR", "teamThree");
+                }
             }
             Log.wtf("test", "upload");
                 if (alliance.equals("Blue Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-                    file.println("blueAllianceCapture :" + "true");
+
                 } else if (alliance.equals("Red Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-                    file.println("blueAllianceCapture :" + "false");
+
                 }
 
-
-
+            file.println(superExternalData);
+            System.out.println(superExternalData);
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
             backToHome.putExtra("alliance", alliance);

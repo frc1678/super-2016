@@ -53,7 +53,7 @@ import org.json.JSONObject;
     JSONObject jsonUnderKey;
     ArrayList <String> keysInKey;
     ArrayList <String> valueOfKeys;
-    ArrayList <String> testKeys;
+    ArrayList <String> checkKeys;
     PrintWriter file = null;
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
@@ -219,11 +219,12 @@ import org.json.JSONObject;
                         System.out.println(valueOfKeys.toString());
 
                     }
-                    testKeys = new ArrayList<>(Arrays.asList("didScaleTele", "numHighShotsMissedTele", "numHighShotsMissedAuto",
+                    checkKeys = new ArrayList<>(Arrays.asList("didScaleTele", "numHighShotsMissedTele", "numHighShotsMissedAuto",
                             "numHighShotsMadeTele", "didGetDisabled", "numLowShotsMissedTele", "numLowShotsMadeTele", "didGetIncapacitated",
-                            "numBallsKnockedOffMidlineAuto", "didChallengeTele", "numShotsBlockedTele", "numHighShotsMadeAuto", "didReachAuto"));
-                    for(int i = 0; i < testKeys.size(); i++){
-                        index = (keysInKey.indexOf(testKeys.get(i)));
+                            "numBallsKnockedOffMidlineAuto", "didChallengeTele", "numShotsBlockedTele", "numHighShotsMadeAuto", "didReachAuto",
+                            "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
+                    for(int i = 0; i < checkKeys.size(); i++){
+                        index = (keysInKey.indexOf(checkKeys.get(i)));
                         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                             @Override
                             public void onAuthenticated(AuthData authData) {}
@@ -234,8 +235,8 @@ import org.json.JSONObject;
                         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(index)).setValue(valueOfKeys.get(index));
                         }
-                    System.out.println(valueOfKeys.get(3));
-                    String s = valueOfKeys.get(3).replace("[", "").replace("]", "");
+                    System.out.println(valueOfKeys.get(5));
+                    String s = valueOfKeys.get(5).replace("[", "").replace("]", "");
                     List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
                     System.out.println(myList.toString());
                     System.out.println(myList.size());
