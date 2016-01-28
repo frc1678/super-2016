@@ -126,11 +126,14 @@ public class FinalDataPoints extends ActionBarActivity {
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(secondDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(thirdDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(fourthDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("lb");
+
             }else if(alliance.equals("Red Alliance")){
                 firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(firstDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(secondDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(thirdDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(fourthDefense);
+                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("lb");
             }
             file.println("Match Number:" + numberOfMatch);
             file.println("Team 1:" + teamNumberOne);
@@ -169,16 +172,7 @@ public class FinalDataPoints extends ActionBarActivity {
             //if (captureCheck.isChecked()) {
             Log.wtf("test", "upload");
                 if (alliance.equals("Blue Alliance")) {
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false", new Firebase.CompletionListener(){
-                               @Override
-                                public void onComplete(FirebaseError firebaseError, Firebase firebaseRef){
-                                   if(firebaseError != null){
-                                       Log.e("Firebase", "error" + firebaseError.getMessage());
-                                   }else{
-                                       Log.e("Firebase", "Success!");
-                                   }
-                               }
-                            });
+                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                     file.println("blueAllianceCapture :" + "true");
                 } else if (alliance.equals("Red Alliance")) {

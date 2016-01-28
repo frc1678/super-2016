@@ -37,6 +37,7 @@ import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.FirebaseException;
 import com.firebase.client.ValueEventListener;
 
 import org.json.JSONException;
@@ -130,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
             chosenAlliance = backToHome.getExtras().getString("alliance"); //.getStringExtra("alliance");
             Log.e("chosen alliance", chosenAlliance);
             if(chosenAlliance.equals("Blue Alliance")){
-                alliance.setText("Blue Allinace");
+                alliance.setText("Blue Alliance");
                 alliance.setTextColor(Color.BLUE);
             }else if(chosenAlliance.equals("Red Alliance")){
                 alliance.setText("Red Alliance");
@@ -227,6 +228,40 @@ public class MainActivity extends ActionBarActivity {
             teamNumberTwo.setFocusableInTouchMode(true);
             teamNumberThree.setFocusableInTouchMode(true);
         }else if(id == R.id.unoverride){
+            Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                @Override
+                public void onAuthenticated(AuthData authData) {}
+                @Override
+                public void onAuthenticationError(FirebaseError firebaseError) {}
+            };
+            dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+            dataBase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if(alliance.getText().toString().equals("Blue Alliance")) {
+                        try {
+                            teamNumberOne.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("0").getValue().toString());
+                            teamNumberTwo.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("1").getValue().toString());
+                            teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("2").getValue().toString());
+                        }catch (FirebaseException FE){
+                            Toast.makeText(context, "Error! does this match exist?", Toast.LENGTH_LONG).show();
+                        }
+                    }else if(alliance.getText().toString().equals("Red Alliance")){
+                        try {
+                            teamNumberOne.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("0").getValue().toString());
+                            teamNumberTwo.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("1").getValue().toString());
+                            teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("2").getValue().toString());
+                        }catch (FirebaseException FE){
+                            Toast.makeText(context, "Error! does this match exist?", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    System.out.println("The read failed: " + firebaseError.getMessage());
+                }
+            });
             numberOfMatch.setFocusable(false);
             teamNumberOne.setFocusable(false);
             teamNumberTwo.setFocusable(false);
