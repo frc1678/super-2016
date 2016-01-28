@@ -52,6 +52,7 @@ public class FinalDataPoints extends ActionBarActivity {
     ToggleButton captureCheck;
     File dir;
     PrintWriter file;
+    Firebase firebaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,13 @@ public class FinalDataPoints extends ActionBarActivity {
         thirdDefense = intent.getExtras().getString("thirdDefensePicked");
         fourthDefense = intent.getExtras().getString("fourthDefensePicked");
         alliance = intent.getExtras().getString("alliance");
+        teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
+        teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
+        teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
+        teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
+        teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
+        teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         superExternalData = new JSONObject();
         teamOneJson = new JSONObject();
@@ -78,12 +86,15 @@ public class FinalDataPoints extends ActionBarActivity {
         }else if(alliance.equals("Red Alliance")){
             finalScore.setTextColor(Color.RED);
         }
-        teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
-        teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
-        teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
-        teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
-        teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
-        teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {}
+
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {}
+        };
+        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
+        firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
@@ -107,16 +118,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
-            final Firebase firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
-            Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                @Override
-                public void onAuthenticated(AuthData authData) {}
-
-                @Override
-                public void onAuthenticationError(FirebaseError firebaseError) {}
-            };
             try {
-
                 file = null;
                 //make the directory of the file
                 dir.mkdir();
@@ -126,7 +128,6 @@ public class FinalDataPoints extends ActionBarActivity {
                 Log.e("File error", "Failed to open File");
                 return false;
             }
-            firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberTwo));
@@ -197,7 +198,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
                 }
 
-            file.println(superExternalData);
+            file.println(superExternalData.toString());
             System.out.println(superExternalData);
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);

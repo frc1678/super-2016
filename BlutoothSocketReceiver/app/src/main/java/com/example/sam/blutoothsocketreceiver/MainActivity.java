@@ -222,13 +222,6 @@ public class MainActivity extends ActionBarActivity {
             teamNumberTwo.setFocusableInTouchMode(true);
             teamNumberThree.setFocusableInTouchMode(true);
         }else if(id == R.id.unoverride){
-            Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                @Override
-                public void onAuthenticated(AuthData authData) {}
-                @Override
-                public void onAuthenticationError(FirebaseError firebaseError) {}
-            };
-            dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
             dataBase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
