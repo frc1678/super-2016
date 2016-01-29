@@ -49,12 +49,50 @@ import org.json.JSONObject;
     String firstKey;
     String keys;
     int index;
+    int matchNum;
     BluetoothSocket socket;
     JSONObject jsonUnderKey;
-    ArrayList <String> keysInKey;
-    ArrayList <String> valueOfKeys;
-    ArrayList <String> checkKeys;
+    ArrayList<String> keysInKey;
+    ArrayList<String> valueOfKeys;
+    ArrayList<String> checkKeys;
     PrintWriter file = null;
+    JSONArray successDefenseTele;
+    JSONArray failedDefenseTele;
+    JSONArray successDefenseAuto;
+    JSONArray failedDefenseAuto;
+    JSONArray firstSuccessDefenseTele;
+    JSONArray secondSuccessDefenseTele;
+    JSONArray thirdSuccessDefenseTele;
+    JSONArray fourthSuccessDefenseTele;
+    JSONArray fifthSuccessDefenseTele;
+    JSONArray firstFailedDefenseTele;
+    JSONArray secondFailedDefenseTele;
+    JSONArray thirdFailedDefenseTele;
+    JSONArray fourthFailedDefenseTele;
+    JSONArray fifthFailedDefenseTele;
+    JSONArray firstSuccessDefenseAuto;
+    JSONArray secondSuccessDefenseAuto;
+    JSONArray thirdSuccessDefenseAuto;
+    JSONArray fourthSuccessDefenseAuto;
+    JSONArray fifthSuccessDefenseAuto;
+    JSONArray firstFailedDefenseAuto;
+    JSONArray secondFailedDefenseAuto;
+    JSONArray thirdFailedDefenseAuto;
+    JSONArray fourthFailedDefenseAuto;
+    JSONArray fifthFailedDefenseAuto;
+    public static final Map<String, String> defenseCategories = new HashMap<String, String>() {
+        {
+            put("cdf", "a");
+            put("pc", "a");
+            put("mt", "b");
+            put("rp", "b");
+            put("db", "c");
+            put("sp", "c");
+            put("rt", "d");
+            put("rw", "d");
+            put("lb", "e");
+        }
+    };
 
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
@@ -182,6 +220,8 @@ import org.json.JSONObject;
                             Iterator getFirstKey = scoutData.keys();
                             while(getFirstKey.hasNext()){
                                 firstKey = (String) getFirstKey.next();
+                                String[] teamAndMatchNumbers = firstKey.split("Q");
+                                matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
                                 try{
                                     jsonUnderKey = scoutData.getJSONObject(firstKey);
                                     System.out.println("First Key: " + firstKey);
@@ -236,10 +276,10 @@ import org.json.JSONObject;
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(index)).setValue(valueOfKeys.get(index));
                         }
                     System.out.println(valueOfKeys.get(5));
-                    String s = valueOfKeys.get(5).replace("[", "").replace("]", "");
-                    List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
-                    System.out.println(myList.toString());
-                    System.out.println(myList.size());
+                    String ballIntaked = valueOfKeys.get(5).replace("[", "").replace("]", "");
+                    List<String> intakedBalls = new ArrayList<String>(Arrays.asList(ballIntaked.split(",")));
+                    System.out.println(intakedBalls.toString());
+                    System.out.println(intakedBalls.size());
                     Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                         @Override
                         public void onAuthenticated(AuthData authData) {}
@@ -248,9 +288,57 @@ import org.json.JSONObject;
                     };
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                     dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-                    for(int i = 0; i < myList.size(); i++){
-                        dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(myList.get(i));
+                    for(int i = 0; i < intakedBalls.size(); i++){
+                        dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(intakedBalls.get(i));
                     }
+                    try {
+
+                        successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
+                        failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+                        successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
+                        failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+                        firstSuccessDefenseTele = successDefenseTele.getJSONArray(0);
+                        firstFailedDefenseTele = failedDefenseTele.getJSONArray(0);
+                        secondSuccessDefenseTele = successDefenseTele.getJSONArray(1);
+                        secondFailedDefenseTele = failedDefenseTele.getJSONArray(1);
+                        thirdSuccessDefenseTele = successDefenseTele.getJSONArray(2);
+                        thirdFailedDefenseTele = failedDefenseTele.getJSONArray(2);
+                        fourthSuccessDefenseTele = successDefenseTele.getJSONArray(3);
+                        fourthFailedDefenseTele = failedDefenseTele.getJSONArray(3);
+                        fifthSuccessDefenseTele = successDefenseTele.getJSONArray(4);
+                        fifthFailedDefenseTele = failedDefenseTele.getJSONArray(4);
+
+                        firstSuccessDefenseAuto = successDefenseAuto.getJSONArray(0);
+                        firstFailedDefenseAuto = failedDefenseAuto.getJSONArray(0);
+                        secondSuccessDefenseAuto = successDefenseAuto.getJSONArray(1);
+                        secondFailedDefenseAuto = failedDefenseAuto.getJSONArray(1);
+                        thirdSuccessDefenseAuto = successDefenseAuto.getJSONArray(2);
+                        thirdFailedDefenseAuto = failedDefenseAuto.getJSONArray(2);
+                        fourthSuccessDefenseAuto = successDefenseAuto.getJSONArray(3);
+                        fourthFailedDefenseAuto = failedDefenseAuto.getJSONArray(3);
+                        fifthSuccessDefenseAuto = successDefenseAuto.getJSONArray(4);
+                        fifthFailedDefenseAuto = failedDefenseAuto.getJSONArray(4);
+                        dataBase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                String nameOfFirstDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("0").getValue().toString();
+                                String nameOfSecondDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("1").getValue().toString();
+                                String nameOfThirdDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("2").getValue().toString();
+                                String nameOfFourthDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("3").getValue().toString();
+                                String nameOfFifthDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("4").getValue().toString();
+
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                System.out.println("The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+
+                    }catch(JSONException JE){
+
+                    }
+
                 }
                     System.out.println("end");
                     return;
