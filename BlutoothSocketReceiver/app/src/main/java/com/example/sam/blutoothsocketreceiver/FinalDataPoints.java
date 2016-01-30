@@ -1,5 +1,6 @@
 package com.example.sam.blutoothsocketreceiver;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -116,83 +117,94 @@ public class FinalDataPoints extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
-            try {
-                file = null;
-                //make the directory of the file
-                dir.mkdir();
-                //can delete when doing the actual thing
-                file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch + " "  + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())))));
-            } catch (IOException IOE) {
-                Log.e("File error", "Failed to open File");
-                return false;
-            }
-            if(alliance.equals("Blue Alliance")) {
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(firstDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(secondDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(thirdDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(fourthDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
+            final Activity context = this;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        file = null;
+                        //make the directory of the file
+                        dir.mkdir();
+                        //can delete when doing the actual thing
+                        file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch + " "  + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())))));
+                    } catch (IOException IOE) {
+                        Log.e("File error", "Failed to open File");
+                        return;
+                    }
+                    if(alliance.equals("Blue Alliance")) {
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(firstDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(secondDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(thirdDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(fourthDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
 
-            }else if(alliance.equals("Red Alliance")){
-                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(firstDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(secondDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(thirdDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(fourthDefense);
-                firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
-            }
-            try {
-                superExternalData.put("matchNumber", numberOfMatch);
-                superExternalData.put("defenseOne", firstDefense);
-                superExternalData.put("defenseTwo", secondDefense);
-                superExternalData.put("defenseThree", thirdDefense);
-                superExternalData.put("defenseFour", fourthDefense);
-                superExternalData.put(alliance + " Score", allianceScore.getText().toString());
-                superExternalData.put(teamNumberOne, teamOneJson);
-                superExternalData.put(teamNumberTwo, teamTwoJson);
-                superExternalData.put(teamNumberThree, teamThreeJson);
+                    }else if(alliance.equals("Red Alliance")){
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(firstDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(secondDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(thirdDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(fourthDefense);
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
+                    }
+                    try {
+                        superExternalData.put("matchNumber", numberOfMatch);
+                        superExternalData.put("defenseOne", firstDefense);
+                        superExternalData.put("defenseTwo", secondDefense);
+                        superExternalData.put("defenseThree", thirdDefense);
+                        superExternalData.put("defenseFour", fourthDefense);
+                        superExternalData.put(alliance + " Score", allianceScore.getText().toString());
+                        superExternalData.put(teamNumberOne, teamOneJson);
+                        superExternalData.put(teamNumberTwo, teamTwoJson);
+                        superExternalData.put(teamNumberThree, teamThreeJson);
 
-            }catch(JSONException JE){
-                Log.e("JSON Error", "couldn't put keys and values in json object");
-            }
+                    }catch(JSONException JE){
+                        Log.e("JSON Error", "couldn't put keys and values in json object");
+                    }
 
-            for (int i = 0; i < teamOneDataName.size(); i++) {
-                firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
-                try {
-                    teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
-                }catch (JSONException JE){
-                    Log.e("JSON ERROR", "teamOne");
+                    for (int i = 0; i < teamOneDataName.size(); i++) {
+                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+                        try {
+                            teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
+                        }catch (JSONException JE){
+                            Log.e("JSON ERROR", "teamOne");
+                        }
+                    }
+                    for (int i = 0; i < teamTwoDataName.size(); i++) {
+                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+                        try {
+                            teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
+                        }catch (JSONException JE){
+                            Log.e("JSON ERROR", "teamTwo");
+                        }
+                    }
+                    for (int i = 0; i < teamThreeDataName.size(); i++) {
+                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+                        try {
+                            teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
+                        }catch (JSONException JE){
+                            Log.e("JSON ERROR", "teamThree");
+                        }
+                    }
+                        if (alliance.equals("Blue Alliance")) {
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+
+                        } else if (alliance.equals("Red Alliance")) {
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+                        }
+
+                    file.println(superExternalData.toString());
+                    file.close();
+                    System.out.println(superExternalData.toString());
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Sent Match Data", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-            }
-            for (int i = 0; i < teamTwoDataName.size(); i++) {
-                firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
-                try {
-                    teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
-                }catch (JSONException JE){
-                    Log.e("JSON ERROR", "teamTwo");
-                }
-            }
-            for (int i = 0; i < teamThreeDataName.size(); i++) {
-                firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
-                try {
-                    teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
-                }catch (JSONException JE){
-                    Log.e("JSON ERROR", "teamThree");
-                }
-            }
-                if (alliance.equals("Blue Alliance")) {
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-
-                } else if (alliance.equals("Red Alliance")) {
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-                    firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-                }
-
-            file.println(superExternalData.toString());
-            file.close();
-            System.out.println(superExternalData.toString());
-            Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
-            Intent backToHome = new Intent(this, MainActivity.class);
+            }.start();
+            Intent backToHome = new Intent(context, MainActivity.class);
             backToHome.putExtra("alliance", alliance);
             backToHome.putExtra("number", numberOfMatch);
             startActivity(backToHome);

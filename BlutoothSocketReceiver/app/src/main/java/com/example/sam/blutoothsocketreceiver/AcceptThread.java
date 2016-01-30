@@ -126,6 +126,7 @@ import org.json.JSONObject;
                     byteSize = reader.readLine();
                 } catch (IOException e) {
                     System.out.println("Failed to read Data");
+                    return;
                 }
                 final int size = Integer.parseInt(byteSize);
                 //If the scout requests the schedule
@@ -232,6 +233,7 @@ import org.json.JSONObject;
                                     System.out.println(jsonUnderKey.toString());
                                 }catch(Exception e){
                                     Log.e("JSON", "Failed to get first key");
+                                    return;
                                 }
                             }
 
@@ -251,6 +253,7 @@ import org.json.JSONObject;
 
                         }catch(JSONException JE){
                             Log.e("json failure", "Failed to get keys in the first key");
+                            return;
                         }
                         valueOfKeys = new ArrayList<>();
                         //get all the value of the keys in an array list
@@ -260,6 +263,7 @@ import org.json.JSONObject;
                                 valueOfKeys.add(jsonUnderKey.get(nameOfKeys).toString());
                             }catch (JSONException JE){
                                 Log.e("json failure", "failed to get value of keys in jsonUnderKey");
+                                return;
                             }
                         }
                         System.out.println(valueOfKeys.toString());
@@ -291,6 +295,7 @@ import org.json.JSONObject;
                         }
                     }catch(JSONException JE){
                         Log.e("Json failure", "failed to get balls intaked");
+                        return;
                     }
 
                     try {
@@ -393,6 +398,7 @@ import org.json.JSONObject;
 
                     }catch(JSONException JE){
                         Log.e("change", "cant send jsonarray");
+                        return;
                     }
 
                 }

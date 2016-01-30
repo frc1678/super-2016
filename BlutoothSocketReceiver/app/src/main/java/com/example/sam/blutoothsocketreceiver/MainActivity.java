@@ -254,6 +254,7 @@ public class MainActivity extends ActionBarActivity {
                             teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("blueAllianceTeamNumbers").child("2").getValue().toString());
                         }catch (FirebaseException FE){
                             Toast.makeText(context, "Error! Does this match exist?", Toast.LENGTH_LONG).show();
+                            return;
                         }
                     }else if(alliance.getText().toString().equals("Red Alliance")){
                         try {
@@ -262,6 +263,7 @@ public class MainActivity extends ActionBarActivity {
                             teamNumberThree.setText(snapshot.child("Matches").child(numberOfMatch.getText().toString()).child("redAllianceTeamNumbers").child("2").getValue().toString());
                         }catch (FirebaseException FE){
                             Toast.makeText(context, "Error! Does this match exist?", Toast.LENGTH_LONG).show();
+                            return;
                         }
                     }
                 }
