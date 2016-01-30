@@ -126,12 +126,6 @@ public class FinalDataPoints extends ActionBarActivity {
                 Log.e("File error", "Failed to open File");
                 return false;
             }
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberOne));
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberTwo));
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumberThree));
-            firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
             if(alliance.equals("Blue Alliance")) {
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(firstDefense);
                 firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(secondDefense);
