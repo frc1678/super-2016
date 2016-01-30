@@ -341,7 +341,7 @@ import org.json.JSONObject;
                                     String nameOfFourthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("3").getValue().toString()).toLowerCase();
                                     String nameOfFifthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("4").getValue().toString()).toLowerCase();
 
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).setValue(firstSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).setValue(firstSuccessDefenseAuto.toString());
                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseAuto.toString());
                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseAuto.toString());
                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseAuto.toString());
@@ -362,7 +362,7 @@ import org.json.JSONObject;
                         });
 
                     }catch(JSONException JE){
-
+                        Log.e("change", "cant send jsonarray");
                     }
 
                 }
