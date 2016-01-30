@@ -48,13 +48,15 @@ import org.json.JSONObject;
     String data;
     String firstKey;
     String keys;
-    int index;
+    int stringIndex;
+    int intIndex;
     int matchNum;
     BluetoothSocket socket;
     JSONObject jsonUnderKey;
     ArrayList<String> keysInKey;
     ArrayList<String> valueOfKeys;
-    ArrayList<String> checkKeys;
+    ArrayList<String> checkNumKeys;
+    ArrayList<String> checkStringKeys;
     PrintWriter file = null;
     JSONArray successDefenseTele;
     JSONArray failedDefenseTele;
@@ -80,7 +82,8 @@ import org.json.JSONObject;
     JSONArray thirdFailedDefenseAuto;
     JSONArray fourthFailedDefenseAuto;
     JSONArray fifthFailedDefenseAuto;
-    public static final Map<String, String> defenseCategories = new HashMap<String, String>() {
+    Firebase database;
+    Map<String, String> defenseCategories = new HashMap<String, String>(){
         {
             put("cdf", "a");
             put("pc", "a");
@@ -92,8 +95,8 @@ import org.json.JSONObject;
             put("rw", "d");
             put("lb", "e");
         }
-    };
 
+    };
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
         this.context = context;
@@ -259,35 +262,26 @@ import org.json.JSONObject;
                         System.out.println(valueOfKeys.toString());
 
                     }
-                    checkKeys = new ArrayList<>(Arrays.asList("didScaleTele", "numHighShotsMissedTele", "numHighShotsMissedAuto",
-                            "numHighShotsMadeTele", "didGetDisabled", "numLowShotsMissedTele", "numLowShotsMadeTele", "didGetIncapacitated",
-                            "numBallsKnockedOffMidlineAuto", "didChallengeTele", "numShotsBlockedTele", "numHighShotsMadeAuto", "didReachAuto",
+                    checkNumKeys = new ArrayList<>(Arrays.asList("numHighShotsMissedTele", "numHighShotsMissedAuto",
+                            "numHighShotsMadeTele", "numLowShotsMissedTele", "numLowShotsMadeTele",
+                            "numBallsKnockedOffMidlineAuto", "numShotsBlockedTele", "numHighShotsMadeAuto",
                             "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
-                    for(int i = 0; i < checkKeys.size(); i++){
-                        index = (keysInKey.indexOf(checkKeys.get(i)));
-                        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                            @Override
-                            public void onAuthenticated(AuthData authData) {}
-                            @Override
-                            public void onAuthenticationError(FirebaseError firebaseError) {}
-                        };
-                        final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-                        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(index)).setValue(valueOfKeys.get(index));
+                    checkStringKeys = new ArrayList<>(Arrays.asList("didScaleTele", "didGetDisabled", "didGetIncapacitated",
+                            "didChallengeTele", "didReachAuto", "scoutName"));
+                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                    for(int i = 0; i < checkNumKeys.size(); i++){
+                        stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
+                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
                         }
+                    for(int i = 0; i < checkStringKeys.size(); i++){
+                        intIndex = (keysInKey.indexOf(checkStringKeys.get(i)));
+                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
+                    }
                     System.out.println(valueOfKeys.get(5));
                     String ballIntaked = valueOfKeys.get(5).replace("[", "").replace("]", "");
                     List<String> intakedBalls = new ArrayList<String>(Arrays.asList(ballIntaked.split(",")));
                     System.out.println(intakedBalls.toString());
                     System.out.println(intakedBalls.size());
-                    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                        @Override
-                        public void onAuthenticated(AuthData authData) {}
-                        @Override
-                        public void onAuthenticationError(FirebaseError firebaseError) {}
-                    };
-                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-                    dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                     for(int i = 0; i < intakedBalls.size(); i++){
                         dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(intakedBalls.get(i));
                     }
@@ -321,13 +315,23 @@ import org.json.JSONObject;
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                String nameOfFirstDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("0").getValue().toString();
-                                String nameOfSecondDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("1").getValue().toString();
-                                String nameOfThirdDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("2").getValue().toString();
-                                String nameOfFourthDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("3").getValue().toString();
-                                String nameOfFifthDefense = snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("4").getValue().toString();
-                                
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).setValue(firstSuccessDefenseAuto.toString());
+
+                                String nameOfFirstDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("0").getValue().toString()).toLowerCase();
+                                String nameOfSecondDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("1").getValue().toString()).toLowerCase();
+                                String nameOfThirdDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("2").getValue().toString()).toLowerCase();
+                                String nameOfFourthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("3").getValue().toString()).toLowerCase();
+                                String nameOfFifthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("4").getValue().toString()).toLowerCase();
+
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).setValue(firstSuccessDefenseAuto.toString());
+                                Log.e("match Number", Integer.toString(matchNum));
+                                Log.wtf("name of first defense", nameOfFirstDefense);
+                                Log.wtf("name of second defense", nameOfSecondDefense);
+                                Log.wtf("name of third defense", nameOfThirdDefense);
+                                Log.wtf("name of fourth defense", nameOfFourthDefense);
+                                Log.wtf("name of fifth defense", nameOfFifthDefense);
+                                Log.wtf("Category of Second Defense", defenseCategories.get(nameOfSecondDefense));
+                                Log.wtf("Name of second defense", nameOfSecondDefense);
+                                Log.wtf("success times for second defense auto", secondSuccessDefenseAuto.toString());
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseAuto.toString());
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseAuto.toString());
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseAuto.toString());
