@@ -214,7 +214,6 @@ import org.json.JSONObject;
                         out.println("0");
                         out.flush();
                         toasts("Data transfer Success!");
-                        toasts("Sent scout data to file");
                         //System.out.println(data);
                         updateScoutData();
                         try {

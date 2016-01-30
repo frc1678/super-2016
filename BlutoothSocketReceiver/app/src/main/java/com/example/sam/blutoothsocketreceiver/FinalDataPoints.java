@@ -15,10 +15,8 @@ import android.widget.ToggleButton;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -154,10 +152,10 @@ public class FinalDataPoints extends ActionBarActivity {
                 superExternalData.put("defenseTwo", secondDefense);
                 superExternalData.put("defenseThree", thirdDefense);
                 superExternalData.put("defenseFour", fourthDefense);
-                superExternalData.put("allianceScore", allianceScore.getText().toString());
-                superExternalData.put("teamOne", teamOneJson);
-                superExternalData.put("teamTwo", teamTwoJson);
-                superExternalData.put("teamThree", teamThreeJson);
+                superExternalData.put(alliance + " Score", allianceScore.getText().toString());
+                superExternalData.put(teamNumberOne, teamOneJson);
+                superExternalData.put(teamNumberTwo, teamTwoJson);
+                superExternalData.put(teamNumberThree, teamThreeJson);
 
             }catch(JSONException JE){
                 Log.e("JSON Error", "couldn't put keys and values in json object");
@@ -187,7 +185,6 @@ public class FinalDataPoints extends ActionBarActivity {
                     Log.e("JSON ERROR", "teamThree");
                 }
             }
-            Log.wtf("test", "upload");
                 if (alliance.equals("Blue Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
@@ -195,16 +192,15 @@ public class FinalDataPoints extends ActionBarActivity {
                 } else if (alliance.equals("Red Alliance")) {
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
                     firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-
                 }
 
             file.println(superExternalData.toString());
-            System.out.println(superExternalData);
+            file.close();
+            System.out.println(superExternalData.toString());
             Toast.makeText(this, "Sent Match Data", Toast.LENGTH_SHORT).show();
             Intent backToHome = new Intent(this, MainActivity.class);
             backToHome.putExtra("alliance", alliance);
             backToHome.putExtra("number", numberOfMatch);
-            Log.e("alliance", alliance);
             startActivity(backToHome);
         }
         return super.onOptionsItemSelected(item);

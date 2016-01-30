@@ -56,13 +56,10 @@ public class accept_loop extends Thread {
             try {
                 if (mmServerSocket.equals(null)) {
                     System.out.println("Trying to connect...");
-                    text("Trying to connect...");
                     Log.e("serverSocket", "is null");
                 }
                 //otherwise accept the connection and print out 'accepting'
                 System.out.println("accepting...");
-                //text("accepting connection...");
-                toasts("accepting connection");
                 //socket now calls accept() which returns bluetooth socket
                 System.out.println("before .accept");
                 socket = mmServerSocket.accept();

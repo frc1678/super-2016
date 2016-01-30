@@ -85,7 +85,6 @@ public class MainActivity extends ActionBarActivity {
             match = prefs.getInt("match_number", 1);
         }
         numberOfMatch.setText(Integer.toString(match));
-
         matchNumber = numberOfMatch.getText().toString();
 
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
