@@ -283,20 +283,22 @@ import org.json.JSONObject;
                         intIndex = (keysInKey.indexOf(checkStringKeys.get(i)));
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                     }
-                    System.out.println(valueOfKeys.get(6));
-                    String ballIntaked = valueOfKeys.get(6).replace("[", "").replace("]", "");
-                    List<String> intakedBalls = new ArrayList<String>(Arrays.asList(ballIntaked.split(",")));
-                    System.out.println(intakedBalls.toString());
-                    System.out.println(intakedBalls.size());
-                    for(int i = 0; i < intakedBalls.size(); i++){
-                        dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(intakedBalls.get(i));
+                    try {
+                        JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
+                        for (int i = 0; i < balls.length(); i++) {
+                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(balls.get(i));
+
+                        }
+                    }catch(JSONException JE){
+                        Log.e("Json failure", "failed to get balls intaked");
                     }
+
                     try {
                         //get json array containing success and fail times for defense crossing of auto and tele
                         successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
                         failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
                         successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
-                        failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+                        failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
 
                         firstSuccessDefenseTele = successDefenseTele.getJSONArray(0);
                         firstFailedDefenseTele = failedDefenseTele.getJSONArray(0);
