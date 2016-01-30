@@ -38,7 +38,6 @@ public class Super_Scouting extends ActionBarActivity {
     ArrayList <String> teamTwoDataScore;
     ArrayList <String> teamThreeDataName;
     ArrayList <String> teamThreeDataScore;
-
     JSONObject object;
 
     @Override

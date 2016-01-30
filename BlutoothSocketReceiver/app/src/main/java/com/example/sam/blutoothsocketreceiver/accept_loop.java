@@ -41,6 +41,7 @@ public class accept_loop extends Thread {
         this.context = context;
     }
     public void run() {
+        //continously checking for connection
         tmp = null;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         uuid = "f8212682-9a34-11e5-8994-feff819cdc9f";

@@ -53,12 +53,12 @@ import org.json.JSONObject;
     int intIndex;
     int matchNum;
     BluetoothSocket socket;
-    JSONObject jsonUnderKey;
     ArrayList<String> keysInKey;
     ArrayList<String> valueOfKeys;
     ArrayList<String> checkNumKeys;
     ArrayList<String> checkStringKeys;
     PrintWriter file = null;
+    JSONObject jsonUnderKey;
     JSONArray successDefenseTele;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
@@ -83,8 +83,8 @@ import org.json.JSONObject;
     JSONArray thirdFailedDefenseAuto;
     JSONArray fourthFailedDefenseAuto;
     JSONArray fifthFailedDefenseAuto;
-    Firebase database;
     Map<String, String> defenseCategories = new HashMap<String, String>(){
+        //each defense with is own category
         {
             put("cdf", "a");
             put("pc", "a");
@@ -96,7 +96,6 @@ import org.json.JSONObject;
             put("rw", "d");
             put("lb", "e");
         }
-
     };
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
@@ -111,6 +110,7 @@ import org.json.JSONObject;
             try {
                 PrintWriter out;
                 out = new PrintWriter(socket.getOutputStream(), true);
+                //set the out printWriter to send data to scout
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 try {
                     File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
@@ -128,6 +128,7 @@ import org.json.JSONObject;
                     System.out.println("Failed to read Data");
                 }
                 final int size = Integer.parseInt(byteSize);
+                //If the scout requests the schedule
                 if (size == -1) {
                     Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
                         @Override
@@ -157,9 +158,6 @@ import org.json.JSONObject;
                                     return;
                                 }
                             }
-                            System.out.println(blueTeamNumbers.toString());
-                            System.out.println(redTeamNumbers.toString());
-
                             JSONObject data = new JSONObject();
                             try {
                                 data.put("redTeamNumbers", redTeamNumbers);
@@ -171,7 +169,9 @@ import org.json.JSONObject;
                             try {
                                 PrintWriter out;
                                 out = new PrintWriter(socket.getOutputStream(), true);
+                                //Send the schedule length to scout to check
                                 out.println(data.toString().length());
+                                //send the schedule to scout
                                 out.println(data.toString());
                                 out.println("\0");
                                 out.flush();
@@ -218,11 +218,12 @@ import org.json.JSONObject;
                         //System.out.println(data);
                         updateScoutData();
                         try {
+                            //get first key of the scout data that contains the match and the team number
                             JSONObject scoutData = new JSONObject(data);
-                            //System.out.println(scoutData.toString());
                             Iterator getFirstKey = scoutData.keys();
                             while(getFirstKey.hasNext()){
                                 firstKey = (String) getFirstKey.next();
+                                //split first key to get only match number
                                 String[] teamAndMatchNumbers = firstKey.split("Q");
                                 matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
                                 try{
@@ -238,6 +239,7 @@ import org.json.JSONObject;
                             Log.e("json Failure", "Failed to convert json string into json object");
                         }
                         try{
+                            //get arrays of the keys in the json object
                             keysInKey = new ArrayList<>();
                             JSONObject keyNames = new JSONObject(jsonUnderKey.toString());
                             Iterator getRestOfKeys = keyNames.keys();
@@ -251,6 +253,7 @@ import org.json.JSONObject;
                             Log.e("json failure", "Failed to get keys in the first key");
                         }
                         valueOfKeys = new ArrayList<>();
+                        //get all the value of the keys in an array list
                         for(int i = 0; i < keysInKey.size(); i++){
                             String nameOfKeys = keysInKey.get(i);
                             try {
@@ -262,12 +265,14 @@ import org.json.JSONObject;
                         System.out.println(valueOfKeys.toString());
 
                     }
+                    //seperate all keys with int values and string values
                     checkNumKeys = new ArrayList<>(Arrays.asList("numHighShotsMissedTele", "numHighShotsMissedAuto",
                             "numHighShotsMadeTele", "numLowShotsMissedTele", "numLowShotsMadeTele",
                             "numBallsKnockedOffMidlineAuto", "numShotsBlockedTele", "numHighShotsMadeAuto",
                             "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
                     checkStringKeys = new ArrayList<>(Arrays.asList("didScaleTele", "didGetDisabled", "didGetIncapacitated",
                             "didChallengeTele", "didReachAuto", "scoutName"));
+
                     scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                     for(int i = 0; i < checkNumKeys.size(); i++){
@@ -287,11 +292,12 @@ import org.json.JSONObject;
                         dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(intakedBalls.get(i));
                     }
                     try {
-
+                        //get json array containing success and fail times for defense crossing of auto and tele
                         successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
                         failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
                         successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
                         failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+
                         firstSuccessDefenseTele = successDefenseTele.getJSONArray(0);
                         firstFailedDefenseTele = failedDefenseTele.getJSONArray(0);
                         secondSuccessDefenseTele = successDefenseTele.getJSONArray(1);
@@ -322,17 +328,28 @@ import org.json.JSONObject;
                                     String nameOfThirdDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("2").getValue().toString()).toLowerCase();
                                     String nameOfFourthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("3").getValue().toString()).toLowerCase();
                                     String nameOfFifthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child("4").getValue().toString()).toLowerCase();
-
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).setValue(firstSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).setValue(fifthSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).setValue(firstSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).setValue(fifthSuccessDefenseTele.toString());
+                                    //Success times
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).child("successes").setValue(firstSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("successes").setValue(secondSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("successes").setValue(thirdSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("successes").setValue(fourthSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("successes").setValue(fifthSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).child("successes").setValue(firstSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("successes").setValue(secondSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("successes").setValue(thirdSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("successes").setValue(fourthSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("successes").setValue(fifthSuccessDefenseTele.toString());
+                                    //Failed times
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).child("fails").setValue(firstFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("fails").setValue(secondFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("fails").setValue(thirdFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("fails").setValue(fourthFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("fails").setValue(fifthFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).child("fails").setValue(firstFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("fails").setValue(secondFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("fails").setValue(thirdFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("fails").setValue(fourthFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("fails").setValue(fifthFailedDefenseTele.toString());
 
                                 }else if(scoutAlliance.equals("red")){
                                     String nameOfFirstDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("0").getValue().toString()).toLowerCase();
@@ -340,17 +357,28 @@ import org.json.JSONObject;
                                     String nameOfThirdDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("2").getValue().toString()).toLowerCase();
                                     String nameOfFourthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("3").getValue().toString()).toLowerCase();
                                     String nameOfFifthDefense = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child("4").getValue().toString()).toLowerCase();
-
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).setValue(firstSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).setValue(fifthSuccessDefenseAuto.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).setValue(firstSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).setValue(secondSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).setValue(thirdSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).setValue(fourthSuccessDefenseTele.toString());
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).setValue(fifthSuccessDefenseTele.toString());
+                                    //Success times
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).child("successes").setValue(firstSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("successes").setValue(secondSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("successes").setValue(thirdSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("successes").setValue(fourthSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("successes").setValue(fifthSuccessDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).child("successes").setValue(firstSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("successes").setValue(secondSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("successes").setValue(thirdSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("successes").setValue(fourthSuccessDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("successes").setValue(fifthSuccessDefenseTele.toString());
+                                    //Failed times
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense.toLowerCase()).child("fails").setValue(firstFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("fails").setValue(secondFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("fails").setValue(thirdFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("fails").setValue(fourthFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("fails").setValue(fifthFailedDefenseAuto.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFirstDefense)).child(nameOfFirstDefense).child("fails").setValue(firstFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfSecondDefense)).child(nameOfSecondDefense).child("fails").setValue(secondFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfThirdDefense)).child(nameOfThirdDefense).child("fails").setValue(thirdFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFourthDefense)).child(nameOfFourthDefense).child("fails").setValue(fourthFailedDefenseTele.toString());
+                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(nameOfFifthDefense)).child(nameOfFifthDefense).child("fails").setValue(fifthFailedDefenseTele.toString());
                                 }
 
                             }
