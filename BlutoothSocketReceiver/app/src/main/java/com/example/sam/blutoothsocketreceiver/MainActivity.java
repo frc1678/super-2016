@@ -73,6 +73,7 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(context, "Please wait...", Toast.LENGTH_SHORT).show();
             }
         };
+        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
 
         Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
@@ -121,10 +122,9 @@ public class MainActivity extends ActionBarActivity {
         if (backToHome.hasExtra("alliance")) {
             chosenAlliance = backToHome.getExtras().getString("alliance");
             Log.e("chosen alliance", chosenAlliance);
-            if(chosenAlliance.equals("Blue Alliance")){
+            if(chosenAlliance.equals("Blue Alliance")) {
                 alliance.setText("Blue Alliance");
                 alliance.setTextColor(Color.BLUE);
-                dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
                 dataBase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -132,7 +132,6 @@ public class MainActivity extends ActionBarActivity {
                         teamNumberTwo.setText(snapshot.child("Matches").child(matchNumber).child("blueAllianceTeamNumbers").child("1").getValue().toString());
                         teamNumberThree.setText(snapshot.child("Matches").child(matchNumber).child("blueAllianceTeamNumbers").child("2").getValue().toString());
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         System.out.println("The read failed: " + firebaseError.getMessage());
@@ -149,7 +148,6 @@ public class MainActivity extends ActionBarActivity {
                         teamNumberTwo.setText(snapshot.child("Matches").child(matchNumber).child("redAllianceTeamNumbers").child("1").getValue().toString());
                         teamNumberThree.setText(snapshot.child("Matches").child(matchNumber).child("redAllianceTeamNumbers").child("2").getValue().toString());
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         System.out.println("The read failed: " + firebaseError.getMessage());
