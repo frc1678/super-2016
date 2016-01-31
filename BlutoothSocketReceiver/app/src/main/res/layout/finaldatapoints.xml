@@ -13,7 +13,7 @@
         android:textSize="30sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="80dp"/>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:textSize="25sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"/>
+        android:layout_marginTop="190dp"/>
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,10 +47,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Did Breach"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="290dp"/>
+        android:layout_marginTop="300dp"/>
     <ToggleButton
         android:id="@+id/didBreach"
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:layout_centerHorizontal="true"
         android:checked="false"
         android:text="Breach"
-        android:textSize="20dp"/>
+        android:textSize="20sp"/>
 
 
 </RelativeLayout>
