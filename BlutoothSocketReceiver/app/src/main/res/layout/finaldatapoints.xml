@@ -32,7 +32,7 @@
         android:textSize="25sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="240dp"/>
+        android:layout_marginTop="200dp"/>
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,5 +42,24 @@
         android:layout_centerHorizontal="true"
         android:checked="false"
         android:id="@+id/captureToggleButton" />
+    <TextView
+        android:id="@+id/breachTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Did Breach"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="290dp"/>
+    <ToggleButton
+        android:id="@+id/didBreach"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/breachTextView"
+        android:layout_centerHorizontal="true"
+        android:checked="false"
+        android:text="Breach"
+        android:textSize="20dp"/>
+
 
 </RelativeLayout>

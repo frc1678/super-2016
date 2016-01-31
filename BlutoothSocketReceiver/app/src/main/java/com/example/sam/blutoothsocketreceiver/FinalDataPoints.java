@@ -49,6 +49,7 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamThreeDataScore;
     EditText allianceScore;
     ToggleButton captureCheck;
+    ToggleButton breachCheck;
     File dir;
     PrintWriter file;
     Firebase firebaseRef;
@@ -97,6 +98,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
+        breachCheck = (ToggleButton) findViewById(R.id.didBreach);
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
 
     }
@@ -187,10 +189,12 @@ public class FinalDataPoints extends ActionBarActivity {
                     }
                         if (alliance.equals("Blue Alliance")) {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
 
                         } else if (alliance.equals("Red Alliance")) {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                         }
 
