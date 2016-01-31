@@ -63,26 +63,6 @@ import org.json.JSONObject;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
-    JSONArray firstSuccessDefenseTele;
-    JSONArray secondSuccessDefenseTele;
-    JSONArray thirdSuccessDefenseTele;
-    JSONArray fourthSuccessDefenseTele;
-    JSONArray fifthSuccessDefenseTele;
-    JSONArray firstFailedDefenseTele;
-    JSONArray secondFailedDefenseTele;
-    JSONArray thirdFailedDefenseTele;
-    JSONArray fourthFailedDefenseTele;
-    JSONArray fifthFailedDefenseTele;
-    JSONArray firstSuccessDefenseAuto;
-    JSONArray secondSuccessDefenseAuto;
-    JSONArray thirdSuccessDefenseAuto;
-    JSONArray fourthSuccessDefenseAuto;
-    JSONArray fifthSuccessDefenseAuto;
-    JSONArray firstFailedDefenseAuto;
-    JSONArray secondFailedDefenseAuto;
-    JSONArray thirdFailedDefenseAuto;
-    JSONArray fourthFailedDefenseAuto;
-    JSONArray fifthFailedDefenseAuto;
     Map<String, String> defenseCategories = new HashMap<String, String>(){
         //each defense with is own category
         {
@@ -113,6 +93,7 @@ import org.json.JSONObject;
                 //set the out printWriter to send data to scout
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 try {
+                    //make file and directory for Scout data
                     File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                     dir.mkdir();
                     file = new PrintWriter(new FileOutputStream(new File(dir, "Scout_data" + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
@@ -304,32 +285,38 @@ import org.json.JSONObject;
                         failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
                         successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
                         failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
-                        
+
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
+                                //if the scout data is based on blue alliance
                                 if(scoutAlliance.equals("blue")) {
                                     List<String> defenses = new ArrayList<>();
                                     for (int i = 0; i < 5; i++) {
+                                        //get all the defenses for that alliance
                                         String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
                                         defenses.add(tmp);
                                     }
                                     try {
+                                        //write to defense Auto Success times to firebase
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseAuto.get(i).toString());
                                         }
-                                        for (int i = 0; i < successDefenseAuto.length(); i++) {
+                                        //write to defense Auto fail times to firebase;
+                                        for (int i = 0; i < failedDefenseAuto.length(); i++) {
                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseAuto.get(i).toString());
                                         }
-                                        for (int i = 0; i < failedDefenseTele.length(); i++) {
+                                        //write to defense Tele Success time to firebase
+                                        for (int i = 0; i < successDefenseTele.length(); i++) {
                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseTele.get(i).toString());
                                         }
+                                        //write to defense Tele fail time to firebase
                                         for (int i = 0; i < failedDefenseTele.length(); i++) {
                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseTele.get(i).toString());
                                         }
                                     }catch(JSONException JE){
                                         Log.e("json failure", "failed loop blue");
-
+                                        return;
                                     }
 
                                 }else if(scoutAlliance.equals("red")){
@@ -353,12 +340,10 @@ import org.json.JSONObject;
                                         }
                                     }catch(JSONException JE){
                                         Log.e("json failure", "failed loop red");
+                                        return;
                                     }
-
                                 }
-
                             }
-
                             @Override
                             public void onCancelled(FirebaseError firebaseError) {
                                 System.out.println("The read failed: " + firebaseError.getMessage());

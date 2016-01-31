@@ -118,6 +118,7 @@ public class FinalDataPoints extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
             final Activity context = this;
+            //Send the data of the super scout on a separate thread
             new Thread() {
                 @Override
                 public void run() {
