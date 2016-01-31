@@ -44,9 +44,10 @@ public class FieldSetUp extends ActionBarActivity {
     String teamTwoNumber;
     String teamThreeNumber;
     String alliance;
-    ArrayList <String> defensesPicked;
+    ArrayList<String> defensesPicked;
     ToggleButton defenseButton;
     Firebase firebaseRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +88,12 @@ public class FieldSetUp extends ActionBarActivity {
                 defenseButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        for (int i = 0; i < ((LinearLayout)v.getParent()).getChildCount(); i++) {
-                            ((ToggleButton)((LinearLayout)v.getParent()).getChildAt(i)).setChecked(false);
-                            ((ToggleButton)((LinearLayout)v.getParent()).getChildAt(i)).setBackgroundColor(Color.LTGRAY);
+                        for (int i = 0; i < ((LinearLayout) v.getParent()).getChildCount(); i++) {
+                            ((ToggleButton) ((LinearLayout) v.getParent()).getChildAt(i)).setChecked(false);
+                            ((ToggleButton) ((LinearLayout) v.getParent()).getChildAt(i)).setBackgroundColor(Color.LTGRAY);
                         }
-                        ((ToggleButton)v).setChecked(true);
-                        ((ToggleButton)v).setBackgroundColor(Color.GREEN);
+                        ((ToggleButton) v).setChecked(true);
+                        ((ToggleButton) v).setBackgroundColor(Color.GREEN);
                     }
                 });
 
@@ -128,50 +129,55 @@ public class FieldSetUp extends ActionBarActivity {
                     defensesPicked.add(toggleButtonList.get(i).getText().toString());
                 }
             }
-            new Thread() {
-                @Override
-                public void run() {
-                    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                        @Override
-                        public void onAuthenticated(AuthData authData) {
-                        }
+            if (defensesPicked.size() < 4) {
+                Toast.makeText(this, "Input four defenses!!", Toast.LENGTH_LONG).show();
 
-                        @Override
-                        public void onAuthenticationError(FirebaseError firebaseError) {
-                        }
-                    };
-                    firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-                    if (alliance.equals("Blue Alliance")) {
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(2));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(3));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
-                        Log.e("blue alliance", "Sent defense position of Blue");
+            } else if(defensesPicked.size() == 4) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                            }
 
-                    } else if (alliance.equals("Red Alliance")) {
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(defensesPicked.get(0));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(1));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(2));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(3));
-                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
-                        Log.e("red alliance", "Sent defense position of Red");
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
+                            }
+                        };
+                        firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+                        if (alliance.equals("Blue Alliance")) {
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(2));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(3));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
+                            Log.e("blue alliance", "Sent defense position of Blue");
+
+                        } else if (alliance.equals("Red Alliance")) {
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(defensesPicked.get(0));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(1));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(2));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(3));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
+                            Log.e("red alliance", "Sent defense position of Red");
+                        }
                     }
-                }
-            }.start();
+                }.start();
+                    next.putExtra("matchNumber", numberOfMatch);
+                    next.putExtra("teamNumberOne", teamOneNumber);
+                    next.putExtra("teamNumberTwo", teamTwoNumber);
+                    next.putExtra("teamNumberThree", teamThreeNumber);
+                    next.putExtra("alliance", alliance);
+                    startActivity(next);
+                 }
 
-            next.putExtra("matchNumber", numberOfMatch);
-            next.putExtra("teamNumberOne", teamOneNumber);
-            next.putExtra("teamNumberTwo", teamTwoNumber);
-            next.putExtra("teamNumberThree", teamThreeNumber);
-            next.putExtra("alliance", alliance);
-            startActivity(next);
-
-        }
+            }
             return super.onOptionsItemSelected(item);
         }
 
     }
+
 
 
 

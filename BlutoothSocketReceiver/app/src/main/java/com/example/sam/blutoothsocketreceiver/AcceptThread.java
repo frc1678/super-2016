@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sam.blutoothsocketreceiver.firebase_classes.TeamInMatchData;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -286,6 +287,7 @@ import org.json.JSONObject;
                         successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
                         failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
 
+
                         dataBase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
@@ -293,29 +295,24 @@ import org.json.JSONObject;
                                 if(scoutAlliance.equals("blue")) {
                                     List<String> defenses = new ArrayList<>();
                                     for (int i = 0; i < 5; i++) {
-                                        //get all the defenses for that alliance
                                         String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
                                         defenses.add(tmp);
                                     }
                                     try {
-                                        //write to defense Auto Success times to firebase
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseAuto.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseAuto.get(i)));
                                         }
-                                        //write to defense Auto fail times to firebase;
                                         for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseAuto.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseAuto.get(i)));
                                         }
-                                        //write to defense Tele Success time to firebase
                                         for (int i = 0; i < successDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseTele.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseTele.get(i)));
                                         }
-                                        //write to defense Tele fail time to firebase
                                         for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseTele.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseTele.get(i)));
                                         }
                                     }catch(JSONException JE){
-                                        Log.e("json failure", "failed loop blue");
+                                        Log.e("json failure", "failed loop red");
                                         return;
                                     }
 
@@ -327,16 +324,16 @@ import org.json.JSONObject;
                                     }
                                     try {
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseAuto.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseAuto.get(i)));
                                         }
-                                        for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseAuto.get(i).toString());
+                                        for (int i = 0; i < failedDefenseAuto.length(); i++) {
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseAuto.get(i)));
+                                        }
+                                        for (int i = 0; i < successDefenseTele.length(); i++) {
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseTele.get(i)));
                                         }
                                         for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("successes").setValue(successDefenseTele.get(i).toString());
-                                        }
-                                        for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).child("fails").setValue(failedDefenseTele.get(i).toString());
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseTele.get(i)));
                                         }
                                     }catch(JSONException JE){
                                         Log.e("json failure", "failed loop red");
@@ -395,6 +392,19 @@ import org.json.JSONObject;
             }
         });
     }
+
+    public List<Object> jsonArrayToArray(JSONArray array) {
+        List<Object> os = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                os.add(array.get(i));
+            } catch (Exception e) {
+                //do nothing
+            }
+        }
+        return os;
+    }
+
 }
 
 

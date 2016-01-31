@@ -23,7 +23,8 @@ public class TeamInMatchData extends Object {
 	//Auto
 	public List<Integer> ballsIntakedAuto;
 	public Integer numBallsKnockedOffMidlineAuto;
-	public Map<String, Map<String, Integer>> timesDefensesCrossedAuto;
+	public Map<String, Map<String, List<Long>>> timesSuccessfulDefensesCrossedAuto;
+	public Map<String, Map<String, List<Long>>> timesFailedDefensesCrossedAuto;
 	public Integer numHighShotsMadeAuto;
 	public Integer numLowShotsMadeAuto;
 	public Integer numHighShotsMissedAuto;
@@ -39,5 +40,6 @@ public class TeamInMatchData extends Object {
 	public Integer numShotsBlockedTele;
 	public Boolean didScaleTele;
 	public Boolean didChallengeTele;
-	public Map<String, Map<String, Integer>> timesDefensesCrossedTele;
+	public Map<String, Map<String, List<Long>>> timesSuccessfulDefensesCrossedTele;
+	public Map<String, Map<String, List<Long>>> timesFailedDefensesCrossedTele;
 }
