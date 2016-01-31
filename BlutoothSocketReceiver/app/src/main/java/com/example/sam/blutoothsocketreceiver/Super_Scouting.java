@@ -130,8 +130,8 @@ public class Super_Scouting extends ActionBarActivity {
             public void onClick(View v) {
                 int current = Integer.parseInt(incrementor.getText().toString());
                 current++;
-                if(current > 3){
-                    incrementor.setText(Integer.toString(3));
+                if(current > 4 ){
+                    incrementor.setText(Integer.toString(4));
                 }else {
                     incrementor.setText(Integer.toString(current));
                 }

@@ -20,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +46,7 @@ public class FieldSetUp extends ActionBarActivity {
     String alliance;
     ArrayList <String> defensesPicked;
     ToggleButton defenseButton;
+    Firebase firebaseRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class FieldSetUp extends ActionBarActivity {
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
+        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
 
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
@@ -119,15 +123,43 @@ public class FieldSetUp extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.nextButton) {
             Intent next = new Intent(this, Super_Scouting.class);
-            for(int i = 0; i < toggleButtonList.size(); i++){
-                if(toggleButtonList.get(i).isChecked()){
+            for (int i = 0; i < toggleButtonList.size(); i++) {
+                if (toggleButtonList.get(i).isChecked()) {
                     defensesPicked.add(toggleButtonList.get(i).getText().toString());
                 }
             }
-            next.putExtra("firstDefensePicked", defensesPicked.get(0));
-            next.putExtra("secondDefensePicked", defensesPicked.get(1));
-            next.putExtra("thirdDefensePicked", defensesPicked.get(2));
-            next.putExtra("fourthDefensePicked", defensesPicked.get(3));
+            new Thread() {
+                @Override
+                public void run() {
+                    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+                        @Override
+                        public void onAuthenticated(AuthData authData) {
+                        }
+
+                        @Override
+                        public void onAuthenticationError(FirebaseError firebaseError) {
+                        }
+                    };
+                    firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+                    if (alliance.equals("Blue Alliance")) {
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(2));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(3));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
+                        Log.e("blue alliance", "Sent defense position of Blue");
+
+                    } else if (alliance.equals("Red Alliance")) {
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(defensesPicked.get(0));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(1));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(2));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(3));
+                        firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
+                        Log.e("red alliance", "Sent defense position of Red");
+                    }
+                }
+            }.start();
+
             next.putExtra("matchNumber", numberOfMatch);
             next.putExtra("teamNumberOne", teamOneNumber);
             next.putExtra("teamNumberTwo", teamTwoNumber);

@@ -59,10 +59,9 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberTwo;
     EditText teamNumberThree;
     TextView alliance;
-    String matchNumber;
     String chosenAlliance;
     Boolean isRed = new Boolean(false);
-    String matchName;
+    Integer matchNumber = new Integer(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,6 @@ public class MainActivity extends ActionBarActivity {
         accept_loop loop = new accept_loop(context);
         loop.start();
 
-
         Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
@@ -83,28 +81,35 @@ public class MainActivity extends ActionBarActivity {
         alliance = (TextView) findViewById(R.id.allianceName);
 
         //If got intent from the last activity
-        Integer match = 1;
         if (backToHome.hasExtra("number")) {
-            match = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
-
+            matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
             SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
-            editor.putInt("match_number", match);
+            editor.putInt("match_number", matchNumber);
             editor.commit();
         } else {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-            match = prefs.getInt("match_number", 1);
+            matchNumber = prefs.getInt("match_number", 1);
         }
-        numberOfMatch.setText(Integer.toString(match));
-        matchNumber = numberOfMatch.getText().toString();
+        if(backToHome.hasExtra("shouldBeRed")) {
+            isRed = getIntent().getBooleanExtra("shouldBeRed", false);
+            SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
+            editor.putBoolean("allianceColor", isRed);
+            editor.commit();
+        }else {
+            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+            isRed = prefs.getBoolean("allianceColor", false);
+        }
+
+        updateUI();
+        numberOfMatch.setText(matchNumber.toString());
         //Set the editTexts so that the user can't change it unless override
         numberOfMatch.setFocusable(false);
         teamNumberOne.setFocusable(false);
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);
-        matchName = numberOfMatch.getText().toString();
+        matchNumber = Integer.parseInt(numberOfMatch.getText().toString());
 
         updateSuperData();
-
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
             @Override
@@ -128,7 +133,11 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                matchName = s.toString();
+                try {
+                    matchNumber = Integer.parseInt(s.toString());
+                } catch (NumberFormatException nfe) {
+                    matchNumber = 0;
+                }
                 updateUI();
             }
         });
@@ -163,8 +172,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if (id == R.id.scout) {
             //check to see if all data inputs were filled out before continuing
-            if (numberOfMatch.
-                    getText().toString().equals("")) {
+            if (numberOfMatch.getText().toString().equals("")) {
                 Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
             } else if (teamNumberOne.getText().toString().equals("")) {
                 Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
@@ -180,6 +188,7 @@ public class MainActivity extends ActionBarActivity {
                 intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
                 intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
                 intent.putExtra("alliance", alliance.getText().toString());
+                Log.e("start alliance", alliance.getText().toString());
                 startActivity(intent);
             }
         }else if (id == R.id.action_override) {
@@ -237,8 +246,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateUI() {
-        if (FirebaseLists.matchesList.getKeys().contains(matchName)) {
-            Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchName);
+        if (FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())) {
+            Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchNumber.toString());
 
             List<Integer> teamsOnAlliance = new ArrayList<>();
             teamsOnAlliance.addAll((isRed) ? match.redAllianceTeamNumbers : match.blueAllianceTeamNumbers);
