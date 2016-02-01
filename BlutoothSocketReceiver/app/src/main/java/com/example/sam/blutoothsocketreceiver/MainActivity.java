@@ -83,18 +83,12 @@ public class MainActivity extends ActionBarActivity {
         //If got intent from the last activity
         if (backToHome.hasExtra("number")) {
             matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
-            SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
-            editor.putInt("match_number", matchNumber);
-            editor.commit();
         } else {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             matchNumber = prefs.getInt("match_number", 1);
         }
         if(backToHome.hasExtra("shouldBeRed")) {
             isRed = getIntent().getBooleanExtra("shouldBeRed", false);
-            SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
-            editor.putBoolean("allianceColor", isRed);
-            editor.commit();
         }else {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             isRed = prefs.getBoolean("allianceColor", false);
@@ -141,6 +135,8 @@ public class MainActivity extends ActionBarActivity {
                 updateUI();
             }
         });
+
+        commitSharedPreferences();
     }
 
     public void getScoutData(View view) {
@@ -168,6 +164,7 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.changeAlliance){
             isRed = !isRed;
+            commitSharedPreferences();
             updateUI();
         }
         if (id == R.id.scout) {
@@ -261,6 +258,13 @@ public class MainActivity extends ActionBarActivity {
             teamNumberTwo.setText("");
             teamNumberThree.setText("");
         }
+    }
+
+    public void commitSharedPreferences() {
+        SharedPreferences.Editor editor = getSharedPreferences("prefs", MODE_PRIVATE).edit();
+        editor.putInt("match_number", matchNumber);
+        editor.putBoolean("allianceColor", isRed);
+        editor.commit();
     }
 }
 
