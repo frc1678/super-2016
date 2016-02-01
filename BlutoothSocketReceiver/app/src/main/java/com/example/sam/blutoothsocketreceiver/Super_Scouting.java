@@ -30,46 +30,39 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
-    ArrayList <String> defenses;
-    ArrayList <String> dataScore;
-    ArrayList <String> teamOneDataName;
-    ArrayList <String> teamOneDataScore;
-    ArrayList <String> teamTwoDataName;
-    ArrayList <String> teamTwoDataScore;
-    ArrayList <String> teamThreeDataName;
-    ArrayList <String> teamThreeDataScore;
+    ArrayList<String> defenses;
+    ArrayList<String> dataScore;
+    ArrayList<String> teamOneDataName;
+    ArrayList<String> teamOneDataScore;
+    ArrayList<String> teamTwoDataName;
+    ArrayList<String> teamTwoDataScore;
+    ArrayList<String> teamThreeDataName;
+    ArrayList<String> teamThreeDataScore;
+    ArrayList<String> data;
     JSONObject object;
+    Intent next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.super_scouting);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        Intent next = getIntent();
+        next = getIntent();
         object = new JSONObject();
 
-        numberOfMatch = next.getExtras().getString("matchNumber");
-        teamNumberOne = next.getExtras().getString("teamNumberOne");
-        teamNumberTwo = next.getExtras().getString("teamNumberTwo");
-        teamNumberThree = next.getExtras().getString("teamNumberThree");
-        alliance = next.getExtras().getString("alliance");
-        firstDefense = next.getExtras().getString("firstDefensePicked");
-        secondDefense = next.getExtras().getString("secondDefensePicked");
-        thirdDefense = next.getExtras().getString("thirdDefensePicked");
-        fourthDefense = next.getExtras().getString("fourthDefensePicked");
-
+        getExtrasForScouting();
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
 
-        if(alliance.equals("Blue Alliance")) {
+        if (alliance.equals("Blue Alliance")) {
             teamNumber1.setText(teamNumberOne);
             teamNumber1.setTextColor(Color.BLUE);
             teamNumber2.setText(teamNumberTwo);
             teamNumber2.setTextColor(Color.BLUE);
             teamNumber3.setText(teamNumberThree);
             teamNumber3.setTextColor(Color.BLUE);
-        }else if(alliance.equals("Red Alliance")){
+        } else if (alliance.equals("Red Alliance")) {
             teamNumber1.setText(teamNumberOne);
             teamNumber1.setTextColor(Color.RED);
             teamNumber2.setText(teamNumberTwo);
@@ -77,8 +70,7 @@ public class Super_Scouting extends ActionBarActivity {
             teamNumber3.setText(teamNumberThree);
             teamNumber3.setTextColor(Color.RED);
         }
-
-        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense,thirdDefense, fourthDefense));
+        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense, thirdDefense, fourthDefense));
         dataScore = new ArrayList<>();
         teamOneDataName = new ArrayList<>();
         teamOneDataScore = new ArrayList<>();
@@ -86,9 +78,112 @@ public class Super_Scouting extends ActionBarActivity {
         teamTwoDataScore = new ArrayList<>();
         teamThreeDataName = new ArrayList<>();
         teamThreeDataScore = new ArrayList<>();
+        data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
 
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
+        setUpDataRanking();
 
+    }
+
+    private View createCounter(String title) {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View counter = inflater.inflate(R.layout.counter, null);
+        TextView dataNameTextView = (TextView) counter.findViewById(R.id.dataName);
+        dataNameTextView.setText(title);
+        final TextView incrementor = (TextView) counter.findViewById(R.id.scoreCounter);
+        Button plusButton = (Button) counter.findViewById(R.id.plusButton);
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(incrementor.getText().toString());
+                current++;
+                if (current > 4) {
+                    incrementor.setText(Integer.toString(4));
+                } else {
+                    incrementor.setText(Integer.toString(current));
+                }
+            }
+        });
+        Button minusButton = (Button) counter.findViewById(R.id.minusButton);
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(incrementor.getText().toString());
+                current--;
+                if (current < 0) {
+                    incrementor.setText(Integer.toString(0));
+                } else {
+                    incrementor.setText(Integer.toString(current));
+                }
+            }
+        });
+        return counter;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.finaldata, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.finalNext) {
+            Intent intent = new Intent(this, FinalDataPoints.class);
+            intent.putExtra("matchNumber", numberOfMatch);
+            intent.putExtra("teamNumberOne", teamNumberOne);
+            intent.putExtra("teamNumberTwo", teamNumberTwo);
+            intent.putExtra("teamNumberThree", teamNumberThree);
+            intent.putExtra("firstDefensePicked", firstDefense);
+            intent.putExtra("secondDefensePicked", secondDefense);
+            intent.putExtra("thirdDefensePicked", thirdDefense);
+            intent.putExtra("fourthDefensePicked", fourthDefense);
+            intent.putExtra("alliance", alliance);
+
+            getEachDataNameAndValue();
+            intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
+            intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
+            intent.putStringArrayListExtra("dataNameTwo", teamTwoDataName);
+            intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
+            intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
+            intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void getEachDataNameAndValue() {
+        LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
+        LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
+        LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+        for (int i = 0; i < teamOneRelativeLayout.getChildCount(); i++) {
+            View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
+            TextView nameOfData1 = (TextView) teamOneLayout.findViewById(R.id.dataName);
+            TextView scoreOfData1 = (TextView) teamOneLayout.findViewById(R.id.scoreCounter);
+            teamOneDataName.add((nameOfData1.getText().toString()));
+            teamOneDataScore.add(scoreOfData1.getText().toString());
+        }
+        for (int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++) {
+            View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
+            TextView nameOfData2 = (TextView) teamTwoLayout.findViewById(R.id.dataName);
+            TextView scoreOfData2 = (TextView) teamTwoLayout.findViewById(R.id.scoreCounter);
+            teamTwoDataName.add(nameOfData2.getText().toString());
+            teamTwoDataScore.add(scoreOfData2.getText().toString());
+        }
+        for (int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++) {
+            View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
+            TextView nameOfData3 = (TextView) teamThreeLayout.findViewById(R.id.dataName);
+            TextView scoreOfData3 = (TextView) teamThreeLayout.findViewById(R.id.scoreCounter);
+            teamThreeDataName.add(nameOfData3.getText().toString());
+            teamThreeDataScore.add(scoreOfData3.getText().toString());
+        }
+    }
+    public void setUpDataRanking(){
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
@@ -115,116 +210,19 @@ public class Super_Scouting extends ActionBarActivity {
             teamThreeRelativeLayout.addView(counter);
         }
     }
+    public void getExtrasForScouting(){
 
-
-    private View createCounter(String title) {
-
-        LayoutInflater inflater = getLayoutInflater();
-        View counter = inflater.inflate(R.layout.counter, null);
-        TextView dataNameTextView = (TextView)counter.findViewById(R.id.dataName);
-        dataNameTextView.setText(title);
-        final TextView incrementor = (TextView) counter.findViewById(R.id.scoreCounter);
-        Button plusButton = (Button)counter.findViewById(R.id.plusButton);
-        plusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = Integer.parseInt(incrementor.getText().toString());
-                current++;
-                if(current > 4 ){
-                    incrementor.setText(Integer.toString(4));
-                }else {
-                    incrementor.setText(Integer.toString(current));
-                }
-            }
-        });
-        Button minusButton = (Button)counter.findViewById(R.id.minusButton);
-        minusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = Integer.parseInt(incrementor.getText().toString());
-                current--;
-                if (current < 0) {
-                    incrementor.setText(Integer.toString(0));
-                }else{
-                    incrementor.setText(Integer.toString(current));
-                }
-
-            }
-        });
-        return counter;
+        numberOfMatch = next.getExtras().getString("matchNumber");
+        teamNumberOne = next.getExtras().getString("teamNumberOne");
+        teamNumberTwo = next.getExtras().getString("teamNumberTwo");
+        teamNumberThree = next.getExtras().getString("teamNumberThree");
+        alliance = next.getExtras().getString("alliance");
+        firstDefense = next.getExtras().getString("firstDefensePicked");
+        secondDefense = next.getExtras().getString("secondDefensePicked");
+        thirdDefense = next.getExtras().getString("thirdDefensePicked");
+        fourthDefense = next.getExtras().getString("fourthDefensePicked");
     }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.finaldata, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.finalNext) {
-            Intent intent = new Intent(this, FinalDataPoints.class);
-            intent.putExtra("matchNumber", numberOfMatch);
-            intent.putExtra("teamNumberOne", teamNumberOne);
-            intent.putExtra("teamNumberTwo", teamNumberTwo);
-            intent.putExtra("teamNumberThree", teamNumberThree);
-            intent.putExtra("firstDefensePicked", firstDefense);
-            intent.putExtra("secondDefensePicked", secondDefense);
-            intent.putExtra("thirdDefensePicked", thirdDefense);
-            intent.putExtra("fourthDefensePicked", fourthDefense);
-            intent.putExtra("alliance", alliance);
-            LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
-            LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
-            LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
-            for(int i = 0; i < teamOneRelativeLayout.getChildCount(); i++){
-                View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
-                TextView nameOfData1 = (TextView)teamOneLayout.findViewById(R.id.dataName);
-                TextView scoreOfData1 = (TextView)teamOneLayout.findViewById(R.id.scoreCounter);
-                teamOneDataName.add((nameOfData1.getText().toString()));
-                teamOneDataScore.add(scoreOfData1.getText().toString());
-
-            }
-            for(int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++ ){
-                View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
-                TextView nameOfData2 = (TextView)teamTwoLayout.findViewById(R.id.dataName);
-                TextView scoreOfData2 = (TextView)teamTwoLayout.findViewById(R.id.scoreCounter);
-                teamTwoDataName.add(nameOfData2.getText().toString());
-                teamTwoDataScore.add(scoreOfData2.getText().toString());
-
-            }
-            for(int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++){
-                View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
-                TextView nameOfData3 = (TextView)teamThreeLayout.findViewById(R.id.dataName);
-                TextView scoreOfData3 = (TextView)teamThreeLayout.findViewById(R.id.scoreCounter);
-                teamThreeDataName.add(nameOfData3.getText().toString());
-                teamThreeDataScore.add(scoreOfData3.getText().toString());
-
-            }
-            intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
-            intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
-
-            intent.putStringArrayListExtra("dataNameTwo", teamTwoDataName);
-            intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
-
-            intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
-            intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
-
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }
+
 
 

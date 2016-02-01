@@ -1,9 +1,6 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,36 +17,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
-import com.firebase.client.AuthData;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.FirebaseException;
-import com.firebase.client.ValueEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity {
     Activity context;
@@ -59,7 +34,6 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberTwo;
     EditText teamNumberThree;
     TextView alliance;
-    String chosenAlliance;
     Boolean isRed = new Boolean(false);
     Integer matchNumber = new Integer(0);
 
@@ -93,16 +67,11 @@ public class MainActivity extends ActionBarActivity {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             isRed = prefs.getBoolean("allianceColor", false);
         }
-
         updateUI();
         numberOfMatch.setText(matchNumber.toString());
-        //Set the editTexts so that the user can't change it unless override
-        numberOfMatch.setFocusable(false);
-        teamNumberOne.setFocusable(false);
-        teamNumberTwo.setFocusable(false);
-        teamNumberThree.setFocusable(false);
         matchNumber = Integer.parseInt(numberOfMatch.getText().toString());
 
+        disenableEditTestEditing();
         updateSuperData();
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
@@ -113,29 +82,7 @@ public class MainActivity extends ActionBarActivity {
         }, new IntentFilter("matches_updated"));
 
         //Change team numbers as the user changes the match number
-        EditText editText = (EditText) findViewById(R.id.matchNumber);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                try {
-                    matchNumber = Integer.parseInt(s.toString());
-                } catch (NumberFormatException nfe) {
-                    matchNumber = 0;
-                }
-                updateUI();
-            }
-        });
-
+        changeTeamsByMatchName();
         commitSharedPreferences();
     }
 
@@ -189,16 +136,11 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         }else if (id == R.id.action_override) {
-            numberOfMatch.setFocusableInTouchMode(true);
-            teamNumberOne.setFocusableInTouchMode(true);
-            teamNumberTwo.setFocusableInTouchMode(true);
-            teamNumberThree.setFocusableInTouchMode(true);
+            enableEditTextEditing();
+
         }else if(id == R.id.unoverride){
             updateUI();
-            numberOfMatch.setFocusable(false);
-            teamNumberOne.setFocusable(false);
-            teamNumberTwo.setFocusable(false);
-            teamNumberThree.setFocusable(false);
+            disenableEditTestEditing();
         }
             return super.onOptionsItemSelected(item);
     }
@@ -239,9 +181,7 @@ public class MainActivity extends ActionBarActivity {
                 listView.setAdapter(adapter);
             }
         });
-
     }
-
     private void updateUI() {
         if (FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())) {
             Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchNumber.toString());
@@ -265,6 +205,39 @@ public class MainActivity extends ActionBarActivity {
         editor.putInt("match_number", matchNumber);
         editor.putBoolean("allianceColor", isRed);
         editor.commit();
+    }
+
+    public void changeTeamsByMatchName(){
+        EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
+        numberOfMatch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    matchNumber = Integer.parseInt(s.toString());
+                } catch (NumberFormatException NFE) {
+                    matchNumber = 0;
+                }
+                updateUI();
+            }
+        });
+    }
+    public void enableEditTextEditing(){
+
+        numberOfMatch.setFocusableInTouchMode(true);
+        teamNumberOne.setFocusableInTouchMode(true);
+        teamNumberTwo.setFocusableInTouchMode(true);
+        teamNumberThree.setFocusableInTouchMode(true);
+    }
+    public void disenableEditTestEditing(){
+
+        numberOfMatch.setFocusable(false);
+        teamNumberOne.setFocusable(false);
+        teamNumberTwo.setFocusable(false);
+        teamNumberThree.setFocusable(false);
     }
 }
 

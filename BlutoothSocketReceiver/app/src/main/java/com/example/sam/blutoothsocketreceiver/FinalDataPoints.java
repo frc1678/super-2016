@@ -37,6 +37,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String fourthDefense;
     String alliance;
     TextView finalScore;
+    EditText allianceScore;
     JSONObject superExternalData;
     JSONObject teamOneJson;
     JSONObject teamTwoJson;
@@ -47,34 +48,20 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamTwoDataScore;
     ArrayList<String> teamThreeDataName;
     ArrayList<String> teamThreeDataScore;
-    EditText allianceScore;
     ToggleButton captureCheck;
     ToggleButton breachCheck;
     File dir;
     PrintWriter file;
     Firebase firebaseRef;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finaldatapoints);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        Intent intent = getIntent();
-        numberOfMatch = intent.getExtras().getString("matchNumber");
-        teamNumberOne = intent.getExtras().getString("teamNumberOne");
-        teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
-        teamNumberThree = intent.getExtras().getString("teamNumberThree");
-        firstDefense = intent.getExtras().getString("firstDefensePicked");
-        secondDefense = intent.getExtras().getString("secondDefensePicked");
-        thirdDefense = intent.getExtras().getString("thirdDefensePicked");
-        fourthDefense = intent.getExtras().getString("fourthDefensePicked");
-        alliance = intent.getExtras().getString("alliance");
-        teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
-        teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
-        teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
-        teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
-        teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
-        teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+        intent = getIntent();
+        getExtrasForFinalData();
 
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         superExternalData = new JSONObject();
@@ -206,5 +193,23 @@ public class FinalDataPoints extends ActionBarActivity {
             startActivity(backToHome);
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void getExtrasForFinalData(){
+
+        numberOfMatch = intent.getExtras().getString("matchNumber");
+        teamNumberOne = intent.getExtras().getString("teamNumberOne");
+        teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
+        teamNumberThree = intent.getExtras().getString("teamNumberThree");
+        firstDefense = intent.getExtras().getString("firstDefensePicked");
+        secondDefense = intent.getExtras().getString("secondDefensePicked");
+        thirdDefense = intent.getExtras().getString("thirdDefensePicked");
+        fourthDefense = intent.getExtras().getString("fourthDefensePicked");
+        alliance = intent.getExtras().getString("alliance");
+        teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
+        teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
+        teamTwoDataName = intent.getStringArrayListExtra("dataNameTwo");
+        teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
+        teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
+        teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
     }
 }
