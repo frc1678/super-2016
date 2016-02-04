@@ -144,6 +144,7 @@ public class FinalDataPoints extends ActionBarActivity {
                         return;
                     }
                     try {
+                        superExternalData.put("matchNumber", numberOfMatch);
                         superExternalData.put("defenseOne", firstDefense);
                         superExternalData.put("defenseTwo", secondDefense);
                         superExternalData.put("defenseThree", thirdDefense);
@@ -153,13 +154,9 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put(teamNumberOne, teamOneJson);
                         superExternalData.put(teamNumberTwo, teamTwoJson);
                         superExternalData.put(teamNumberThree, teamThreeJson);
-                        superExternalData.put("teamOneDataName", teamOneDataName);
-                        superExternalData.put("teamOneDataScore", teamOneDataScore);
-                        superExternalData.put("teamTwoDataName", teamOneDataName);
-                        superExternalData.put("teamTwoDataScore", teamOneDataScore);
-                        superExternalData.put("teamThreeDataName", teamOneDataName);
-                        superExternalData.put("teamThreeDataScore", teamOneDataScore);
-
+                        superExternalData.put("teamOne", teamNumberOne);
+                        superExternalData.put("teamTwo", teamNumberTwo);
+                        superExternalData.put("teamThree", teamNumberThree);
 
                     }catch(JSONException JE){
                         Log.e("JSON Error", "couldn't put keys and values in json object");

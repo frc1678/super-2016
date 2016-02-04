@@ -23,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +31,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity {
     Activity context;
@@ -43,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
     Boolean isRed = new Boolean(false);
     Integer matchNumber = new Integer(0);
     ListView superList;
+    Firebase dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +59,20 @@ public class MainActivity extends ActionBarActivity {
         context = this;
         accept_loop loop = new accept_loop(context);
         loop.start();
-
         Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
         alliance = (TextView) findViewById(R.id.allianceName);
-
+        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {}
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {}
+        };
+        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
         //If got intent from the last activity
         if (backToHome.hasExtra("number")) {
             matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
@@ -80,6 +92,7 @@ public class MainActivity extends ActionBarActivity {
 
         disenableEditTestEditing();
         updateSuperData();
+        listenForFileClick();
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
             @Override
@@ -259,6 +272,20 @@ public class MainActivity extends ActionBarActivity {
                 //read data from file
                 String text = readFile(name);
                 if (text != null) {
+                    try {
+                        JSONObject object = new JSONObject(text);
+                        System.out.println(object.toString());
+                        String matchAndTeamOne = object.get("teamOne") + "Q" + object.get("matchNumber");
+                        String matchAndTeamTwo = object.get("teamTwo") + "Q" + object.get("matchNumber");
+                        String matchAndTeamThree = object.get("teamThree") + "Q" + object.get("matchNumber");
+                        if (object.get("alliance").equals("Blue Alliance")) {
+/*
+                            dataBase.child("Matches").child((object.getString("matchNumber"))).child()
+*/
+                        }
+                    }catch(JSONException JE){
+                        Log.e("json error", "failed to get super json");
+                    }
                     // new ConnectThread(context, superName, uuid, name, text).start();
                 }
             }
