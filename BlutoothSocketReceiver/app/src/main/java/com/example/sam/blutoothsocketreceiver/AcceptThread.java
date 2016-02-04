@@ -93,15 +93,7 @@ import org.json.JSONObject;
                 out = new PrintWriter(socket.getOutputStream(), true);
                 //set the out printWriter to send data to scout
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                try {
-                    //make file and directory for Scout data
-                    File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
-                    dir.mkdir();
-                    file = new PrintWriter(new FileOutputStream(new File(dir, "Scout_data" + " " + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
-                } catch (IOException IOE) {
-                    Log.e("File error", "Failed to open File");
-                    return;
-                }
+
                 try {
                     text = "";
                     //get the bytesize from the first line of the data
@@ -272,7 +264,7 @@ import org.json.JSONObject;
                     try {
                         JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                         for (int i = 0; i < balls.length(); i++) {
-                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").child(Integer.toString(i)).setValue(balls.get(i));
+                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
 
                         }
                     }catch(JSONException JE){
@@ -349,6 +341,15 @@ import org.json.JSONObject;
 
                     }catch(JSONException JE){
                         Log.e("change", "cant send jsonarray");
+                        return;
+                    }
+                    try {
+                        //make file and directory for Scout data
+                        File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
+                        dir.mkdir();
+                        file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+                    } catch (IOException IOE) {
+                        Log.e("File error", "Failed to open File");
                         return;
                     }
 

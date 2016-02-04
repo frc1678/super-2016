@@ -1,5 +1,8 @@
 package com.example.sam.blutoothsocketreceiver;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -83,6 +86,26 @@ public class Super_Scouting extends ActionBarActivity {
         setUpDataRanking();
 
     }
+    @Override
+    public void onBackPressed(){
+        final Activity activity = this;
+        new AlertDialog.Builder(this)
+                .setTitle("WARNING")
+                .setMessage("GOING BACK WILL CAUSE LOSS OF DATA")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 
     private View createCounter(String title) {
 
@@ -161,6 +184,12 @@ public class Super_Scouting extends ActionBarActivity {
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+        teamOneDataName.clear();
+        teamOneDataScore.clear();
+        teamTwoDataName.clear();
+        teamTwoDataScore.clear();
+        teamThreeDataName.clear();
+        teamThreeDataScore.clear();
         for (int i = 0; i < teamOneRelativeLayout.getChildCount(); i++) {
             View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
             TextView nameOfData1 = (TextView) teamOneLayout.findViewById(R.id.dataName);

@@ -17,12 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
@@ -36,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
     TextView alliance;
     Boolean isRed = new Boolean(false);
     Integer matchNumber = new Integer(0);
+    ListView superList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +166,8 @@ public class MainActivity extends ActionBarActivity {
                 for (File tmpFile : files) {
                     adapter.add(tmpFile.getName());
                 }
-                ListView listView = (ListView)context.findViewById(R.id.view_files_received);
-                listView.setAdapter(adapter);
+                superList = (ListView)context.findViewById(R.id.view_files_received);
+                superList.setAdapter(adapter);
             }
         });
     }
@@ -211,9 +218,13 @@ public class MainActivity extends ActionBarActivity {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -238,6 +249,44 @@ public class MainActivity extends ActionBarActivity {
         teamNumberOne.setFocusable(false);
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);
+    }
+    public void listenForFileClick(){
+        superList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("test", "at 1");
+                final String name = parent.getItemAtPosition(position).toString();
+                //read data from file
+                String text = readFile(name);
+                if (text != null) {
+                    // new ConnectThread(context, superName, uuid, name, text).start();
+                }
+            }
+        });
+    }
+    public String readFile(String name){
+        BufferedReader file;
+        try {
+            file = new BufferedReader(new InputStreamReader(new FileInputStream(
+                    new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name))));
+        } catch (IOException ioe) {
+            Log.e("File Error", "Failed To Open File");
+            Toast.makeText(context, "Failed To Open File", Toast.LENGTH_LONG).show();
+            return null;
+        }
+        String text = "";
+        String buf;
+        try {
+            while ((buf = file.readLine()) != null) {
+                text = text.concat(buf + "\n");
+            }
+        } catch (IOException ioe) {
+            Log.e("File Error", "Failed To Read From File");
+            Toast.makeText(context, "Failed To Read From File", Toast.LENGTH_LONG).show();
+            return null;
+        }
+        Log.i("text", text);
+        return text;
     }
 }
 

@@ -1,6 +1,8 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -106,6 +108,25 @@ public class FieldSetUp extends ActionBarActivity {
         }
 
     }
+    @Override
+    public void onBackPressed(){
+        final Activity activity = this;
+        new AlertDialog.Builder(this)
+                .setTitle("WARNING")
+                .setMessage("GOING BACK WILL CAUSE LOSS OF DATA")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,6 +145,7 @@ public class FieldSetUp extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.nextButton) {
             Intent next = new Intent(this, Super_Scouting.class);
+            defensesPicked.clear();
             for (int i = 0; i < toggleButtonList.size(); i++) {
                 if (toggleButtonList.get(i).isChecked()) {
                     defensesPicked.add(toggleButtonList.get(i).getText().toString());
@@ -170,7 +192,9 @@ public class FieldSetUp extends ActionBarActivity {
                     next.putExtra("teamNumberThree", teamThreeNumber);
                     next.putExtra("alliance", alliance);
                     startActivity(next);
-                 }
+                 } else {
+                Log.i("test", "here");
+            }
 
             }
             return super.onOptionsItemSelected(item);

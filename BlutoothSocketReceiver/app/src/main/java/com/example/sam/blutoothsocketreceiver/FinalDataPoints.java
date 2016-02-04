@@ -1,6 +1,8 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -89,6 +91,26 @@ public class FinalDataPoints extends ActionBarActivity {
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
 
     }
+    @Override
+    public void onBackPressed(){
+        final Activity activity = this;
+        new AlertDialog.Builder(this)
+                .setTitle("WARNING!")
+                .setMessage("GOING BACK WILL CAUSE LOSS OF DATA")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,21 +138,28 @@ public class FinalDataPoints extends ActionBarActivity {
                         //make the directory of the file
                         dir.mkdir();
                         //can delete when doing the actual thing
-                        file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch + " "  + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())))));
+                        file = new PrintWriter(new FileOutputStream(new File(dir, ("Q" + numberOfMatch + "_"  + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())))));
                     } catch (IOException IOE) {
                         Log.e("File error", "Failed to open File");
                         return;
                     }
                     try {
-                        superExternalData.put("matchNumber", numberOfMatch);
                         superExternalData.put("defenseOne", firstDefense);
                         superExternalData.put("defenseTwo", secondDefense);
                         superExternalData.put("defenseThree", thirdDefense);
                         superExternalData.put("defenseFour", fourthDefense);
+                        superExternalData.put("alliance", alliance);
                         superExternalData.put(alliance + " Score", allianceScore.getText().toString());
                         superExternalData.put(teamNumberOne, teamOneJson);
                         superExternalData.put(teamNumberTwo, teamTwoJson);
                         superExternalData.put(teamNumberThree, teamThreeJson);
+                        superExternalData.put("teamOneDataName", teamOneDataName);
+                        superExternalData.put("teamOneDataScore", teamOneDataScore);
+                        superExternalData.put("teamTwoDataName", teamOneDataName);
+                        superExternalData.put("teamTwoDataScore", teamOneDataScore);
+                        superExternalData.put("teamThreeDataName", teamOneDataName);
+                        superExternalData.put("teamThreeDataScore", teamOneDataScore);
+
 
                     }catch(JSONException JE){
                         Log.e("JSON Error", "couldn't put keys and values in json object");
