@@ -150,7 +150,7 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("defenseThree", thirdDefense);
                         superExternalData.put("defenseFour", fourthDefense);
                         superExternalData.put("alliance", alliance);
-                        superExternalData.put(alliance + " Score", allianceScore.getText().toString());
+                        superExternalData.put(alliance + "Score", allianceScore.getText().toString());
                         superExternalData.put(teamNumberOne, teamOneJson);
                         superExternalData.put(teamNumberTwo, teamTwoJson);
                         superExternalData.put(teamNumberThree, teamThreeJson);

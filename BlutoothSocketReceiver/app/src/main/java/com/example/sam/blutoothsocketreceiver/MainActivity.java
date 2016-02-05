@@ -55,7 +55,7 @@ public class MainActivity extends ActionBarActivity {
     TextView alliance;
     Boolean isRed = new Boolean(false);
     Integer matchNumber = new Integer(0);
-    ListView superList;
+    ListView listView;
     Firebase dataBase;
     String firstKey;
     String keys;
@@ -72,6 +72,7 @@ public class MainActivity extends ActionBarActivity {
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
+    private boolean scoutOrSuperFiles;
     Map<String, String> defenseCategories = new HashMap<String, String>(){
         //each defense with is own category
         {
@@ -134,8 +135,9 @@ public class MainActivity extends ActionBarActivity {
         disenableEditTestEditing();
         updateSuperData();
 
-        listenForSuperFileClick();
-        listenForScoutFileClick();
+        scoutOrSuperFiles = true;
+
+        listenForFileListClick();
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
             @Override
@@ -150,10 +152,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getScoutData(View view) {
+        scoutOrSuperFiles = false;
+        listenForFileListClick();
         updateScoutData();
     }
 
     public void getSuperData(View view) {
+        scoutOrSuperFiles = true;
+        listenForFileListClick();
         updateSuperData();
     }
 
@@ -221,8 +227,8 @@ public class MainActivity extends ActionBarActivity {
                 for (File tmpFile : files) {
                     adapter.add(tmpFile.getName());
                 }
-                superList = (ListView) context.findViewById(R.id.view_files_received);
-                superList.setAdapter(adapter);
+                listView = (ListView) context.findViewById(R.id.view_files_received);
+                listView.setAdapter(adapter);
             }
         });
     }
@@ -240,7 +246,7 @@ public class MainActivity extends ActionBarActivity {
                 for (File tmpFile : files) {
                     adapter.add(tmpFile.getName());
                 }
-                ListView listView = (ListView) context.findViewById(R.id.view_files_received);
+                listView = (ListView) context.findViewById(R.id.view_files_received);
                 listView.setAdapter(adapter);
             }
         });
@@ -310,34 +316,6 @@ public class MainActivity extends ActionBarActivity {
         teamNumberThree.setFocusable(false);
     }
 
-    public void listenForSuperFileClick() {
-        superList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("test", "at 1");
-                final String superFileName = parent.getItemAtPosition(position).toString();
-                //read data from file
-                String text = readSuperFile(superFileName);
-                if (text != null) {
-                    try {
-                        JSONObject object = new JSONObject(text);
-                        System.out.println(object.toString());
-                        String matchAndTeamOne = object.get("teamOne") + "Q" + object.get("matchNumber");
-                        String matchAndTeamTwo = object.get("teamTwo") + "Q" + object.get("matchNumber");
-                        String matchAndTeamThree = object.get("teamThree") + "Q" + object.get("matchNumber");
-                        if (object.get("alliance").equals("Blue Alliance")) {
-
-                            //dataBase.child("Matches").child((object.getString("matchNumber"))).child()
-                        }
-                    } catch (JSONException JE) {
-                        Log.e("json error", "failed to get super json");
-                    }
-                    // new ConnectThread(context, superName, uuid, name, text).start();
-                }
-            }
-        });
-    }
-
     public String readSuperFile(String name) {
         BufferedReader file;
         try {
@@ -363,183 +341,233 @@ public class MainActivity extends ActionBarActivity {
         return dataOfSuper;
     }
 
-    public void listenForScoutFileClick() {
+    public void listenForFileListClick() {
         final Activity activity = this;
-        superList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final String scoutFileName = parent.getItemAtPosition(position).toString();
-                new AlertDialog.Builder(activity)
-                        .setTitle("Resend Data?")
-                        .setMessage("RESEND SCOUT DATA?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                //read data from file
-                                String scoutData = readScoutFile(scoutFileName);
-                                System.out.println("scoutData: " + scoutData);
-                                if (scoutData != null) {
-                                    try {
-                                        JSONObject scoutDataJson = new JSONObject(scoutData);
-                                        System.out.println("scoutDataJson: " + scoutDataJson.toString());
-                                        Iterator getFirstKey = scoutDataJson.keys();
-                                        while (getFirstKey.hasNext()) {
-                                            firstKey = (String) getFirstKey.next();
-                                            //split first key to get only match number
-                                            String[] teamAndMatchNumbers = firstKey.split("Q");
-                                            matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
+        if (scoutOrSuperFiles = true) {
+            //copy and paste super onclick here
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i("test", "at 1");
+                    final String superFileName = parent.getItemAtPosition(position).toString();
+                    //read data from file
+                    String text = readSuperFile(superFileName);
+                    if (text != null) {
+                        try {
+                            JSONObject superData = new JSONObject(text);
+                            System.out.println(superData.toString());
+                            String matchAndTeamOne = superData.get("teamOne") + "Q" + superData.get("matchNumber");
+                            String matchAndTeamTwo = superData.get("teamTwo") + "Q" + superData.get("matchNumber");
+                            String matchAndTeamThree = superData.get("teamThree") + "Q" + superData.get("matchNumber");
+                            JSONObject teamOneData = superData.getJSONObject(superData.getJSONObject("teamOne").toString());
+                            JSONObject teamTwoData = superData.getJSONObject(superData.getJSONObject("teamTwo").toString());
+                            JSONObject teamThreeData = superData.getJSONObject(superData.getJSONObject("teamThree").toString());
+
+                            JSONObject teamOneKeyNames = new JSONObject(teamOneData.toString());
+                            JSONObject teamTwoKeyNames = new JSONObject(teamTwoData.toString());
+                            JSONObject teamThreeKeyNames = new JSONObject(teamThreeData.toString());
+                            Iterator getTeamOneKeys = teamOneKeyNames.keys();
+                            Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
+                            Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
+                            while(getTeamOneKeys.hasNext()){
+                                String teamOneKeys = (String) getTeamOneKeys.next();
+                                dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child(teamOneKeys).setValue(Integer.parseInt(teamOneData.get(teamOneKeys).toString()));
+                            }
+                            while (getTeamTwoKeys.hasNext()){
+                                String teamTwoKeys = (String) getTeamTwoKeys.next();
+                                dataBase.child("TeamInMatchDatas").child(matchAndTeamTwo).child(teamTwoKeys).setValue(Integer.parseInt(teamOneData.get(teamTwoKeys).toString()));
+                            }
+                            while (getTeamThreeKeys.hasNext()) {
+                                String teamThreeKeys = (String) getTeamTwoKeys.next();
+                                dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child(teamThreeKeys).setValue(Integer.parseInt(teamOneData.get(teamThreeKeys).toString()));
+                            }
+                    } catch (JSONException JE) {
+                        Log.e("json error", "failed to get super json");
+                    }
+                        // new ConnectThread(context, superName, uuid, name, text).start();
+                    }
+                }
+            });
+        } else {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final String scoutFileName = parent.getItemAtPosition(position).toString();
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Resend Data?")
+                            .setMessage("RESEND SCOUT DATA?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //read data from file
+                                    String scoutData = readScoutFile(scoutFileName);
+                                    System.out.println("scoutData: " + scoutData);
+                                    if (scoutData != null) {
+                                        try {
+                                            JSONObject scoutDataJson = new JSONObject(scoutData);
+                                            System.out.println("scoutDataJson: " + scoutDataJson.toString());
+                                            Iterator getFirstKey = scoutDataJson.keys();
+                                            while (getFirstKey.hasNext()) {
+                                                firstKey = (String) getFirstKey.next();
+                                                //split first key to get only match number
+                                                String[] teamAndMatchNumbers = firstKey.split("Q");
+                                                matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
+                                                try {
+                                                    jsonUnderKey = scoutDataJson.getJSONObject(firstKey);
+                                                    System.out.println("First Key: " + firstKey);
+                                                    System.out.println(jsonUnderKey.toString());
+                                                } catch (Exception e) {
+                                                    Log.e("JSON", "Failed to get first key");
+                                                    return;
+                                                }
+                                            }
+                                        } catch (JSONException JE) {
+                                            Log.e("json error", "failed to get super json");
+                                        }// new ConnectThread(context, superName, uuid, name, text).start();
+                                        try {
+                                            //get arrays of the keys in the json object
+                                            keysInKey = new ArrayList<>();
+                                            JSONObject keyNames = new JSONObject(jsonUnderKey.toString());
+                                            Iterator getRestOfKeys = keyNames.keys();
+                                            while (getRestOfKeys.hasNext()) {
+                                                keys = (String) getRestOfKeys.next();
+                                                keysInKey.add(keys);
+                                            }
+                                            System.out.println("keys in the first key:" + keysInKey.toString());
+
+                                        } catch (JSONException JE) {
+                                            Log.e("json failure", "Failed to get keys in the first key");
+                                            return;
+                                        }
+                                        valueOfKeys = new ArrayList<String>();
+                                        for (int i = 0; i < keysInKey.size(); i++) {
+                                            String nameOfKeys = keysInKey.get(i);
                                             try {
-                                                jsonUnderKey = scoutDataJson.getJSONObject(firstKey);
-                                                System.out.println("First Key: " + firstKey);
-                                                System.out.println(jsonUnderKey.toString());
-                                            } catch (Exception e) {
-                                                Log.e("JSON", "Failed to get first key");
+                                                valueOfKeys.add(jsonUnderKey.get(nameOfKeys).toString());
+                                            } catch (JSONException JE) {
+                                                Log.e("json failure", "failed to get value of keys in jsonUnderKey");
                                                 return;
                                             }
                                         }
-                                    } catch (JSONException JE) {
-                                        Log.e("json error", "failed to get super json");
-                                    }// new ConnectThread(context, superName, uuid, name, text).start();
-                                    try{
-                                        //get arrays of the keys in the json object
-                                        keysInKey = new ArrayList<>();
-                                        JSONObject keyNames = new JSONObject(jsonUnderKey.toString());
-                                        Iterator getRestOfKeys = keyNames.keys();
-                                        while(getRestOfKeys.hasNext()){
-                                            keys = (String) getRestOfKeys.next();
-                                            keysInKey.add(keys);
-                                        }
-                                        System.out.println("keys in the first key:" + keysInKey.toString());
+                                        checkNumKeys = new ArrayList<>(Arrays.asList("numHighShotsMissedTele", "numHighShotsMissedAuto",
+                                                "numHighShotsMadeTele", "numLowShotsMissedTele", "numLowShotsMadeTele",
+                                                "numBallsKnockedOffMidlineAuto", "numShotsBlockedTele", "numHighShotsMadeAuto",
+                                                "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
+                                        checkStringKeys = new ArrayList<>(Arrays.asList("didScaleTele", "didGetDisabled", "didGetIncapacitated",
+                                                "didChallengeTele", "didReachAuto", "scoutName"));
 
-                                    }catch(JSONException JE){
-                                        Log.e("json failure", "Failed to get keys in the first key");
-                                        return;
-                                    }
-                                    valueOfKeys= new ArrayList<String>();
-                                    for(int i = 0; i < keysInKey.size(); i++){
-                                        String nameOfKeys = keysInKey.get(i);
+                                        scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
+                                        final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                                        for (int i = 0; i < checkNumKeys.size(); i++) {
+                                            stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
+                                        }
+                                        for (int i = 0; i < checkStringKeys.size(); i++) {
+                                            intIndex = (keysInKey.indexOf(checkStringKeys.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
+                                        }
                                         try {
-                                            valueOfKeys.add(jsonUnderKey.get(nameOfKeys).toString());
-                                        }catch (JSONException JE){
-                                            Log.e("json failure", "failed to get value of keys in jsonUnderKey");
+                                            JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
+                                            for (int i = 0; i < balls.length(); i++) {
+                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
+
+                                            }
+                                        } catch (JSONException JE) {
+                                            Log.e("Json failure", "failed to get balls intaked");
+                                            return;
+                                        }
+
+                                        try {
+                                            //get json array containing success and fail times for defense crossing of auto and tele
+                                            successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
+                                            failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+                                            successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
+                                            failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
+                                            dataBase.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot snapshot) {
+                                                    //if the scout data is based on blue alliance
+                                                    if (scoutAlliance.equals("blue")) {
+                                                        List<String> defenses = new ArrayList<>();
+                                                        for (int i = 0; i < 5; i++) {
+                                                            String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
+                                                            defenses.add(tmp);
+                                                        }
+                                                        try {
+                                                            for (int i = 0; i < successDefenseAuto.length(); i++) {
+                                                                Log.i("i", Integer.toString(i));
+                                                                Log.e("Test 1", firstKey);
+                                                                Log.e("Test 2", defenseCategories.toString());
+                                                                Log.e("Test 3", defenseCategories.get(defenses.get(i)));
+                                                                Log.e("Test 4", jsonArrayToArray((JSONArray) successDefenseAuto.get(i)).toString());
+
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                                            }
+                                                            for (int i = 0; i < failedDefenseAuto.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                                            }
+                                                            for (int i = 0; i < successDefenseTele.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                                            }
+                                                            for (int i = 0; i < failedDefenseTele.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                                            }
+                                                        } catch (JSONException JE) {
+                                                            Log.e("json failure", "failed loop red");
+                                                            return;
+                                                        }
+
+                                                    } else if (scoutAlliance.equals("red")) {
+                                                        List<String> defenses = new ArrayList<>();
+                                                        for (int i = 0; i < 5; i++) {
+                                                            String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
+                                                            defenses.add(tmp);
+                                                        }
+                                                        try {
+                                                            for (int i = 0; i < successDefenseAuto.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                                            }
+                                                            for (int i = 0; i < failedDefenseAuto.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                                            }
+                                                            for (int i = 0; i < successDefenseTele.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                                            }
+                                                            for (int i = 0; i < failedDefenseTele.length(); i++) {
+                                                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                                            }
+                                                            Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
+                                                            Log.e("resent Toast", "Resent!");
+                                                        } catch (JSONException JE) {
+                                                            Log.e("json failure", "failed loop red");
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError) {
+                                                    System.out.println("The read failed: " + firebaseError.getMessage());
+                                                }
+                                            });
+                                        } catch (JSONException JE) {
+                                            Log.e("change", "cant send jsonarray");
                                             return;
                                         }
                                     }
-                                    checkNumKeys = new ArrayList<>(Arrays.asList("numHighShotsMissedTele", "numHighShotsMissedAuto",
-                                            "numHighShotsMadeTele", "numLowShotsMissedTele", "numLowShotsMadeTele",
-                                            "numBallsKnockedOffMidlineAuto", "numShotsBlockedTele", "numHighShotsMadeAuto",
-                                            "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
-                                    checkStringKeys = new ArrayList<>(Arrays.asList("didScaleTele", "didGetDisabled", "didGetIncapacitated",
-                                            "didChallengeTele", "didReachAuto", "scoutName"));
-
-                                    scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-                                    for(int i = 0; i < checkNumKeys.size(); i++){
-                                        stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
-                                    }
-                                    for(int i = 0; i < checkStringKeys.size(); i++){
-                                        intIndex = (keysInKey.indexOf(checkStringKeys.get(i)));
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
-                                    }
-                                    try {
-                                        JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
-                                        for (int i = 0; i < balls.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
-
-                                        }
-                                    }catch(JSONException JE){
-                                        Log.e("Json failure", "failed to get balls intaked");
-                                        return;
-                                    }
-
-                                    try {
-                                        //get json array containing success and fail times for defense crossing of auto and tele
-                                        successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
-                                        failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
-                                        successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
-                                        failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
-                                        dataBase.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot snapshot) {
-                                                //if the scout data is based on blue alliance
-                                                if(scoutAlliance.equals("blue")) {
-                                                    List<String> defenses = new ArrayList<>();
-                                                    for (int i = 0; i < 5; i++) {
-                                                        String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
-                                                        defenses.add(tmp);
-                                                    }
-                                                    try {
-                                                        for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                                            Log.i("i", Integer.toString(i));
-                                                            Log.e("Test 1", firstKey);
-                                                            Log.e("Test 2", defenseCategories.toString());
-                                                            Log.e("Test 3", defenseCategories.get(defenses.get(i)));
-                                                            Log.e("Test 4", jsonArrayToArray((JSONArray) successDefenseAuto.get(i)).toString());
-
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
-                                                        }
-                                                        for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseAuto.get(i)));
-                                                        }
-                                                        for (int i = 0; i < successDefenseTele.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseTele.get(i)));
-                                                        }
-                                                        for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseTele.get(i)));
-                                                        }
-                                                    }catch(JSONException JE){
-                                                        Log.e("json failure", "failed loop red");
-                                                        return;
-                                                    }
-
-                                                }else if(scoutAlliance.equals("red")){
-                                                    List<String> defenses = new ArrayList<>();
-                                                    for (int i = 0; i < 5; i++) {
-                                                        String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
-                                                        defenses.add(tmp);
-                                                    }
-                                                    try {
-                                                        for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseAuto.get(i)));
-                                                        }
-                                                        for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseAuto.get(i)));
-                                                        }
-                                                        for (int i = 0; i < successDefenseTele.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseTele.get(i)));
-                                                        }
-                                                        for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseTele.get(i)));
-                                                        }
-                                                    }catch(JSONException JE){
-                                                        Log.e("json failure", "failed loop red");
-                                                        return;
-                                                    }
-                                                }
-                                            }
-                                            @Override
-                                            public void onCancelled(FirebaseError firebaseError) {
-                                                System.out.println("The read failed: " + firebaseError.getMessage());
-                                            }
-                                        });
-                                    }catch (JSONException JE){
-                                        Log.e("change", "cant send jsonarray");
-                                        return;
-                                    }
                                 }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                Log.i("test", "at 1");
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    Log.i("test", "at 1");
 
-            }
-        });
+                }
+            });
+        }
 }
 
     public String readScoutFile(String name) {

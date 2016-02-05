@@ -151,7 +151,7 @@ import org.json.JSONObject;
                                 out.println(data.toString());
                                 out.println("\0");
                                 out.flush();
-                                toasts("Schedule sent to Scout");
+                                //toasts("Schedule sent to Scout");
 
                             } catch (IOException IOE) {
                                 toasts("Failed to send schedule to scout");
