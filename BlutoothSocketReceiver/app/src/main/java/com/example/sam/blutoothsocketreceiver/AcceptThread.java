@@ -60,6 +60,7 @@ import org.json.JSONObject;
     ArrayList<String> checkStringKeys;
     PrintWriter file = null;
     JSONObject jsonUnderKey;
+    JSONObject scoutData;
     JSONArray successDefenseTele;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
@@ -194,7 +195,7 @@ import org.json.JSONObject;
                         updateScoutData();
                         try {
                             //get first key of the scout data that contains the match and the team number
-                            JSONObject scoutData = new JSONObject(data);
+                            scoutData = new JSONObject(data);
                             Iterator getFirstKey = scoutData.keys();
                             while(getFirstKey.hasNext()){
                                 firstKey = (String) getFirstKey.next();
@@ -348,6 +349,7 @@ import org.json.JSONObject;
                         File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                         dir.mkdir();
                         file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+                        file.println(scoutData);
                     } catch (IOException IOE) {
                         Log.e("File error", "Failed to open File");
                         return;
