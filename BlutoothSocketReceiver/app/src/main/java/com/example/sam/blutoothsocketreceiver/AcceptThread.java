@@ -307,6 +307,9 @@ import org.json.JSONObject;
                                     }catch(JSONException JE){
                                         Log.e("json failure", "failed loop red");
                                         return;
+                                    } catch (NullPointerException npe) {
+                                        toasts("Tell scout not to send it yet!");
+                                        return;
                                     }
 
                                 }else if(scoutAlliance.equals("red")){
@@ -349,7 +352,8 @@ import org.json.JSONObject;
                         File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                         dir.mkdir();
                         file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
-                        file.println(scoutData);
+                        file.println(scoutData.toString());
+                        file.close();
                     } catch (IOException IOE) {
                         Log.e("File error", "Failed to open File");
                         return;

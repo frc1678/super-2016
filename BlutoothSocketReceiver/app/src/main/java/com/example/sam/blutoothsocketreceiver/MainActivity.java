@@ -364,18 +364,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void listenForScoutFileClick() {
-        new AlertDialog.Builder(this)
-                .setTitle("Resend Data?")
-                .setMessage("Resend Scout Data?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        superList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Log.i("test", "at 1");
-                                final String scoutFileName = parent.getItemAtPosition(position).toString();
+        final Activity activity = this;
+        superList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final String scoutFileName = parent.getItemAtPosition(position).toString();
+                new AlertDialog.Builder(activity)
+                        .setTitle("Resend Data?")
+                        .setMessage("RESEND SCOUT DATA?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                                 //read data from file
                                 String scoutData = readScoutFile(scoutFileName);
+                                System.out.println("scoutData: " + scoutData);
                                 if (scoutData != null) {
                                     try {
                                         JSONObject scoutDataJson = new JSONObject(scoutData);
@@ -413,6 +414,7 @@ public class MainActivity extends ActionBarActivity {
                                         Log.e("json failure", "Failed to get keys in the first key");
                                         return;
                                     }
+                                    valueOfKeys= new ArrayList<String>();
                                     for(int i = 0; i < keysInKey.size(); i++){
                                         String nameOfKeys = keysInKey.get(i);
                                         try {
@@ -468,7 +470,13 @@ public class MainActivity extends ActionBarActivity {
                                                     }
                                                     try {
                                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)successDefenseAuto.get(i)));
+                                                            Log.i("i", Integer.toString(i));
+                                                            Log.e("Test 1", firstKey);
+                                                            Log.e("Test 2", defenseCategories.toString());
+                                                            Log.e("Test 3", defenseCategories.get(defenses.get(i)));
+                                                            Log.e("Test 4", jsonArrayToArray((JSONArray) successDefenseAuto.get(i)).toString());
+
+                                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                                         }
                                                         for (int i = 0; i < failedDefenseAuto.length(); i++) {
                                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray)failedDefenseAuto.get(i)));
@@ -520,23 +528,26 @@ public class MainActivity extends ActionBarActivity {
                                     }
                                 }
                             }
-                        });
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                Log.i("test", "at 1");
+
+            }
+        });
+}
 
     public String readScoutFile(String name) {
         BufferedReader file;
         try {
             file = new BufferedReader(new InputStreamReader(new FileInputStream(
                     new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data/" + name))));
+            Log.e("Error 1", "1");
         } catch (IOException ioe) {
             Log.e("File Error", "Failed To Open File");
             Toast.makeText(context, "Failed To Open File", Toast.LENGTH_LONG).show();
@@ -544,16 +555,20 @@ public class MainActivity extends ActionBarActivity {
         }
         String dataOfScout = "";
         String buf;
+        Log.e("Error 2", "2");
         try {
             while ((buf = file.readLine()) != null) {
                 dataOfScout = dataOfScout.concat(buf + "\n");
+                Log.e("Error 3", "3");
             }
+            Log.e("Error 4", "4");
         } catch (IOException ioe) {
             Log.e("File Error", "Failed To Read From File");
             Toast.makeText(context, "Failed To Read From File", Toast.LENGTH_LONG).show();
             return null;
         }
         Log.i("SCOUT", dataOfScout);
+        Log.e("Error 5", "5");
         return dataOfScout;
     }
 
