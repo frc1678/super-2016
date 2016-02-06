@@ -3,12 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/superNotes"
-        android:title="Notes"
+        android:id="@+id/noteSubmit"
+        android:title="Submit Note"
         app:showAsAction = "always"/>
-    <item
-        android:id="@+id/Submit"
-        android:title="Submit"
-        app:showAsAction = "always"/>
-
 </menu>

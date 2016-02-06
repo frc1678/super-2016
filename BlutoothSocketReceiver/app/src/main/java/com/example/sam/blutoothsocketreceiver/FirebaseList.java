@@ -1,12 +1,10 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.util.Log;
-
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-
 import java.util.ArrayList;
 import java.util.List;
 

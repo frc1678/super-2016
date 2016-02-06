@@ -6,4 +6,5 @@
         android:id="@+id/finalNext"
         android:title="Next >>"
         app:showAsAction = "always"/>
+
 </menu>

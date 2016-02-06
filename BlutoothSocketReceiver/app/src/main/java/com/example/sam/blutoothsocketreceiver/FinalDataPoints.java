@@ -128,7 +128,12 @@ public class FinalDataPoints extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        if(id == R.id.superNotes){
+            Intent toNotes = new Intent(this, SuperNotes.class);
+            toNotes.putExtra("alliance", alliance);
+            toNotes.putExtra("matchNumber", numberOfMatch);
+            startActivity(toNotes);
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
             final Activity context = this;

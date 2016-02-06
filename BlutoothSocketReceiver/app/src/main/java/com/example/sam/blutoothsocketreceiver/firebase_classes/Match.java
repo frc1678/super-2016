@@ -22,4 +22,6 @@ public class Match extends Object {
 	public Boolean blueAllianceDidCapture;
 	public Boolean redAllianceDidBreach;
 	public Boolean blueAllianceDidBreach;
+	public String BSNotes;
+	public String RSNotes;
 }

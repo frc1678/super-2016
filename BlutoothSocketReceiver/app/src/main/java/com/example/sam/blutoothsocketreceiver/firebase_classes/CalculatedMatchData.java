@@ -1,5 +1,6 @@
 package com.example.sam.blutoothsocketreceiver.firebase_classes;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +32,6 @@ public class CalculatedMatchData extends Object {
     public Float blueBreachChance;
     public Float redCaptureChance;
     public Float blueCaptureChance;
+    public List<String> optimalRedDefenses;
+    public List<String> optimalBlueDefenses;
 }
