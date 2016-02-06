@@ -343,7 +343,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void listenForFileListClick() {
-        if (scoutOrSuperFiles = true) {
+        if (scoutOrSuperFiles) {
             resendSuperData();
 
         } else {
@@ -352,6 +352,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public String readScoutFile(String name) {
+        Log.e("file name", name);
         BufferedReader file;
         try {
             file = new BufferedReader(new InputStreamReader(new FileInputStream(
