@@ -40,6 +40,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String alliance;
     TextView finalScore;
     EditText allianceScore;
+    EditText finalAllianceScoreEditText;
     JSONObject superExternalData;
     JSONObject teamOneJson;
     JSONObject teamTwoJson;
@@ -66,6 +67,8 @@ public class FinalDataPoints extends ActionBarActivity {
         getExtrasForFinalData();
 
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
+        finalAllianceScoreEditText = (EditText)findViewById(R.id.finalScoreEditText);
+        finalAllianceScoreEditText.setText("0");
         superExternalData = new JSONObject();
         teamOneJson = new JSONObject();
         teamTwoJson = new JSONObject();
