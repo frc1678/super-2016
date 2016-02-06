@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
             put("lb", "e");
         }
     };
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,10 @@ public class MainActivity extends ActionBarActivity {
         matchNumber = Integer.parseInt(numberOfMatch.getText().toString());
 
         disenableEditTestEditing();
-        updateSuperData();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        ListView listView = (ListView) findViewById(R.id.view_files_received);
+        listView.setAdapter(adapter);
+        updateListView();
 
         scoutOrSuperFiles = true;
 
@@ -195,16 +199,53 @@ public class MainActivity extends ActionBarActivity {
             });
          }
 
+    public void resendAllClicked(View view){
+        new AlertDialog.Builder(this)
+                .setTitle("RESEND ALL?")
+                .setMessage("RESEND ALL DATA?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        List<JSONObject> dataPoints = new ArrayList<>();
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            String name = adapter.getItem(i);
+                            String content;
+                            if (scoutOrSuperFiles) {
+                                content = readSuperFile(name);
+                            } else {
+                                content = readScoutFile(name);
+                            }
+                            if (content != null) {
+                                try {
+                                    JSONObject data = new JSONObject(content);
+                                    dataPoints.add(data);
+                                    //we dont implement this because we dont care if one file is not JSON object
+                                } catch (JSONException jsone) {
+                                    Log.i("JSON info", "Failed to parse JSON for resend all. unimportant");
+                                }
+                            }
+                        }
+                        if (scoutOrSuperFiles) {
+                            resendSuperData(dataPoints);
+                        } else {
+                            resendScoutData(dataPoints);
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
     public void getScoutData(View view) {
         scoutOrSuperFiles = false;
         //listenForFileListClick();
-        updateScoutData();
+        updateListView();
     }
 
     public void getSuperData(View view) {
         scoutOrSuperFiles = true;
         //listenForFileListClick();
-        updateSuperData();
+        updateListView();
     }
 
     @Override
@@ -258,42 +299,22 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateSuperData() {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
-                if (!dir.mkdir()) {
-                    Log.i("File Info", "Failed to make Directory. Unimportant");
-                }
-                File[] files = dir.listFiles();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-                for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName());
-                }
-                listView = (ListView) context.findViewById(R.id.view_files_received);
-                listView.setAdapter(adapter);
-            }
-        });
-    }
-
-    public void updateScoutData() {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
-                if (!scoutFile.mkdir()) {
-                    Log.i("File Info", "Failed to make Directory. Unimportant");
-                }
-                File[] files = scoutFile.listFiles();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-                for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName());
-                }
-                listView = (ListView) context.findViewById(R.id.view_files_received);
-                listView.setAdapter(adapter);
-            }
-        });
+    public void updateListView() {
+        File dir;
+        if (scoutOrSuperFiles) {
+            dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
+        } else {
+            dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
+        }
+        if (!dir.mkdir()) {
+            Log.i("File Info", "Failed to make Directory. Unimportant");
+        }
+        File[] files = dir.listFiles();
+        adapter.clear();
+        for (File tmpFile : files) {
+            adapter.add(tmpFile.getName());
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void updateUI() {

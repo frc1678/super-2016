@@ -82,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="scout data"
+            android:textSize="10sp"
             android:onClick="getScoutData"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"/>
@@ -89,9 +90,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="6dp"
             android:text = "super data"
+            android:textSize="10sp"
             android:onClick="getSuperData"/>
+        <Button
+            android:id="@+id/resendAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="Resend All"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:onClick="resendAllClicked"/>
 
     </RelativeLayout>
 </LinearLayout>
