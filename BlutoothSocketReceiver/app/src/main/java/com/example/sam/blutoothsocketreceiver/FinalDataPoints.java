@@ -67,8 +67,6 @@ public class FinalDataPoints extends ActionBarActivity {
         getExtrasForFinalData();
 
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
-        finalAllianceScoreEditText = (EditText)findViewById(R.id.finalScoreEditText);
-        finalAllianceScoreEditText.setText("0");
         superExternalData = new JSONObject();
         teamOneJson = new JSONObject();
         teamTwoJson = new JSONObject();
@@ -137,6 +135,18 @@ public class FinalDataPoints extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {
             final Activity context = this;
+            int score;
+            try {
+                score = Integer.parseInt(allianceScore.getText().toString());
+            } catch (NumberFormatException nfe) {
+                Toast.makeText(this, "Invalid score", Toast.LENGTH_LONG).show();
+                return false;
+            } catch (NullPointerException npe) {
+                Toast.makeText(this, "Enter a score", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            final int allianceScoreNum = score;
+
             //Send the data of the super scout on a separate thread
             new Thread() {
                 @Override
@@ -158,7 +168,7 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("defenseThree", thirdDefense);
                         superExternalData.put("defenseFour", fourthDefense);
                         superExternalData.put("alliance", alliance);
-                        superExternalData.put(alliance + "Score", allianceScore.getText().toString());
+                        superExternalData.put(alliance + "Score", allianceScoreNum);
                         superExternalData.put(teamNumberOne, teamOneJson);
                         superExternalData.put(teamNumberTwo, teamTwoJson);
                         superExternalData.put(teamNumberThree, teamThreeJson);

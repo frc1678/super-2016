@@ -114,7 +114,7 @@ import org.json.JSONObject;
                     };
                     final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                     dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
-                    dataBase.addValueEventListener(new ValueEventListener() {
+                    dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             JSONObject blueTeamNumbers = new JSONObject();
@@ -285,7 +285,7 @@ import org.json.JSONObject;
                                 failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
 
 
-                                dataBase.addValueEventListener(new ValueEventListener() {
+                                dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
                                         //if the scout data is based on blue alliance
@@ -384,25 +384,6 @@ import org.json.JSONObject;
             @Override
             public void run() {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void updateScoutData() {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                File scoutFile = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
-                if (!scoutFile.mkdir()) {
-                    Log.i("File Info", "Failed to make Directory. Unimportant");
-                }
-                File[] files = scoutFile.listFiles();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-                for (File tmpFile : files) {
-                    adapter.add(tmpFile.getName());
-                }
-                ListView listView = (ListView) context.findViewById(R.id.view_files_received);
-                listView.setAdapter(adapter);
             }
         });
     }

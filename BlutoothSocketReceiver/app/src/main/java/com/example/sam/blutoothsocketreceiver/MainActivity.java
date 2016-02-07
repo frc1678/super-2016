@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -166,7 +165,7 @@ public class MainActivity extends ActionBarActivity {
                 final String fileName = name;
                 new AlertDialog.Builder(context)
                         .setTitle("RESEND DATA?")
-                        .setMessage("RESEND SUPER DATA?")
+                        .setMessage("RESEND DATA?")
                         .setNegativeButton("", null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -566,7 +565,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
                 //get json array containing success and fail times for defense crossing of auto and tele
-                dataBase.addValueEventListener(new ValueEventListener() {
+                dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         for (int j = 0; j < datapoints.size(); j++) {
@@ -653,6 +652,7 @@ public class MainActivity extends ActionBarActivity {
                         }
                         Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
                     }
+
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
