@@ -66,6 +66,7 @@ public class MainActivity extends ActionBarActivity {
     ArrayList<String> valueOfKeys;
     ArrayList<String> checkNumKeys;
     ArrayList<String> checkStringKeys;
+    ArrayList<String> defenses;
     JSONObject jsonUnderKey;
     JSONArray successDefenseTele;
     JSONArray failedDefenseTele;
@@ -439,7 +440,7 @@ public class MainActivity extends ActionBarActivity {
                     try {
                         Log.e("Test 2", "assign file data to Json");
                         JSONObject superData = dataPoints.get(j);
-
+                        defenses = new ArrayList<>(Arrays.asList("defenseOne", "defenseTwo", "defenseThree", "defenseFour"));
                         String matchNum = superData.get("matchNumber").toString();
                         String matchAndTeamOne = superData.get("teamOne") + "Q" + matchNum;
                         String matchAndTeamTwo = superData.get("teamTwo") + "Q" + matchNum;
@@ -472,19 +473,17 @@ public class MainActivity extends ActionBarActivity {
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child(teamThreeKeys).setValue(Integer.parseInt(teamOneData.get(teamThreeKeys).toString()));
                         }
                         if (!isRed){
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("0").setValue(superData.get("defenseOne"));
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("1").setValue(superData.get("defenseTwo"));
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("2").setValue(superData.get("defenseThree"));
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("3").setValue(superData.get("defenseFour"));
+                            for (int i = 0; i < defenses.size(); i++){
+                                dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
+                            }
                             dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("4").setValue("LB");
                             dataBase.child("Matches").child(matchNum).child("blueScore").setValue(Integer.parseInt(superData.get("Blue Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidCapture").setValue(superData.get("didCapture"));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidBreach").setValue(superData.get("didBreach"));
                         }else{
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("0").setValue(superData.get("defenseOne"));
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("1").setValue(superData.get("defenseTwo"));
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("2").setValue(superData.get("defenseThree"));
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("3").setValue(superData.get("defenseFour"));
+                            for (int i = 0; i < defenses.size(); i++){
+                                dataBase.child("Matches").child(matchNum).child("redDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
+                            }
                             dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("4").setValue("LB");
                             dataBase.child("Matches").child(matchNum).child("redScore").setValue(Integer.parseInt(superData.get("Red Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("redAllianceDidCapture").setValue(superData.get("didCapture"));
