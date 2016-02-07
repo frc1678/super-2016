@@ -36,6 +36,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,8 @@ public class FieldSetUp extends ActionBarActivity {
     String teamThreeNumber;
     String alliance;
     ArrayList<String> defensesPicked;
+    ArrayList<String> checkDefensesPicked;
+    ArrayList<String> sameDefenses;
     ToggleButton defenseButton;
     Firebase firebaseRef;
 
@@ -65,6 +68,8 @@ public class FieldSetUp extends ActionBarActivity {
 
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
+        checkDefensesPicked = new ArrayList<>();
+        sameDefenses = new ArrayList<>();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         ArrayList<String> defenses = new ArrayList<>(Arrays.asList("PC", "CDF", "DB", "SP", "RT", "RW", "RP", "MT"));
 
@@ -146,15 +151,27 @@ public class FieldSetUp extends ActionBarActivity {
         if (id == R.id.nextButton) {
             Intent next = new Intent(this, Super_Scouting.class);
             defensesPicked.clear();
+            checkDefensesPicked.clear();
             for (int i = 0; i < toggleButtonList.size(); i++) {
                 if (toggleButtonList.get(i).isChecked()) {
                     defensesPicked.add(toggleButtonList.get(i).getText().toString());
+                    //checkDefensesPicked.add(toggleButtonList.get(i).getText().toString());
                 }
             }
-            if (defensesPicked.size() < 4) {
+            for(int i = 0; i < defensesPicked.size(); i++){
+                if ( (Collections.frequency(defensesPicked, defensesPicked.get(i))) > 1 ){
+                    Toast.makeText(this, "You put " + defensesPicked.get(i) + " more than once!", Toast.LENGTH_SHORT).show();
+                    checkDefensesPicked.add(defensesPicked.get(i));
+                }
+            }
+            if (checkDefensesPicked.size() > 0){
+                Toast.makeText(this, "input different defenses", Toast.LENGTH_SHORT);
+            }
+            else if (defensesPicked.size() < 4) {
                 Toast.makeText(this, "Input four defenses!!", Toast.LENGTH_LONG).show();
 
-            } else if(defensesPicked.size() == 4) {
+            }
+            else if(defensesPicked.size() == 4) {
                 new Thread() {
                     @Override
                     public void run() {
