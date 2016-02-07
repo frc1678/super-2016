@@ -68,12 +68,16 @@ public class SuperNotes extends ActionBarActivity {
         int id = item.getItemId();
         if(id == R.id.noteSubmit){
             Log.e("matchNumber", numberOfMatch);
-            if(isBlue){
-                Log.e("matchNumber", numberOfMatch);
-                dataBase.child("Matches").child(numberOfMatch).child("BSNotes").setValue(superNotesEditText.getText().toString());
-            }else{
-                dataBase.child("Matches").child(numberOfMatch).child("RSNotes").setValue(superNotesEditText.getText().toString());
-            }
+            new Thread() {
+                public void run() {
+                    if (isBlue) {
+                        Log.e("matchNumber", numberOfMatch);
+                        dataBase.child("Matches").child(numberOfMatch).child("BSNotes").setValue(superNotesEditText.getText().toString());
+                    } else {
+                        dataBase.child("Matches").child(numberOfMatch).child("RSNotes").setValue(superNotesEditText.getText().toString());
+                    }
+                }
+            }.start();
             final Activity activity = this;
             activity.finish();
         }

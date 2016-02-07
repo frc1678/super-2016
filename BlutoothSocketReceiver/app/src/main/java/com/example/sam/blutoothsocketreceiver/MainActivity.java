@@ -163,10 +163,13 @@ public class MainActivity extends ActionBarActivity {
                     name = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data/" + name;
                 }
                 final String fileName = name;
+                final String[] nameOfResendMatch = name.split("Q");
                 new AlertDialog.Builder(context)
                         .setTitle("RESEND DATA?")
-                        .setMessage("RESEND DATA?")
-                        .setNegativeButton("", null)
+                        .setMessage("RESEND " + "Q" + nameOfResendMatch[1] + "?")
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which){}
+                        })
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -396,19 +399,19 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(context, "Failed To Open File", Toast.LENGTH_LONG).show();
             return null;
         }
-        String dataOfSuper = "";
+        String dataOfFile = "";
         String buf;
         try {
             while ((buf = file.readLine()) != null) {
-                dataOfSuper = dataOfSuper.concat(buf + "\n");
+                dataOfFile = dataOfFile.concat(buf + "\n");
             }
         } catch (IOException ioe) {
             Log.e("File Error", "Failed To Read From File");
             Toast.makeText(context, "Failed To Read From File", Toast.LENGTH_LONG).show();
             return null;
         }
-        Log.i("SUPER", dataOfSuper);
-        return dataOfSuper;
+        Log.i("fileData", dataOfFile);
+        return dataOfFile;
     }
 
 
@@ -436,40 +439,56 @@ public class MainActivity extends ActionBarActivity {
                     try {
                         Log.e("Test 2", "assign file data to Json");
                         JSONObject superData = dataPoints.get(j);
-                        String matchAndTeamOne = superData.get("teamOne") + "Q" + superData.get("matchNumber");
-                        String matchAndTeamTwo = superData.get("teamTwo") + "Q" + superData.get("matchNumber");
-                        String matchAndTeamThree = superData.get("teamThree") + "Q" + superData.get("matchNumber");
+
+                        String matchNum = superData.get("matchNumber").toString();
+                        String matchAndTeamOne = superData.get("teamOne") + "Q" + matchNum;
+                        String matchAndTeamTwo = superData.get("teamTwo") + "Q" + matchNum;
+                        String matchAndTeamThree = superData.get("teamThree") + "Q" + matchNum;
                         String teamOneNumber = superData.getString("teamOne");
                         String teamTwoNumber = superData.getString("teamTwo");
                         String teamThreeNumber = superData.getString("teamThree");
+
                         JSONObject teamOneData = superData.getJSONObject(teamOneNumber);
                         JSONObject teamTwoData = superData.getJSONObject(teamTwoNumber);
                         JSONObject teamThreeData = superData.getJSONObject(teamThreeNumber);
-                        System.out.println("teamThreeJson: " + teamThreeData.toString());
-                        Log.e("Test 3", "Test Here!");
                         JSONObject teamOneKeyNames = new JSONObject(teamOneData.toString());
                         JSONObject teamTwoKeyNames = new JSONObject(teamTwoData.toString());
                         JSONObject teamThreeKeyNames = new JSONObject(teamThreeData.toString());
+
                         Iterator getTeamOneKeys = teamOneKeyNames.keys();
                         Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
                         Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
-                        Log.e("Test 4", "Test Here!");
+
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
-                            Log.e("teamOneKeys", teamOneKeys);
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child(teamOneKeys).setValue(Integer.parseInt(teamOneData.get(teamOneKeys).toString()));
                         }
-                        Log.e("Test 5", "test here!");
                         while (getTeamTwoKeys.hasNext()) {
                             String teamTwoKeys = (String) getTeamTwoKeys.next();
-                            Log.e("teamTwoKeys", teamTwoKeys);
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamTwo).child(teamTwoKeys).setValue(Integer.parseInt(teamOneData.get(teamTwoKeys).toString()));
                         }
-                        Log.e("Test 6", "Test here!");
                         while (getTeamThreeKeys.hasNext()) {
                             String teamThreeKeys = (String) getTeamThreeKeys.next();
-                            Log.e("teamThreeKeys", teamThreeKeys);
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child(teamThreeKeys).setValue(Integer.parseInt(teamOneData.get(teamThreeKeys).toString()));
+                        }
+                        if (!isRed){
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("0").setValue(superData.get("defenseOne"));
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("1").setValue(superData.get("defenseTwo"));
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("2").setValue(superData.get("defenseThree"));
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("3").setValue(superData.get("defenseFour"));
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("4").setValue("LB");
+                            dataBase.child("Matches").child(matchNum).child("blueScore").setValue(Integer.parseInt(superData.get("Blue Alliance Score").toString()));
+                            dataBase.child("Matches").child(matchNum).child("blueAllianceDidCapture").setValue(superData.get("didCapture"));
+                            dataBase.child("Matches").child(matchNum).child("blueAllianceDidBreach").setValue(superData.get("didBreach"));
+                        }else{
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("0").setValue(superData.get("defenseOne"));
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("1").setValue(superData.get("defenseTwo"));
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("2").setValue(superData.get("defenseThree"));
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("3").setValue(superData.get("defenseFour"));
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("4").setValue("LB");
+                            dataBase.child("Matches").child(matchNum).child("redScore").setValue(Integer.parseInt(superData.get("Red Alliance Score").toString()));
+                            dataBase.child("Matches").child(matchNum).child("redAllianceDidCapture").setValue(superData.get("didCapture"));
+                            dataBase.child("Matches").child(matchNum).child("redAllianceDidBreach").setValue(superData.get("didBreach"));
                         }
 
                     } catch (JSONException JE) {

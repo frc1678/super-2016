@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class FinalDataPoints extends ActionBarActivity {
@@ -40,7 +41,6 @@ public class FinalDataPoints extends ActionBarActivity {
     String alliance;
     TextView finalScore;
     EditText allianceScore;
-    EditText finalAllianceScoreEditText;
     JSONObject superExternalData;
     JSONObject teamOneJson;
     JSONObject teamTwoJson;
@@ -51,6 +51,7 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamTwoDataScore;
     ArrayList<String> teamThreeDataName;
     ArrayList<String> teamThreeDataScore;
+    ArrayList<String> defenses;
     ToggleButton captureCheck;
     ToggleButton breachCheck;
     File dir;
@@ -162,13 +163,15 @@ public class FinalDataPoints extends ActionBarActivity {
                         return;
                     }
                     try {
+                        superExternalData.put("didCapture", captureCheck.getText().toString());
+                        superExternalData.put("didBreach", breachCheck.getText().toString());
                         superExternalData.put("matchNumber", numberOfMatch);
                         superExternalData.put("defenseOne", firstDefense);
                         superExternalData.put("defenseTwo", secondDefense);
                         superExternalData.put("defenseThree", thirdDefense);
                         superExternalData.put("defenseFour", fourthDefense);
                         superExternalData.put("alliance", alliance);
-                        superExternalData.put(alliance + "Score", allianceScoreNum);
+                        superExternalData.put(alliance + " Score", allianceScoreNum);
                         superExternalData.put(teamNumberOne, teamOneJson);
                         superExternalData.put(teamNumberTwo, teamTwoJson);
                         superExternalData.put(teamNumberThree, teamThreeJson);
@@ -217,7 +220,8 @@ public class FinalDataPoints extends ActionBarActivity {
 
                     file.println(superExternalData.toString());
                     file.close();
-                    System.out.println(superExternalData.toString());
+                    System.out.println("SUPER EXTERNAL DATA" + superExternalData.toString());
+                    System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -255,5 +259,7 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+
+        defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense, thirdDefense, fourthDefense, "LB"));
     }
 }

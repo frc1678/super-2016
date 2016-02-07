@@ -174,6 +174,8 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
             intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
             intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
+
+            System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
             startActivity(intent);
         }
 

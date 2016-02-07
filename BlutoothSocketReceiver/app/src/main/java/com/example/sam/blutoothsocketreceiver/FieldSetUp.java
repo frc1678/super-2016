@@ -82,9 +82,9 @@ public class FieldSetUp extends ActionBarActivity {
             for (int j = 0; j <= 7; j++) {
                 defenseButton = new ToggleButton(this);
                 defenseButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-                defenseButton.setText(defenses.get(j).toString());
-                defenseButton.setTextOn(defenses.get(j).toString());
-                defenseButton.setTextOff(defenses.get(j).toString());
+                defenseButton.setText(defenses.get(j));
+                defenseButton.setTextOn(defenses.get(j));
+                defenseButton.setTextOff(defenses.get(j));
                 defenseButton.setTag(Integer.toString(i));
                 defenseButton.setBackgroundColor(Color.LTGRAY);
                 defenseButton.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +190,10 @@ public class FieldSetUp extends ActionBarActivity {
                     next.putExtra("teamNumberOne", teamOneNumber);
                     next.putExtra("teamNumberTwo", teamTwoNumber);
                     next.putExtra("teamNumberThree", teamThreeNumber);
+                    next.putExtra("firstDefensePicked", defensesPicked.get(0));
+                    next.putExtra("secondDefensePicked", defensesPicked.get(1));
+                    next.putExtra("thirdDefensePicked", defensesPicked.get(2));
+                    next.putExtra("fourthDefensePicked", defensesPicked.get(3));
                     next.putExtra("alliance", alliance);
                     startActivity(next);
                  } else {
