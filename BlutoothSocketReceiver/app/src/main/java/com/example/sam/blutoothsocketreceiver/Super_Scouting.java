@@ -2,6 +2,7 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -108,70 +111,75 @@ public class Super_Scouting extends ActionBarActivity {
 
     }
 //Dialog pops up and lets the user input notes for each team
-    public void teamOneNoteClick(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumberOne + " Note:");
-        inputTeamOne = new EditText(this);
-        inputTeamOne.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-        builder.setView(inputTeamOne);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                teamOneNote = inputTeamOne.getText().toString();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+    public void teamOneNoteClick(View view) {
 
-        builder.show();
+        final Dialog dialog = new Dialog(this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        Button ok = (Button) dialogView.findViewById(R.id.OKButton);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText note = (EditText) dialogView.findViewById(R.id.note);
+                teamOneNote = note.getText().toString();
+                dialog.dismiss();
+            }
+        });
+        Button cancel = (Button) dialogView.findViewById(R.id.CancelButton);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setTitle("Team " + teamNumberOne + " Note:");
+        dialog.setContentView(dialogView);
+        dialog.show();
     }
     public void teamTwoNoteClick(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumberTwo + " Note:");
-
-        inputTeamTwo = new EditText(this);
-        inputTeamTwo.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-        builder.setView(inputTeamTwo);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final Dialog dialog = new Dialog(this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        Button ok = (Button) dialogView.findViewById(R.id.OKButton);
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                teamTwoNote = inputTeamTwo.getText().toString();
+            public void onClick(View v) {
+                EditText note = (EditText) dialogView.findViewById(R.id.note);
+                teamTwoNote = note.getText().toString();
+                dialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        Button cancel = (Button) dialogView.findViewById(R.id.CancelButton);
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
-
-        builder.show();
+        dialog.setTitle("Team " + teamNumberTwo + " Note:");
+        dialog.setContentView(dialogView);
+        dialog.show();
     }
     public void teamThreeNoteClick(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumberThree + " Note:");
-
-        inputTeamThree = new EditText(this);
-        inputTeamThree.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-        builder.setView(inputTeamThree);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final Dialog dialog = new Dialog(this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        Button ok = (Button) dialogView.findViewById(R.id.OKButton);
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                teamThreeNote = inputTeamThree.getText().toString();
+            public void onClick(View v) {
+                EditText note = (EditText) dialogView.findViewById(R.id.note);
+                teamThreeNote = note.getText().toString();
+                dialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        Button cancel = (Button) dialogView.findViewById(R.id.CancelButton);
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
-
-        builder.show();
+        dialog.setTitle("Team " + teamNumberThree + " Note:");
+        dialog.setContentView(dialogView);
+        dialog.show();
     }
     //warns the user that going back will change data
     @Override
