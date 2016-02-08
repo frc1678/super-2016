@@ -102,7 +102,7 @@ public class Super_Scouting extends ActionBarActivity {
         teamTwoDataScore = new ArrayList<>();
         teamThreeDataName = new ArrayList<>();
         teamThreeDataScore = new ArrayList<>();
-        data = new ArrayList<>(Arrays.asList("rankSpeed", "rankTorque", "rankDefense", "rankEvasion", "rankBallControl"));
+        data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
 
         setUpDataRanking();
 
@@ -292,21 +292,21 @@ public class Super_Scouting extends ActionBarActivity {
             View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
             TextView nameOfData1 = (TextView) teamOneLayout.findViewById(R.id.dataName);
             TextView scoreOfData1 = (TextView) teamOneLayout.findViewById(R.id.scoreCounter);
-            teamOneDataName.add((nameOfData1.getText().toString()));
+            teamOneDataName.add(("rank" + (nameOfData1.getText().toString())).replace(" ", ""));
             teamOneDataScore.add(scoreOfData1.getText().toString());
         }
         for (int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++) {
             View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
             TextView nameOfData2 = (TextView) teamTwoLayout.findViewById(R.id.dataName);
             TextView scoreOfData2 = (TextView) teamTwoLayout.findViewById(R.id.scoreCounter);
-            teamTwoDataName.add(nameOfData2.getText().toString());
+            teamTwoDataName.add(("rank" + (nameOfData2.getText().toString())).replace(" ", ""));
             teamTwoDataScore.add(scoreOfData2.getText().toString());
         }
         for (int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++) {
             View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
             TextView nameOfData3 = (TextView) teamThreeLayout.findViewById(R.id.dataName);
             TextView scoreOfData3 = (TextView) teamThreeLayout.findViewById(R.id.scoreCounter);
-            teamThreeDataName.add(nameOfData3.getText().toString());
+            teamThreeDataName.add(("rank" + (nameOfData3.getText().toString())).replace(" ", ""));
             teamThreeDataScore.add(scoreOfData3.getText().toString());
         }
     }
