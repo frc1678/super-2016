@@ -96,6 +96,7 @@ public class MainActivity extends ActionBarActivity {
         Log.e("test", "Logcat is up and running!");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         context = this;
+        //Start the class that continuosly accepts connection from scout
         accept_loop loop = new accept_loop(context);
         loop.start();
         Intent backToHome = getIntent();
@@ -107,12 +108,9 @@ public class MainActivity extends ActionBarActivity {
         jsonUnderKey = new JSONObject();
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
-            public void onAuthenticated(AuthData authData) {
-            }
-
+            public void onAuthenticated(AuthData authData) {}
             @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-            }
+            public void onAuthenticationError(FirebaseError firebaseError) {}
         };
         dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
@@ -174,39 +172,39 @@ public class MainActivity extends ActionBarActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (scoutOrSuperFiles) {
-                                    String content = readFile(fileName);
-                                    JSONObject superData;
-                                    try {
-                                        superData = new JSONObject(content);
-                                    } catch (JSONException jsone) {
-                                        Log.e("File Error", "no valid JSON in the file");
-                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                        return;
-                                    }
-                                    List<JSONObject> dataPoints = new ArrayList<>();
-                                    dataPoints.add(superData);
-                                    resendSuperData(dataPoints);
-                                } else {
-                                    String content = readFile(fileName);
-                                    JSONObject data;
-                                    try {
-                                        data = new JSONObject(content);
-                                    } catch (JSONException jsone) {
-                                        Log.e("File Error", "no valid JSON in the file");
-                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                        return;
-                                    }
-                                    List<JSONObject> dataPoints = new ArrayList<>();
-                                    dataPoints.add(data);
-                                    resendScoutData(dataPoints);
-                                }
+                        if (scoutOrSuperFiles) {
+                            String content = readFile(fileName);
+                            JSONObject superData;
+                            try {
+                                superData = new JSONObject(content);
+                            } catch (JSONException jsone) {
+                                Log.e("File Error", "no valid JSON in the file");
+                                Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                return;
                             }
-                        }).show();
+                            List<JSONObject> dataPoints = new ArrayList<>();
+                            dataPoints.add(superData);
+                            resendSuperData(dataPoints);
+                        } else {
+                            String content = readFile(fileName);
+                            JSONObject data;
+                            try {
+                                data = new JSONObject(content);
+                            } catch (JSONException jsone) {
+                                Log.e("File Error", "no valid JSON in the file");
+                                Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            List<JSONObject> dataPoints = new ArrayList<>();
+                            dataPoints.add(data);
+                            resendScoutData(dataPoints);
+                        }
+                    }
+                }).show();
             }
         });
     }
-
+//resends all data on the currently viewed list of data
     public void resendAllClicked(View view) {
         new AlertDialog.Builder(this)
                 .setTitle("RESEND ALL?")
@@ -325,7 +323,7 @@ public class MainActivity extends ActionBarActivity {
         }
         adapter.notifyDataSetChanged();
     }
-
+//updates the team numbers in the front screen according to the match number and the alliance;
     private void updateUI() {
         if (FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())) {
             Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchNumber.toString());
@@ -350,18 +348,14 @@ public class MainActivity extends ActionBarActivity {
         editor.putBoolean("allianceColor", isRed);
         editor.commit();
     }
-
+//changes the team numbers while the user changes the match number
     public void changeTeamsByMatchName() {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -389,7 +383,7 @@ public class MainActivity extends ActionBarActivity {
         teamNumberTwo.setFocusable(false);
         teamNumberThree.setFocusable(false);
     }
-
+//reads the data of the clicked file
     public String readFile(String name) {
         BufferedReader file;
         try {
@@ -415,7 +409,7 @@ public class MainActivity extends ActionBarActivity {
         return dataOfFile;
     }
 
-
+//converts jsonArrays to arrays
     public List<Object> jsonArrayToArray(JSONArray array) {
         List<Object> os = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {

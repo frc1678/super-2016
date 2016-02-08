@@ -18,11 +18,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +64,7 @@ public class Super_Scouting extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         next = getIntent();
         object = new JSONObject();
+        //Get authorized to use the database
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {}
@@ -79,7 +78,7 @@ public class Super_Scouting extends ActionBarActivity {
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
-
+        //set team numbers and their alliance colors on the top
         if (alliance.equals("Blue Alliance")) {
             teamNumber1.setText(teamNumberOne);
             teamNumber1.setTextColor(Color.BLUE);
@@ -108,7 +107,7 @@ public class Super_Scouting extends ActionBarActivity {
         setUpDataRanking();
 
     }
-
+//Dialog pops up and lets the user input notes for each team
     public void teamOneNoteClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Team " + teamNumberOne + " Note:");
@@ -174,6 +173,7 @@ public class Super_Scouting extends ActionBarActivity {
 
         builder.show();
     }
+    //warns the user that going back will change data
     @Override
     public void onBackPressed(){
         final Activity activity = this;
@@ -194,7 +194,7 @@ public class Super_Scouting extends ActionBarActivity {
                 .show();
     }
 
-
+//a view that will be added in a loop
     private View createCounter(String title) {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -277,7 +277,7 @@ public class Super_Scouting extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+//Get all the data names and their values
     public void getEachDataNameAndValue() {
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
@@ -310,6 +310,7 @@ public class Super_Scouting extends ActionBarActivity {
             teamThreeDataScore.add(scoreOfData3.getText().toString());
         }
     }
+    //sets up the counters to add value
     public void setUpDataRanking(){
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
