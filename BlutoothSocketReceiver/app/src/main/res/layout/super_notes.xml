@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:id="@+id/allianceNotesTextView"
         android:layout_width="wrap_content"
@@ -19,15 +18,20 @@
         android:textSize="25sp"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="100dp"/>
+    <ScrollView
+        android:id="@+id/teamOneScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/teamOneNoteTextView">
     <EditText
         android:id="@+id/teamOneNotesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Team One Note"
         android:textSize="20sp"
-        android:layout_marginTop="150dp"
         android:layout_alignParentLeft="true"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine" />
+    </ScrollView>
     <TextView
         android:id="@+id/teamTwoNoteTextView"
         android:layout_width="wrap_content"
@@ -35,16 +39,21 @@
         android:textSize="25sp"
         android:text="Team 2"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/teamOneNotesEditText"/>
+        android:layout_below="@id/teamOneScrollView"/>
+    <ScrollView
+        android:id="@+id/teamTwoScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/teamTwoNoteTextView">
     <EditText
         android:id="@+id/teamTwoNotesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Team Two Note"
         android:textSize="20sp"
-        android:layout_marginTop="250dp"
         android:layout_alignParentLeft="true"
         android:inputType="textMultiLine"/>
+    </ScrollView>
     <TextView
         android:id="@+id/teamThreeNoteTextView"
         android:layout_width="wrap_content"
@@ -52,15 +61,19 @@
         android:textSize="25sp"
         android:text="Team 3"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/teamTwoNotesEditText"/>
+        android:layout_below="@id/teamTwoScrollView"/>
+    <ScrollView
+        android:layout_below="@id/teamThreeNoteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp">
     <EditText
         android:id="@+id/teamThreeNotesEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Team Three Note"
         android:textSize="20sp"
-        android:layout_marginTop="350dp"
         android:layout_alignParentLeft="true"
         android:inputType="textMultiLine"/>
+    </ScrollView>
 
 </RelativeLayout>
