@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/finalScoreTextView"
         android:layout_centerHorizontal="true"
-        android:hint="score"
+        android:hint="Score"
         android:inputType="number"
         android:textSize="25sp"
         android:id="@+id/finalScoreEditText"
