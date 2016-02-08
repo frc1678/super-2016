@@ -11,14 +11,56 @@
         android:textSize="40sp"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"/>
-    <EditText
-        android:id="@+id/notesEditText"
+    <TextView
+        android:id="@+id/teamOneNoteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Notes Here"
+        android:text="Team 1"
         android:textSize="25sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="100dp"/>
+    <EditText
+        android:id="@+id/teamOneNotesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Team One Note"
+        android:textSize="20sp"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentLeft="true"
+        android:inputType="textMultiLine"/>
+    <TextView
+        android:id="@+id/teamTwoNoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Team 2"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/teamOneNotesEditText"/>
+    <EditText
+        android:id="@+id/teamTwoNotesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Team Two Note"
+        android:textSize="20sp"
+        android:layout_marginTop="250dp"
+        android:layout_alignParentLeft="true"
+        android:inputType="textMultiLine"/>
+    <TextView
+        android:id="@+id/teamThreeNoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Team 3"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/teamTwoNotesEditText"/>
+    <EditText
+        android:id="@+id/teamThreeNotesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Team Three Note"
+        android:textSize="20sp"
+        android:layout_marginTop="350dp"
+        android:layout_alignParentLeft="true"
         android:inputType="textMultiLine"/>
 
 </RelativeLayout>

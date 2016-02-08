@@ -85,7 +85,7 @@ public class FinalDataPoints extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
+        firebaseRef = new Firebase("https://1678-dev2-2016.firebaseio.com");
         firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
@@ -132,6 +132,9 @@ public class FinalDataPoints extends ActionBarActivity {
             Intent toNotes = new Intent(this, SuperNotes.class);
             toNotes.putExtra("alliance", alliance);
             toNotes.putExtra("matchNumber", numberOfMatch);
+            toNotes.putExtra("teamOne", teamNumberOne);
+            toNotes.putExtra("teamTwo", teamNumberTwo);
+            toNotes.putExtra("teamThree", teamNumberThree);
             startActivity(toNotes);
         }
         //noinspection SimplifiableIfStatement

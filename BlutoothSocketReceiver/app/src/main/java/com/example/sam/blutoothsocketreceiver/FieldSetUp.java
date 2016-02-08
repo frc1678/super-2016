@@ -64,7 +64,7 @@ public class FieldSetUp extends ActionBarActivity {
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
-        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
+        firebaseRef = new Firebase("https://1678-dev2-2016.firebaseio.com");
 
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
@@ -169,7 +169,18 @@ public class FieldSetUp extends ActionBarActivity {
             }
             else if (defensesPicked.size() < 4) {
                 Toast.makeText(this, "Input four defenses!!", Toast.LENGTH_LONG).show();
-
+            }
+            else if(defensesPicked.contains("PC") && defensesPicked.contains("CDF")){
+                Toast.makeText(this, "PC and CDF can't exist together!", Toast.LENGTH_LONG).show();
+            }
+            else if(defensesPicked.contains("DB") && defensesPicked.contains("SP")){
+                Toast.makeText(this, "DB and SP can't exist together!", Toast.LENGTH_LONG).show();
+            }
+            else if(defensesPicked.contains("RT") && defensesPicked.contains("RW")){
+                Toast.makeText(this, "RT and RW can't exist together!", Toast.LENGTH_LONG).show();
+            }
+            else if(defensesPicked.contains("RP") && defensesPicked.contains("MT")){
+                Toast.makeText(this, "RP and MTgit  can't exist together!", Toast.LENGTH_LONG).show();
             }
             else if(defensesPicked.size() == 4) {
                 new Thread() {

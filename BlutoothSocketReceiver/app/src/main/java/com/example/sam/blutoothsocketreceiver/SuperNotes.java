@@ -19,7 +19,13 @@ public class SuperNotes extends ActionBarActivity {
     Intent notes;
     String alliance;
     String numberOfMatch;
+    String teamOne;
+    String teamTwo;
+    String teamThree;
     TextView superNoteTextView;
+    TextView teamOneTextView;
+    TextView teamTwoTextView;
+    TextView teamThreeTextView;
     EditText superNotesEditText;
     Firebase dataBase;
     boolean isBlue = new Boolean(true);
@@ -30,16 +36,30 @@ public class SuperNotes extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         notes = getIntent();
         superNoteTextView = (TextView)findViewById(R.id.allianceNotesTextView);
-        superNotesEditText = (EditText)findViewById(R.id.notesEditText);
+        teamOneTextView = (TextView)findViewById(R.id.teamOneNoteTextView);
+        teamTwoTextView = (TextView)findViewById(R.id.teamTwoNoteTextView);
+        teamThreeTextView = (TextView)findViewById(R.id.teamThreeNoteTextView);
         alliance = notes.getExtras().getString("alliance");
         numberOfMatch = notes.getStringExtra("matchNumber");
+        teamOne = notes.getStringExtra("teamOne");
+        teamTwo = notes.getStringExtra("teamTwo");
+        teamThree = notes.getStringExtra("teamThree");
         if(alliance.equals("Red Alliance")){
             superNoteTextView.setTextColor(Color.RED);
+            teamOneTextView.setTextColor(Color.RED);
+            teamTwoTextView.setTextColor(Color.RED);
+            teamThreeTextView.setTextColor(Color.RED);
             isBlue = false;
         }else if(alliance.equals("Blue Alliance")){
             superNoteTextView.setTextColor(Color.BLUE);
+            teamOneTextView.setTextColor(Color.BLUE);
+            teamTwoTextView.setTextColor(Color.BLUE);
+            teamThreeTextView.setTextColor(Color.BLUE);
             isBlue = true;
         }
+        teamOneTextView.setText(teamOne);
+        teamTwoTextView.setText(teamTwo);
+        teamThreeTextView.setText(teamThree);
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
@@ -49,7 +69,7 @@ public class SuperNotes extends ActionBarActivity {
             public void onAuthenticationError(FirebaseError firebaseError) {
             }
         };
-        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+        dataBase = new Firebase("https://1678-dev2-2016.firebaseio.com/");
         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
     }
 
