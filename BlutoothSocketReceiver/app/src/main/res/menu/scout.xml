@@ -16,10 +16,6 @@
                 android:title="Override Match and Team Number"
                 app:showAsAction = "always"/>
             <item
-                android:id="@+id/unoverride"
-                android:title="Auto Override"
-                app:showAsAction = "always"/>
-            <item
                 android:id="@+id/changeAlliance"
                 android:title="Change Alliance"
                 app:showAsAction = "always"/>

@@ -297,14 +297,18 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         } else if (id == R.id.action_override) {
-            enableEditTextEditing();
-
-        } else if (id == R.id.unoverride) {
-            updateUI();
-            disenableEditTestEditing();
+            if (item.getTitle().toString().equals("Override Match and Team Number")) {
+                enableEditTextEditing();
+                item.setTitle("Auto Override");
+            } else if (item.getTitle().toString().equals("Auto Override")) {
+                updateUI();
+                disenableEditTestEditing();
+                item.setTitle("Override Match and Team Number");
+            }
         }
-        return super.onOptionsItemSelected(item);
-    }
+            return super.onOptionsItemSelected(item);
+        }
+
 
     public void updateListView() {
         File dir;
