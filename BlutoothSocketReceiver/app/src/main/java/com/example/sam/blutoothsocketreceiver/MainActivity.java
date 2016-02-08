@@ -299,8 +299,8 @@ public class MainActivity extends ActionBarActivity {
         } else if (id == R.id.action_override) {
             if (item.getTitle().toString().equals("Override Match and Team Number")) {
                 enableEditTextEditing();
-                item.setTitle("UnOverride");
-            } else if (item.getTitle().toString().equals("UnOverride")) {
+                item.setTitle("Automate");
+            } else if (item.getTitle().toString().equals("Automate")) {
                 updateUI();
                 disenableEditTestEditing();
                 item.setTitle("Override Match and Team Number");
