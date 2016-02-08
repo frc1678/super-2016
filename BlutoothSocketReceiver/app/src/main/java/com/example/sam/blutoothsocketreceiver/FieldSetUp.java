@@ -64,7 +64,7 @@ public class FieldSetUp extends ActionBarActivity {
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
-        firebaseRef = new Firebase("https://1678-dev2-2016.firebaseio.com");
+        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
 
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();

@@ -41,6 +41,9 @@ public class FinalDataPoints extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
+    String teamOneNote;
+    String teamTwoNote;
+    String teamThreeNote;
     TextView finalScore;
     EditText allianceScore;
     JSONObject superExternalData;
@@ -85,7 +88,7 @@ public class FinalDataPoints extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        firebaseRef = new Firebase("https://1678-dev2-2016.firebaseio.com");
+        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
         firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
@@ -135,6 +138,9 @@ public class FinalDataPoints extends ActionBarActivity {
             toNotes.putExtra("teamOne", teamNumberOne);
             toNotes.putExtra("teamTwo", teamNumberTwo);
             toNotes.putExtra("teamThree", teamNumberThree);
+            toNotes.putExtra("teamOneNote", teamOneNote);
+            toNotes.putExtra("teamTwoNote", teamTwoNote);
+            toNotes.putExtra("teamThreeNote", teamThreeNote);
             startActivity(toNotes);
         }
         //noinspection SimplifiableIfStatement
@@ -221,6 +227,9 @@ public class FinalDataPoints extends ActionBarActivity {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                         }
+                    firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneNote);
+                    firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoNote);
+                    firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeNote);
 
                     file.println(superExternalData.toString());
                     file.close();
@@ -263,5 +272,8 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+        teamOneNote = intent.getStringExtra("teamOneNote");
+        teamTwoNote = intent.getStringExtra("teamTwoNote");
+        teamThreeNote = intent.getStringExtra("teamThreeNote");
     }
 }

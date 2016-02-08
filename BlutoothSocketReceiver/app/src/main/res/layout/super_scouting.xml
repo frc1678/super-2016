@@ -14,7 +14,9 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="Team1"
-            android:textSize="25dp"/>
+            android:textSize="25dp"
+            android:longClickable="true"
+            android:onClick="teamOneNoteClick"/>
 
         <TextView
             android:id="@+id/team2"
@@ -24,7 +26,9 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="Team2"
-            android:textSize="25dp"/>
+            android:textSize="25dp"
+            android:longClickable="true"
+            android:onClick="teamTwoNoteClick"/>
 
         <TextView
             android:id="@+id/team3"
@@ -34,7 +38,9 @@
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="Team3"
-            android:textSize="25dp"/>
+            android:textSize="25dp"
+            android:longClickable="true"
+            android:onClick="teamThreeNoteClick"/>
     </LinearLayout>
         <ScrollView
             android:layout_width="match_parent"

@@ -22,11 +22,16 @@ public class SuperNotes extends ActionBarActivity {
     String teamOne;
     String teamTwo;
     String teamThree;
+    String teamOneNote;
+    String teamTwoNote;
+    String teamThreeNote;
     TextView superNoteTextView;
     TextView teamOneTextView;
     TextView teamTwoTextView;
     TextView teamThreeTextView;
-    EditText superNotesEditText;
+    EditText teamOneEditText;
+    EditText teamTwoEditText;
+    EditText teamThreeEditText;
     Firebase dataBase;
     boolean isBlue = new Boolean(true);
     @Override
@@ -39,11 +44,11 @@ public class SuperNotes extends ActionBarActivity {
         teamOneTextView = (TextView)findViewById(R.id.teamOneNoteTextView);
         teamTwoTextView = (TextView)findViewById(R.id.teamTwoNoteTextView);
         teamThreeTextView = (TextView)findViewById(R.id.teamThreeNoteTextView);
-        alliance = notes.getExtras().getString("alliance");
-        numberOfMatch = notes.getStringExtra("matchNumber");
-        teamOne = notes.getStringExtra("teamOne");
-        teamTwo = notes.getStringExtra("teamTwo");
-        teamThree = notes.getStringExtra("teamThree");
+        teamOneEditText = (EditText)findViewById(R.id.teamOneNotesEditText);
+        teamTwoEditText = (EditText)findViewById(R.id.teamTwoNotesEditText);
+        teamThreeEditText = (EditText)findViewById(R.id.teamThreeNotesEditText);
+        getSuperNotesExtra();
+
         if(alliance.equals("Red Alliance")){
             superNoteTextView.setTextColor(Color.RED);
             teamOneTextView.setTextColor(Color.RED);
@@ -60,16 +65,17 @@ public class SuperNotes extends ActionBarActivity {
         teamOneTextView.setText(teamOne);
         teamTwoTextView.setText(teamTwo);
         teamThreeTextView.setText(teamThree);
+        teamOneEditText.setText(teamOneNote);
+        teamTwoEditText.setText(teamTwoNote);
+        teamThreeEditText.setText(teamThreeNote);
+
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
-            public void onAuthenticated(AuthData authData) {
-            }
-
+            public void onAuthenticated(AuthData authData) {}
             @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-            }
+            public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-dev2-2016.firebaseio.com/");
+        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
     }
 
@@ -90,12 +96,10 @@ public class SuperNotes extends ActionBarActivity {
             Log.e("matchNumber", numberOfMatch);
             new Thread() {
                 public void run() {
-                    if (isBlue) {
-                        Log.e("matchNumber", numberOfMatch);
-                        dataBase.child("Matches").child(numberOfMatch).child("BSNotes").setValue(superNotesEditText.getText().toString());
-                    } else {
-                        dataBase.child("Matches").child(numberOfMatch).child("RSNotes").setValue(superNotesEditText.getText().toString());
-                    }
+                    Log.e("matchNumber", numberOfMatch);
+                    dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
+                    dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
+                    dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
                 }
             }.start();
             final Activity activity = this;
@@ -103,6 +107,17 @@ public class SuperNotes extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
         }
+
+    public void getSuperNotesExtra(){
+        alliance = notes.getExtras().getString("alliance");
+        numberOfMatch = notes.getStringExtra("matchNumber");
+        teamOne = notes.getStringExtra("teamOne");
+        teamTwo = notes.getStringExtra("teamTwo");
+        teamThree = notes.getStringExtra("teamThree");
+        teamOneNote = notes.getStringExtra("teamOneNote");
+        teamTwoNote = notes.getStringExtra("teamTwoNote");
+        teamThreeNote = notes.getStringExtra("teamThreeNote");
+    }
 
     }
 

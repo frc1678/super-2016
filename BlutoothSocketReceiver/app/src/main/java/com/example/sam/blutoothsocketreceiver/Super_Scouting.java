@@ -8,11 +8,13 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +26,9 @@ public class Super_Scouting extends ActionBarActivity {
     TextView teamNumber1;
     TextView teamNumber2;
     TextView teamNumber3;
+    EditText inputTeamOne;
+    EditText inputTeamTwo;
+    EditText inputTeamThree;
     String numberOfMatch;
     String teamNumberOne;
     String teamNumberTwo;
@@ -33,6 +38,9 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
+    String teamOneNote;
+    String teamTwoNote;
+    String teamThreeNote;
     ArrayList<String> defenses;
     ArrayList<String> dataScore;
     ArrayList<String> teamOneDataName;
@@ -85,6 +93,72 @@ public class Super_Scouting extends ActionBarActivity {
 
         setUpDataRanking();
 
+    }
+
+    public void teamOneNoteClick(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Team " + teamNumber1 + " Note:");
+        inputTeamOne = new EditText(this);
+        inputTeamOne.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        builder.setView(inputTeamOne);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                teamOneNote = inputTeamOne.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    public void teamTwoNoteClick(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Team " + teamNumber2 + " Note:");
+
+        inputTeamTwo = new EditText(this);
+        inputTeamTwo.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        builder.setView(inputTeamTwo);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                teamTwoNote = inputTeamTwo.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    public void teamThreeNoteClick(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Team " + teamNumber3 + " Note:");
+
+        inputTeamThree = new EditText(this);
+        inputTeamThree.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        builder.setView(inputTeamThree);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                teamThreeNote = inputTeamThree.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
     @Override
     public void onBackPressed(){
@@ -166,6 +240,9 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("thirdDefensePicked", thirdDefense);
             intent.putExtra("fourthDefensePicked", fourthDefense);
             intent.putExtra("alliance", alliance);
+            intent.putExtra("teamOneNote", teamOneNote);
+            intent.putExtra("teamTwoNote", teamTwoNote);
+            intent.putExtra("teamThreeNote", teamThreeNote);
 
             getEachDataNameAndValue();
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
