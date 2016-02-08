@@ -18,6 +18,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +57,7 @@ public class Super_Scouting extends ActionBarActivity {
     ArrayList<String> data;
     JSONObject object;
     Intent next;
+    Firebase dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,15 @@ public class Super_Scouting extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         next = getIntent();
         object = new JSONObject();
+        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {}
 
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {}
+        };
+        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com");
+        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
         getExtrasForScouting();
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
@@ -97,7 +111,7 @@ public class Super_Scouting extends ActionBarActivity {
 
     public void teamOneNoteClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumber1 + " Note:");
+        builder.setTitle("Team " + teamNumberOne + " Note:");
         inputTeamOne = new EditText(this);
         inputTeamOne.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
         builder.setView(inputTeamOne);
@@ -118,7 +132,7 @@ public class Super_Scouting extends ActionBarActivity {
     }
     public void teamTwoNoteClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumber2 + " Note:");
+        builder.setTitle("Team " + teamNumberTwo + " Note:");
 
         inputTeamTwo = new EditText(this);
         inputTeamTwo.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
@@ -140,7 +154,7 @@ public class Super_Scouting extends ActionBarActivity {
     }
     public void teamThreeNoteClick(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Team " + teamNumber3 + " Note:");
+        builder.setTitle("Team " + teamNumberThree + " Note:");
 
         inputTeamThree = new EditText(this);
         inputTeamThree.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
@@ -251,8 +265,13 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
             intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
             intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
-
-            System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
+            new Thread(){
+                public void run(){
+                    dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneNote);
+                    dataBase.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoNote);
+                    dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeNote);
+                }
+            }.start();
             startActivity(intent);
         }
 

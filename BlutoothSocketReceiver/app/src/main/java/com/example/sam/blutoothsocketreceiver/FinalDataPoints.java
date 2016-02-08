@@ -227,9 +227,6 @@ public class FinalDataPoints extends ActionBarActivity {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
                         }
-                    firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneNote);
-                    firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoNote);
-                    firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeNote);
 
                     file.println(superExternalData.toString());
                     file.close();
