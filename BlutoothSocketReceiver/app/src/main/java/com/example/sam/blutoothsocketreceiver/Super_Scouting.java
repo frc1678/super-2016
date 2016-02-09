@@ -341,7 +341,7 @@ public class Super_Scouting extends ActionBarActivity {
         for (String title : data) {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
-            counter.setId(2 + data.indexOf(title));
+            counter.setId(3 + data.indexOf(title));
             counter.setLayoutParams(param);
             teamThreeRelativeLayout.addView(counter);
         }
