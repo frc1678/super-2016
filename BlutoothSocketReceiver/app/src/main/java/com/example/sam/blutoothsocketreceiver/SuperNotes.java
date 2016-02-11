@@ -1,6 +1,8 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -77,6 +79,32 @@ public class SuperNotes extends ActionBarActivity {
         };
         dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+    }
+    public void onBackPressed(){
+        final Activity activity = this;
+        new AlertDialog.Builder(this)
+                .setTitle("GO BACK?")
+                .setMessage("Do you want to submit the notes first?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread() {
+                            public void run() {
+                                Log.e("matchNumber", numberOfMatch);
+                                dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
+                                dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
+                                dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
+                            }
+                        }.start();
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
