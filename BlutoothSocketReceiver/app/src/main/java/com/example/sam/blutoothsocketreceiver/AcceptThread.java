@@ -339,6 +339,9 @@ import org.json.JSONObject;
                                                 Log.e("json failure", "failed loop red");
                                                 return;
                                             }
+                                            catch (NullPointerException npe){
+                                                toasts("Tell Scout not to send yet!!!");
+                                            }
                                         }
                                     }
 
