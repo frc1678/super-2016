@@ -639,8 +639,15 @@ public class MainActivity extends ActionBarActivity {
                                 } catch (JSONException JE) {
                                     Log.e("json failure", "failed loop red");
                                     return;
+                                } catch (NullPointerException NPE){
+                                    context.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(context, "Invalid Data", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
-
+                                
                             } else if (scoutAlliance.equals("red")) {
                                 List<String> defenses = new ArrayList<>();
                                 for (int i = 0; i < 5; i++) {
@@ -663,6 +670,14 @@ public class MainActivity extends ActionBarActivity {
                                 } catch (JSONException JE) {
                                     Log.e("json failure", "failed loop red");
                                     return;
+                                }
+                                catch (NullPointerException npe){
+                                    context.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(context, "Invalid Data", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             }
                         }

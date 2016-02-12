@@ -64,13 +64,11 @@ public class accept_loop extends Thread {
         }
 
         while (true) {
-
             try {
                 if (mmServerSocket.equals(null)) {
                     System.out.println("Trying to connect...");
                     Log.e("serverSocket", "is null");
                 }
-
                 //otherwise accept the connection and print out 'accepting'
                 System.out.println("accepting...");
                 //socket now calls accept() which returns bluetooth socket
@@ -85,17 +83,7 @@ public class accept_loop extends Thread {
                 Log.e("Bluetooth Error", "Failed to open socket");
                 Toast.makeText(context, "Failed to open socket", Toast.LENGTH_SHORT).show();
                 Log.e("IOE exceptipon", IOE.getMessage());
-                /*try {
-                    //THIS IS THE ERROR LINE
-                    mmServerSocket = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("Test_Connection", UUID.fromString(uuid));
-                } catch (IOException ioe) {
-                    new AlertDialog.Builder(context)
-                            .setTitle("Bluetooth Error")
-                            .setMessage("Serious bluetooth error due to ServerSocket failure.  Get an App Programmer and show him this message")
-                            .setNeutralButton("Dismiss", null);
-                    return;
-                }
-                */
+
             }
         }
     }
