@@ -44,6 +44,16 @@ public class accept_loop extends Thread {
         //continously checking for connection
         tmp = null;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Log.wtf("Bluetooth Error", "Device Not Configured With Bluetooth");
+            toasts("Device Not Configured With Bluetooth");
+            return;
+        }
+        if (!mBluetoothAdapter.isEnabled()) {
+            Log.e("Bluetooth Error", "Bluetooth Not Enabled");
+            toasts("Bluetooth Not Enabled");
+            return;
+        }
         uuid = "f8212682-9a34-11e5-8994-feff819cdc9f";
         try {
             tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("Test_Connection", UUID.fromString(uuid));
@@ -52,6 +62,7 @@ public class accept_loop extends Thread {
         } catch (IOException e) {
             System.out.println("Failed to accept");
         }
+
         while (true) {
 
             try {
@@ -59,6 +70,7 @@ public class accept_loop extends Thread {
                     System.out.println("Trying to connect...");
                     Log.e("serverSocket", "is null");
                 }
+
                 //otherwise accept the connection and print out 'accepting'
                 System.out.println("accepting...");
                 //socket now calls accept() which returns bluetooth socket
