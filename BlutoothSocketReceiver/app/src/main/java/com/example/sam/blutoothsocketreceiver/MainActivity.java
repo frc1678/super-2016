@@ -275,26 +275,41 @@ public class MainActivity extends ActionBarActivity {
             updateUI();
         }
         if (id == R.id.scout) {
+            final Firebase matchesDataBase = new Firebase("https://1678-dev-2016.firebaseio.com/Matches");
+            matchesDataBase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.hasChild(numberOfMatch.getText().toString())){
+                        Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_LONG).show();
+                    }else{
+                        if (numberOfMatch.getText().toString().equals("")) {
+                            Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
+                        } else if (teamNumberOne.getText().toString().equals("")) {
+                            Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
+                        } else if (teamNumberTwo.getText().toString().equals("")) {
+                            Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
+                        } else if (teamNumberThree.getText().toString().equals("")) {
+                            Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(context, FieldSetUp.class);
+                            intent.putExtra("matchNumber", numberOfMatch.getText().toString());
+                            intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
+                            intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
+                            intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
+                            intent.putExtra("alliance", alliance.getText().toString());
+                            Log.e("start alliance", alliance.getText().toString());
+                            startActivity(intent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
             //check to see if all data inputs were filled out before continuing
-            if (numberOfMatch.getText().toString().equals("")) {
-                Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
-            } else if (teamNumberOne.getText().toString().equals("")) {
-                Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
-            } else if (teamNumberTwo.getText().toString().equals("")) {
-                Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
-            } else if (teamNumberThree.getText().toString().equals("")) {
-                Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
-            } else {
-                //write to file
-                Intent intent = new Intent(this, FieldSetUp.class);
-                intent.putExtra("matchNumber", numberOfMatch.getText().toString());
-                intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
-                intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
-                intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
-                intent.putExtra("alliance", alliance.getText().toString());
-                Log.e("start alliance", alliance.getText().toString());
-                startActivity(intent);
-            }
+
         } else if (id == R.id.action_override) {
             if (item.getTitle().toString().equals("Override Match and Team Number")) {
                 enableEditTextEditing();
