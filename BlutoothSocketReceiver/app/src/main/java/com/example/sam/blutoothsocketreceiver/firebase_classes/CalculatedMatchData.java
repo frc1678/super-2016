@@ -1,5 +1,6 @@
 package com.example.sam.blutoothsocketreceiver.firebase_classes;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,10 @@ public class CalculatedMatchData extends Object {
     public Float predictedBlueScore;
     public Integer numDefensesCrossedByBlue;
     public Integer numDefensesCrossedByRed;
+    public Integer numDefenseCrossesByBlue;
+    public Integer numDefenseCrossesByRed;
+    public Integer blueRPs;
+    public Integer redRPs;
     public Float predictedBlueRPs;
     public Float predictedRedRPs;
     public Integer actualBlueRPs;
@@ -26,6 +31,7 @@ public class CalculatedMatchData extends Object {
     public Map<String, Float> blueWinningChanceForDefenses;
     public Map<String, Float> blueBreachChanceForDefenses;
     public Map<String, Float> blueRPsForDefenses;
+    public CalculatedMatchData calculatedData;
     public Float redWinChance;
     public Float blueWinChance;
     public Float redBreachChance;
@@ -35,4 +41,5 @@ public class CalculatedMatchData extends Object {
     public Float scoreContribution;
     public List<String> optimalRedDefenses;
     public List<String> optimalBlueDefenses;
+
 }

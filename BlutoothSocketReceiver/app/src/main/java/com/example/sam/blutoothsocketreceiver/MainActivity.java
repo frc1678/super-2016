@@ -131,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
         numberOfMatch.setText(matchNumber.toString());
         matchNumber = Integer.parseInt(numberOfMatch.getText().toString());
 
-        disenableEditTestEditing();
+        disenableEditTextEditing();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         ListView listView = (ListView) findViewById(R.id.view_files_received);
         listView.setAdapter(adapter);
@@ -281,6 +281,7 @@ public class MainActivity extends ActionBarActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (!dataSnapshot.hasChild(numberOfMatch.getText().toString())){
                         Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_LONG).show();
+                        disenableEditTextEditing();
                     }else{
                         if (numberOfMatch.getText().toString().equals("")) {
                             Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
@@ -316,7 +317,7 @@ public class MainActivity extends ActionBarActivity {
                 item.setTitle("Automate");
             } else if (item.getTitle().toString().equals("Automate")) {
                 updateUI();
-                disenableEditTestEditing();
+                disenableEditTextEditing();
                 item.setTitle("Override Match and Team Number");
             }
         }
@@ -394,7 +395,7 @@ public class MainActivity extends ActionBarActivity {
         teamNumberThree.setFocusableInTouchMode(true);
     }
 
-    public void disenableEditTestEditing() {
+    public void disenableEditTextEditing() {
 
         numberOfMatch.setFocusable(false);
         teamNumberOne.setFocusable(false);
