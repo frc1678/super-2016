@@ -65,7 +65,7 @@ public class accept_loop extends Thread {
 
         while (true) {
             try {
-                if (mmServerSocket.equals(null)) {
+                if (mmServerSocket == null) {
                     System.out.println("Trying to connect...");
                     Log.e("serverSocket", "is null");
                 }
@@ -83,7 +83,6 @@ public class accept_loop extends Thread {
                 Log.e("Bluetooth Error", "Failed to open socket");
                 Toast.makeText(context, "Failed to open socket", Toast.LENGTH_SHORT).show();
                 Log.e("IOE exceptipon", IOE.getMessage());
-
             }
         }
     }
@@ -106,7 +105,5 @@ public class accept_loop extends Thread {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
