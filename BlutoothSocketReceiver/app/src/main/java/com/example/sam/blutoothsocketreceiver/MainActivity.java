@@ -261,7 +261,6 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.scout, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -457,18 +456,19 @@ public class MainActivity extends ActionBarActivity {
                         Iterator getTeamOneKeys = teamOneKeyNames.keys();
                         Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
                         Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
-
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child(teamOneKeys).setValue(Integer.parseInt(teamOneData.get(teamOneKeys).toString()));
                         }
                         while (getTeamTwoKeys.hasNext()) {
                             String teamTwoKeys = (String) getTeamTwoKeys.next();
-                            dataBase.child("TeamInMatchDatas").child(matchAndTeamTwo).child(teamTwoKeys).setValue(Integer.parseInt(teamOneData.get(teamTwoKeys).toString()));
+                            dataBase.child("TeamInMatchDatas").child(matchAndTeamTwo).child(teamTwoKeys).setValue(Integer.parseInt(teamTwoData.get(teamTwoKeys).toString()));
                         }
                         while (getTeamThreeKeys.hasNext()) {
                             String teamThreeKeys = (String) getTeamThreeKeys.next();
-                            dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child(teamThreeKeys).setValue(Integer.parseInt(teamOneData.get(teamThreeKeys).toString()));
+                            dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child(teamThreeKeys).setValue(Integer.parseInt(teamThreeData.get(teamThreeKeys).toString()));
+                            Log.e("teamThreeDataName", teamThreeKeys);
+                            Log.e("teamThreeValues", teamThreeData.get(teamThreeKeys).toString());
                         }
                         if (!isRed){
                             for (int i = 0; i < defenses.size(); i++){
@@ -647,7 +647,7 @@ public class MainActivity extends ActionBarActivity {
                                         }
                                     });
                                 }
-                                
+
                             } else if (scoutAlliance.equals("red")) {
                                 List<String> defenses = new ArrayList<>();
                                 for (int i = 0; i < 5; i++) {

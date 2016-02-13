@@ -157,15 +157,12 @@ import org.json.JSONObject;
                                 toasts("Failed to send schedule to scout");
                                 return;
                             }
-
                         }
-
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
                             System.out.println("The read failed: " + firebaseError.getMessage());
                         }
                     });
-
                 }
                 if (socket != null) {
                     data = "";
@@ -199,11 +196,9 @@ import org.json.JSONObject;
                     } else {
                         out.println("0");
                         out.flush();
+                        toasts("Data transfer Success!");
                         for (int j = 0; j < dataPoints.size(); j++) {
                             scoutData = dataPoints.get(j);
-                            toasts("Data transfer Success!");
-                            //System.out.println(data);
-                            //updateScoutData();
                             //get first key of the scout data that contains the match and the team number
                             Iterator getFirstKey = scoutData.keys();
                             while (getFirstKey.hasNext()) {
