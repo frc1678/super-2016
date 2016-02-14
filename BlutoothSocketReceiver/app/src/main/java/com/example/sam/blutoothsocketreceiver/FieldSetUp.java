@@ -64,7 +64,7 @@ public class FieldSetUp extends ActionBarActivity {
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
-        firebaseRef = new Firebase("https://1678-dev-2016.firebaseio.com");
+        firebaseRef = new Firebase("https://1678-scouting-2016.firebaseio.com");
 
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
@@ -195,7 +195,7 @@ public class FieldSetUp extends ActionBarActivity {
                             public void onAuthenticationError(FirebaseError firebaseError) {
                             }
                         };
-                        firebaseRef.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+                        firebaseRef.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
                         if (alliance.equals("Blue Alliance")) {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));

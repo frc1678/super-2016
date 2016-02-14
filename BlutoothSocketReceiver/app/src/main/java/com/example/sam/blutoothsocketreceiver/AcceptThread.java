@@ -112,8 +112,8 @@ import org.json.JSONObject;
                         @Override
                         public void onAuthenticationError(FirebaseError firebaseError) {}
                     };
-                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-                    dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+                    dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -252,7 +252,7 @@ import org.json.JSONObject;
                                     "didChallengeTele", "didReachAuto", "scoutName"));
 
                             scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                            final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                            final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
                             for (int i = 0; i < checkNumKeys.size(); i++) {
                                 stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));

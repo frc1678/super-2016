@@ -77,7 +77,7 @@ public class SuperNotes extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+        dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
         dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
     }
     public void onBackPressed(){

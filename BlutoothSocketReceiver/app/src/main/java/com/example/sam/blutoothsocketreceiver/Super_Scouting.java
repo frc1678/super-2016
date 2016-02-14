@@ -75,8 +75,8 @@ public class Super_Scouting extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-dev-2016.firebaseio.com");
-        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+        dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com");
+        dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
         getExtrasForScouting();
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
