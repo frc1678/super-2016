@@ -83,6 +83,16 @@ public class accept_loop extends Thread {
                 Log.e("Bluetooth Error", "Failed to open socket");
                 Toast.makeText(context, "Failed to open socket", Toast.LENGTH_SHORT).show();
                 Log.e("IOE exceptipon", IOE.getMessage());
+            } catch (NullPointerException npe) {
+                Log.e("askfjasdkljh", "THIS!");
+                try {
+                    tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("Test_Connection", UUID.fromString(uuid));
+                    mmServerSocket = tmp;
+
+                } catch (IOException e) {
+                    System.out.println("Failed to accept");
+                    return;
+                }
             }
         }
     }
