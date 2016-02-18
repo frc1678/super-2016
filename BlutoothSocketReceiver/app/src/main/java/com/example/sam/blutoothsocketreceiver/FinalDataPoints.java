@@ -44,6 +44,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamOneNote;
     String teamTwoNote;
     String teamThreeNote;
+    String dataBaseUrl;
     TextView finalScore;
     EditText allianceScore;
     JSONObject superExternalData;
@@ -88,7 +89,7 @@ public class FinalDataPoints extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        firebaseRef = new Firebase("https://1678-scouting-2016.firebaseio.com");
+        firebaseRef = new Firebase(dataBaseUrl);
         firebaseRef.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee1", authResultHandler);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
@@ -116,14 +117,12 @@ public class FinalDataPoints extends ActionBarActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.submit, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -140,6 +139,7 @@ public class FinalDataPoints extends ActionBarActivity {
             toNotes.putExtra("teamOneNote", teamOneNote);
             toNotes.putExtra("teamTwoNote", teamTwoNote);
             toNotes.putExtra("teamThreeNote", teamThreeNote);
+            toNotes.putExtra("dataBaseUrl", dataBaseUrl);
             startActivity(toNotes);
         }
         //noinspection SimplifiableIfStatement
@@ -271,5 +271,6 @@ public class FinalDataPoints extends ActionBarActivity {
         teamOneNote = intent.getStringExtra("teamOneNote");
         teamTwoNote = intent.getStringExtra("teamTwoNote");
         teamThreeNote = intent.getStringExtra("teamThreeNote");
+        dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
     }
 }

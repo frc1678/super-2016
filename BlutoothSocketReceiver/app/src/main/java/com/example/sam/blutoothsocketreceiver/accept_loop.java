@@ -37,7 +37,6 @@ public class accept_loop extends Thread {
     TextView changing;
 
     public accept_loop(Activity context){
-
         this.context = context;
     }
     public void run() {
@@ -96,7 +95,6 @@ public class accept_loop extends Thread {
             }
         }
     }
-
 
     public void text(final String change_text) {
         changing = (TextView) context.findViewById(R.id.text);

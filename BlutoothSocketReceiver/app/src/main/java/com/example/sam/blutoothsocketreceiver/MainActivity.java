@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
+    final static String dataBaseUrl = "https://1678-scouting-2016.firebaseio.com/";
     int matchNum;
     int stringIndex;
     int intIndex;
@@ -112,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+        dataBase = new Firebase(dataBaseUrl);
         dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
         //If got intent from the last activity
         if (backToHome.hasExtra("number")) {
@@ -275,7 +276,7 @@ public class MainActivity extends ActionBarActivity {
             updateUI();
         }
         if (id == R.id.scout) {
-            final Firebase matchesDataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/Matches");
+            final Firebase matchesDataBase = new Firebase(dataBaseUrl + "Matches");
             matchesDataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -298,6 +299,7 @@ public class MainActivity extends ActionBarActivity {
                             intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
                             intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
                             intent.putExtra("alliance", alliance.getText().toString());
+                            intent.putExtra("dataBaseUrl", dataBaseUrl);
                             Log.e("start alliance", alliance.getText().toString());
                             startActivity(intent);
                         }
@@ -576,7 +578,6 @@ public class MainActivity extends ActionBarActivity {
                             "didChallengeTele", "didReachAuto", "scoutName"));
 
                     scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
                     for (int i = 0; i < checkNumKeys.size(); i++) {
                         stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));

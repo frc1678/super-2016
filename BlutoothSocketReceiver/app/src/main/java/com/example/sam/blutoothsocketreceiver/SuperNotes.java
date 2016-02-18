@@ -27,6 +27,7 @@ public class SuperNotes extends ActionBarActivity {
     String teamOneNote;
     String teamTwoNote;
     String teamThreeNote;
+    String dataBaseUrl;
     TextView superNoteTextView;
     TextView teamOneTextView;
     TextView teamTwoTextView;
@@ -77,8 +78,8 @@ public class SuperNotes extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
-        dataBase.authWithPassword("1678programming@gmail.com", "Squeezecrush1", authResultHandler);
+        dataBase = new Firebase(dataBaseUrl);
+        dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
     }
     public void onBackPressed(){
         final Activity activity = this;
@@ -145,6 +146,7 @@ public class SuperNotes extends ActionBarActivity {
         teamOneNote = notes.getStringExtra("teamOneNote");
         teamTwoNote = notes.getStringExtra("teamTwoNote");
         teamThreeNote = notes.getStringExtra("teamThreeNote");
+        dataBaseUrl = notes.getExtras().getString("dataBaseUrl");
     }
 
     }

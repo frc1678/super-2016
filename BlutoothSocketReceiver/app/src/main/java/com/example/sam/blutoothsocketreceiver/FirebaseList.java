@@ -42,7 +42,6 @@ public class FirebaseList<T> {
                         keys.add(nextIndex, key);
                     }
                 }
-
                 firebaseUpdatedCallback.execute();
             }
 

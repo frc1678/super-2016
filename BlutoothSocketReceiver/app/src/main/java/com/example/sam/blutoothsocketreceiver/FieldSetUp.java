@@ -47,6 +47,7 @@ public class FieldSetUp extends ActionBarActivity {
     String teamTwoNumber;
     String teamThreeNumber;
     String alliance;
+    String dataBaseUrl;
     ArrayList<String> defensesPicked;
     ArrayList<String> checkDefensesPicked;
     ArrayList<String> sameDefenses;
@@ -64,8 +65,8 @@ public class FieldSetUp extends ActionBarActivity {
         teamTwoNumber = intent.getExtras().getString("teamNumberTwo");
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
-        firebaseRef = new Firebase("https://1678-scouting-2016.firebaseio.com");
-
+        dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
+        firebaseRef = new Firebase(dataBaseUrl);
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
         checkDefensesPicked = new ArrayList<>();
@@ -223,6 +224,7 @@ public class FieldSetUp extends ActionBarActivity {
                     next.putExtra("thirdDefensePicked", defensesPicked.get(2));
                     next.putExtra("fourthDefensePicked", defensesPicked.get(3));
                     next.putExtra("alliance", alliance);
+                    next.putExtra("dataBaseUrl", dataBaseUrl);
                     startActivity(next);
                  } else {
                 Log.i("test", "here");

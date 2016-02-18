@@ -9,17 +9,14 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -32,9 +29,6 @@ public class Super_Scouting extends ActionBarActivity {
     TextView teamNumber1;
     TextView teamNumber2;
     TextView teamNumber3;
-    EditText inputTeamOne;
-    EditText inputTeamTwo;
-    EditText inputTeamThree;
     String numberOfMatch;
     String teamNumberOne;
     String teamNumberTwo;
@@ -47,6 +41,7 @@ public class Super_Scouting extends ActionBarActivity {
     String teamOneNote;
     String teamTwoNote;
     String teamThreeNote;
+    String dataBaseUrl;
     ArrayList<String> defenses;
     ArrayList<String> dataScore;
     ArrayList<String> teamOneDataName;
@@ -75,7 +70,7 @@ public class Super_Scouting extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
-        dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com");
+        dataBase = new Firebase(dataBaseUrl);
         dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
         getExtrasForScouting();
         teamNumber1 = (TextView) findViewById(R.id.team1);
@@ -265,6 +260,7 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("teamOneNote", teamOneNote);
             intent.putExtra("teamTwoNote", teamTwoNote);
             intent.putExtra("teamThreeNote", teamThreeNote);
+            intent.putExtra("dataBaseUrl", dataBaseUrl);
 
             getEachDataNameAndValue();
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
@@ -357,6 +353,7 @@ public class Super_Scouting extends ActionBarActivity {
         secondDefense = next.getExtras().getString("secondDefensePicked");
         thirdDefense = next.getExtras().getString("thirdDefensePicked");
         fourthDefense = next.getExtras().getString("fourthDefensePicked");
+        dataBaseUrl = next.getExtras().getString("dataBaseUrl");
     }
 }
 
