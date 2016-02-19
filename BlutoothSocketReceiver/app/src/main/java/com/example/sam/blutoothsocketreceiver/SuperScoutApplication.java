@@ -23,7 +23,8 @@ public class SuperScoutApplication extends Application {
 
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase firebase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+        Firebase firebase = new Firebase("https://1678-dev3-2016.firebaseio.com/");
+        String url = "https://1678-dev3-2016.firebaseio.com/";
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {}
@@ -32,10 +33,14 @@ public class SuperScoutApplication extends Application {
                 Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT).show();
             }
         };
-
-        firebase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
-
-        FirebaseLists.matchesList = new FirebaseList<>("https://1678-scouting-2016.firebaseio.com/Matches/", new FirebaseList.FirebaseUpdatedCallback() {
+        if(url.equals("https://1678-scouting-2016.firebaseio.com/")){
+            firebase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
+        }else if(url.equals("https://1678-dev3-2016.firebaseio.com/")){
+            firebase.authWithCustomToken("AEduO6VFlZKD4v10eW81u9j3ZNopr5h2R32SPpeq", authResultHandler);
+        }else if(url.equals("https://1678-dev-2016.firebaseio.com/")){
+            firebase.authWithCustomToken("j1r2wo3RUPMeUZosxwvVSFEFVcrXuuMAGjk6uPOc", authResultHandler);
+        }
+        FirebaseLists.matchesList = new FirebaseList<>(url + "Matches/", new FirebaseList.FirebaseUpdatedCallback() {
             @Override
             public void execute() {
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("matches_updated"));

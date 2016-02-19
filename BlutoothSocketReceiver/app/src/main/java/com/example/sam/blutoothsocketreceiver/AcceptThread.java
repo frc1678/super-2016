@@ -112,7 +112,7 @@ import org.json.JSONObject;
                         @Override
                         public void onAuthenticationError(FirebaseError firebaseError) {}
                     };
-                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+                    final Firebase dataBase = new Firebase("https://1678-dev3-2016.firebaseio.com/");
                     dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -252,7 +252,7 @@ import org.json.JSONObject;
                                     "didChallengeTele", "didReachAuto", "scoutName"));
 
                             scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                            final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+                            final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                             for (int i = 0; i < checkNumKeys.size(); i++) {
                                 stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
@@ -265,7 +265,9 @@ import org.json.JSONObject;
                                 JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                                 for (int i = 0; i < balls.length(); i++) {
                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
-
+                                    if(jsonArrayToArray(balls).equals(null)){
+                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue("");
+                                    }
                                 }
                             } catch (JSONException JE) {
                                 Log.e("Json failure", "failed to get balls intaked");
@@ -286,11 +288,11 @@ import org.json.JSONObject;
                                         //if the scout data is based on blue alliance
                                         if (scoutAlliance.equals("blue")) {
                                             List<String> defenses = new ArrayList<>();
-                                            for (int i = 0; i < 5; i++) {
-                                                String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
-                                                defenses.add(tmp);
-                                            }
                                             try {
+                                                for (int i = 0; i < 5; i++) {
+                                                    String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
+                                                    defenses.add(tmp);
+                                                }
                                                 for (int i = 0; i < successDefenseAuto.length(); i++) {
                                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                                 }
@@ -333,8 +335,7 @@ import org.json.JSONObject;
                                             } catch (JSONException JE) {
                                                 Log.e("json failure", "failed loop red");
                                                 return;
-                                            }
-                                            catch (NullPointerException npe){
+                                            } catch (NullPointerException npe) {
                                                 toasts("Tell Scout not to send yet!!!");
                                             }
                                         }

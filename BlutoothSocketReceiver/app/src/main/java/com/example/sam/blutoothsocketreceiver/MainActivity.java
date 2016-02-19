@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
-    final static String dataBaseUrl = "https://1678-scouting-2016.firebaseio.com/";
+    final static String dataBaseUrl = "https://1678-dev3-2016.firebaseio.com/";
     int matchNum;
     int stringIndex;
     int intIndex;
@@ -114,7 +114,13 @@ public class MainActivity extends ActionBarActivity {
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
         dataBase = new Firebase(dataBaseUrl);
+        if(dataBaseUrl.equals("https://1678-scouting-2016.firebaseio.com/")){
         dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
+        }else if(dataBaseUrl.equals("https://1678-dev3-2016.firebaseio.com/")){
+            dataBase.authWithCustomToken("AEduO6VFlZKD4v10eW81u9j3ZNopr5h2R32SPpeq", authResultHandler);
+        }else if(dataBaseUrl.equals("https://1678-dev-2016.firebaseio.com/")){
+            dataBase.authWithCustomToken("j1r2wo3RUPMeUZosxwvVSFEFVcrXuuMAGjk6uPOc", authResultHandler);
+        }
         //If got intent from the last activity
         if (backToHome.hasExtra("number")) {
             matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
@@ -699,10 +705,14 @@ public class MainActivity extends ActionBarActivity {
                                 }
                             }
                         }
-                        Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
+                        Log.e("reached", "toast");
+                        context.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         System.out.println("The read failed: " + firebaseError.getMessage());
