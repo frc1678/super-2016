@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
-    final static String dataBaseUrl = "https://1678-dev3-2016.firebaseio.com/";
+    final static String dataBaseUrl = "https://1678-scouting-2016.firebaseio.com/";
     int matchNum;
     int stringIndex;
     int intIndex;
@@ -533,7 +533,6 @@ public class MainActivity extends ActionBarActivity {
         new Thread() {
             @Override
             public void run() {
-
                 for (int j = 0; j < datapoints.size(); j++) {
                     JSONObject scoutDataJson = datapoints.get(j);
                     System.out.println("scoutDataJson: " + scoutDataJson.toString());
@@ -605,7 +604,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
                 //get json array containing success and fail times for defense crossing of auto and tele
-                dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
+                dataBase.child("TeamInMatchDatas").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         for (int j = 0; j < datapoints.size(); j++) {
@@ -637,17 +636,12 @@ public class MainActivity extends ActionBarActivity {
                             //if the scout data is based on blue alliance
                             if (scoutAlliance.equals("blue")) {
                                 List<String> defenses = new ArrayList<>();
+                                try{
                                 for (int i = 0; i < 5; i++) {
                                     String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
                                     defenses.add(tmp);
                                 }
-                                try {
                                     for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                        Log.i("i", Integer.toString(i));
-                                        Log.e("Test 1", firstKey);
-                                        Log.e("Test 2", defenseCategories.toString());
-                                        Log.e("Test 3", defenseCategories.get(defenses.get(i)));
-                                        Log.e("Test 4", jsonArrayToArray((JSONArray) successDefenseAuto.get(i)).toString());
 
                                         dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                     }
@@ -693,32 +687,38 @@ public class MainActivity extends ActionBarActivity {
                                     }
                                 } catch (JSONException JE) {
                                     Log.e("json failure", "failed loop red");
+                                    context.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(context, "Failed to resend Scout Data", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                     return;
                                 }
                                 catch (NullPointerException npe){
                                     context.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(context, "Invalid Data", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, "Failed to resend Scout Data", Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                                    return;
                                 }
                             }
                         }
-                        Log.e("reached", "toast");
-                        context.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         System.out.println("The read failed: " + firebaseError.getMessage());
                     }
                 });
-
+                Log.e("reached", "toast");
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }.start();
     }

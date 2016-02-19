@@ -39,9 +39,9 @@ public class Super_Scouting extends ActionBarActivity {
     String thirdDefense;
     String fourthDefense;
     String alliance;
-    String teamOneNote;
-    String teamTwoNote;
-    String teamThreeNote;
+    String teamOneNote = "";
+    String teamTwoNote = "";
+    String teamThreeNote = "";
     String dataBaseUrl;
     ArrayList<String> defenses;
     ArrayList<String> dataScore;
@@ -271,17 +271,46 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
             intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
             intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
-            new Thread(){
-                public void run(){
-                    dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneNote);
-                    dataBase.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoNote);
-                    dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeNote);
-                }
-            }.start();
+            if(!teamOneNote.equals("")) {
+                sendTeamOneNotes(teamOneNote);
+            }else {
+                sendTeamOneNotes("No_Notes");
+            }
+            if(!teamTwoNote.equals("")) {
+                sendTeamTwoNotes(teamTwoNote);
+            }else {
+                sendTeamTwoNotes("No_Notes");
+            }
+            if(!teamThreeNote.equals("")) {
+                sendTeamThreeNotes(teamThreeNote);
+            }else {
+                sendTeamThreeNotes("No_Notes");
+            }
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void sendTeamOneNotes(final String notes){
+        new Thread(){
+            public void run(){
+                dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(notes);
+            }
+        }.start();
+    }
+    public void sendTeamTwoNotes(final String notes){
+        new Thread(){
+            public void run(){
+                dataBase.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(notes);
+            }
+        }.start();
+    }
+    public void sendTeamThreeNotes(final String notes){
+        new Thread(){
+            public void run(){
+                dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(notes);
+            }
+        }.start();
     }
 //Get all the data names and their values
     public void getEachDataNameAndValue() {

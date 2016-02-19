@@ -23,8 +23,8 @@ public class SuperScoutApplication extends Application {
 
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase firebase = new Firebase("https://1678-dev3-2016.firebaseio.com/");
-        String url = "https://1678-dev3-2016.firebaseio.com/";
+        Firebase firebase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+        String url = "https://1678-scouting-2016.firebaseio.com/";
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {}
