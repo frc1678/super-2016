@@ -594,9 +594,13 @@ public class MainActivity extends ActionBarActivity {
                     }
                     try {
                         JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
-                        for (int i = 0; i < balls.length(); i++) {
-                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
+                        if(jsonArrayToArray(balls).get(0) == null){
+                            dataBase.child("TeamsInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(null);
+                        }else {
+                            for (int i = 0; i < balls.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
 
+                            }
                         }
                     } catch (JSONException JE) {
                         Log.e("Json failure", "failed to get balls intaked");
