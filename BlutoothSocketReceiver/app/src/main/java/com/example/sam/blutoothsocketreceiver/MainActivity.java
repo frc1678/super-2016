@@ -293,6 +293,7 @@ public class MainActivity extends ActionBarActivity {
                         } else if (teamNumberThree.getText().toString().equals("")) {
                             Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
                         } else {
+                            commitSharedPreferences();
                             Intent intent = new Intent(context, FieldSetUp.class);
                             intent.putExtra("matchNumber", numberOfMatch.getText().toString());
                             intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());

@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,6 +63,7 @@ public class Super_Scouting extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         next = getIntent();
         object = new JSONObject();
+        getExtrasForScouting();
         //Get authorized to use the database
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
@@ -70,9 +72,9 @@ public class Super_Scouting extends ActionBarActivity {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {}
         };
+        Log.e("firebase url", dataBaseUrl);
         dataBase = new Firebase(dataBaseUrl);
         dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
-        getExtrasForScouting();
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);
