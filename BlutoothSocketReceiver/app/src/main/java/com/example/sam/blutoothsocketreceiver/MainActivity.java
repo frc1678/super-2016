@@ -382,9 +382,13 @@ public class MainActivity extends ActionBarActivity {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -531,6 +535,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void resendScoutData(final List<JSONObject> datapoints) {
         //read data from file
+        toasts("Please Wait...Do not do anything");
         new Thread() {
             @Override
             public void run() {
@@ -596,11 +601,11 @@ public class MainActivity extends ActionBarActivity {
                     try {
                         Firebase pathToBallsIntakedAuto = new Firebase("https://1678-scouting-2016.firebaseio.com/TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
                         JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
-                        if(jsonArrayToArray(balls).size() < 1){
+                        if (jsonArrayToArray(balls).size() < 1) {
                             Log.e("balls", "is Null!");
                             pathToBallsIntakedAuto.removeValue();
                             Log.e("ballsIntakedAuto", "Has been removed!");
-                        }else {
+                        } else {
                             for (int i = 0; i < balls.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
 
@@ -611,124 +616,112 @@ public class MainActivity extends ActionBarActivity {
                         return;
                     }
                 }
+                Log.e("Test", "After ballsIntakedAuto");
                 //get json array containing success and fail times for defense crossing of auto and tele
-                dataBase.child("TeamInMatchDatas").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        for (int j = 0; j < datapoints.size(); j++) {
-                            JSONObject scoutDataJson = datapoints.get(j);
-                            Iterator getFirstKey = scoutDataJson.keys();
-                            while (getFirstKey.hasNext()) {
-                                firstKey = (String) getFirstKey.next();
-                                //split first key to get only match number
-                                String[] teamAndMatchNumbers = firstKey.split("Q");
-                                matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
-                                try {
-                                    jsonUnderKey = scoutDataJson.getJSONObject(firstKey);
-                                    System.out.println("First Key: " + firstKey);
-                                    System.out.println(jsonUnderKey.toString());
-                                } catch (Exception e) {
-                                    Log.e("JSON", "Failed to get first key");
-                                    return;
-                                }
-                            }
-                            try {
-                                successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
-                                failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
-                                successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
-                                failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
-                            } catch (JSONException jsone) {
-                                Log.e("Json error", "could not get key json");
-                                return;
-                            }
-                            //if the scout data is based on blue alliance
-                            if (scoutAlliance.equals("blue")) {
-                                List<String> defenses = new ArrayList<>();
-                                try{
-                                for (int i = 0; i < 5; i++) {
-                                    String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("blueDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
-                                    defenses.add(tmp);
-                                }
-                                    for (int i = 0; i < successDefenseAuto.length(); i++) {
-
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
-                                    }
-                                    for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
-                                    }
-                                    for (int i = 0; i < successDefenseTele.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
-                                    }
-                                    for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
-                                    }
-                                } catch (JSONException JE) {
-                                    Log.e("json failure", "failed loop red");
-                                    return;
-                                } catch (NullPointerException NPE){
-                                    context.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(context, "Invalid Data", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-
-                            } else if (scoutAlliance.equals("red")) {
-                                List<String> defenses = new ArrayList<>();
-                                for (int i = 0; i < 5; i++) {
-                                    String tmp = (snapshot.child("Matches").child(Integer.toString(matchNum)).child("redDefensePositions").child(Integer.toString(i)).getValue().toString()).toLowerCase();
-                                    defenses.add(tmp);
-                                }
-                                try {
-                                    for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
-                                    }
-                                    for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
-                                    }
-                                    for (int i = 0; i < successDefenseTele.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
-                                    }
-                                    for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                        dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
-                                    }
-                                } catch (JSONException JE) {
-                                    Log.e("json failure", "failed loop red");
-                                    context.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(context, "Failed to resend Scout Data", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    return;
-                                }
-                                catch (NullPointerException npe){
-                                    context.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(context, "Failed to resend Scout Data", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    return;
-                                }
-                            }
+                for (int j = 0; j < datapoints.size(); j++) {
+                    JSONObject scoutDataJson = datapoints.get(j);
+                    Iterator getFirstKey = scoutDataJson.keys();
+                    while (getFirstKey.hasNext()) {
+                        firstKey = (String) getFirstKey.next();
+                        //split first key to get only match number
+                        String[] teamAndMatchNumbers = firstKey.split("Q");
+                        matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
+                        try {
+                            jsonUnderKey = scoutDataJson.getJSONObject(firstKey);
+                            System.out.println("First Key: " + firstKey);
+                            System.out.println(jsonUnderKey.toString());
+                        } catch (Exception e) {
+                            Log.e("JSON", "Failed to get first key");
+                            return;
                         }
                     }
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        System.out.println("The read failed: " + firebaseError.getMessage());
+                    try {
+                        successDefenseTele = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesTele");
+                        failedDefenseTele = jsonUnderKey.getJSONArray("failedDefenseCrossTimesTele");
+                        successDefenseAuto = jsonUnderKey.getJSONArray("successfulDefenseCrossTimesAuto");
+                        failedDefenseAuto = jsonUnderKey.getJSONArray("failedDefenseCrossTimesAuto");
+                    } catch (JSONException jsone) {
+                        Log.e("Json error", "could not get key json");
+                        return;
                     }
-                });
-                Log.e("reached", "toast");
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Resent Scout Data", Toast.LENGTH_SHORT).show();
+                    //if the scout data is based on blue alliance
+                    if (scoutAlliance.equals("blue")) {
+                        List<String> defenses = new ArrayList<>();
+                        List<String> blueDefenseList = FirebaseLists.matchesList.getFirebaseObjectByKey(Integer.toString(matchNum)).blueDefensePositions;
+                        try {
+                            for (int i = 0; i < 5; i++) {
+                                String tmp = (blueDefenseList.get(i)).toLowerCase();
+                                defenses.add(tmp);
+                                Log.e("defenses", defenses.toString());
+                            }
+                            for (int i = 0; i < successDefenseAuto.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                            }
+                            for (int i = 0; i < failedDefenseAuto.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                            }
+                            for (int i = 0; i < successDefenseTele.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                            }
+                            for (int i = 0; i < failedDefenseTele.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                            }
+                        } catch (JSONException JE) {
+                            Log.e("json failure", "failed loop blue");
+                            toasts("Failed to resend scout data");
+                            return;
+                        } catch (NullPointerException NPE) {
+                            Log.e("If Blue", "9");
+                            toasts("Failed to resend scout data");
+                            Log.e("Toast", "should have been seen");
+                        }
+
+                    } else if (scoutAlliance.equals("red")) {
+                        List<String> defenses = new ArrayList<>();
+                        List<String> redDefenseList = FirebaseLists.matchesList.getFirebaseObjectByKey(Integer.toString(matchNum)).redDefensePositions;
+                        for (int i = 0; i < 5; i++) {
+                            String tmp = (redDefenseList.get(i)).toLowerCase();
+                            defenses.add(tmp);
+                        }
+                        try {
+                            for (int i = 0; i < successDefenseAuto.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                            }
+                            for (int i = 0; i < failedDefenseAuto.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                            }
+                            for (int i = 0; i < successDefenseTele.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                            }
+                            for (int i = 0; i < failedDefenseTele.length(); i++) {
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                            }
+
+                        } catch (JSONException JE) {
+                            Log.e("json failure", "failed loop red");
+                            toasts("Failed to resend Scout Data");
+                            return;
+                        } catch (NullPointerException npe) {
+
+                            toasts("Failed to resend Scout Data");
+                            toasts("Make sure you did this match!");
+                            return;
+                        }
+                        Log.e("reached", "toast");
+                        toasts("Resent Scout Data");
                     }
-                });
+                }
             }
+
         }.start();
+    }
+    public void toasts(final String message){
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 
