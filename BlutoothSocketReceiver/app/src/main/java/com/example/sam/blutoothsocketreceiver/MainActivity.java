@@ -326,6 +326,7 @@ public class MainActivity extends ActionBarActivity {
                 item.setTitle("Automate");
             } else if (item.getTitle().toString().equals("Automate")) {
                 updateUI();
+                commitSharedPreferences();
                 disenableEditTextEditing();
                 item.setTitle("Override Match and Team Number");
             }

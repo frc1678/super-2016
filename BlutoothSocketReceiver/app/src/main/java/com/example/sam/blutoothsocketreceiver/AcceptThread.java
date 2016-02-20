@@ -112,21 +112,21 @@ import org.json.JSONObject;
                         @Override
                         public void onAuthenticationError(FirebaseError firebaseError) {}
                     };
-                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/Matches");
                     dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             JSONObject blueTeamNumbers = new JSONObject();
                             JSONObject redTeamNumbers = new JSONObject();
-                            Iterator<DataSnapshot> iterator = snapshot.child("Matches").getChildren().iterator();
+                            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
 
                             while (iterator.hasNext()) {
                                 DataSnapshot tmp = iterator.next();
                                 String matchKeys = tmp.getKey();
                                 try {
-                                    String blueTeams = snapshot.child("Matches").child(matchKeys).child("blueAllianceTeamNumbers").getValue().toString();
-                                    String redTeams = snapshot.child("Matches").child(matchKeys).child("redAllianceTeamNumbers").getValue().toString();
+                                    String blueTeams = snapshot.child(matchKeys).child("blueAllianceTeamNumbers").getValue().toString();
+                                    String redTeams = snapshot.child(matchKeys).child("redAllianceTeamNumbers").getValue().toString();
                                     blueTeamNumbers.put(matchKeys, new JSONArray(blueTeams));
                                     redTeamNumbers.put(matchKeys, new JSONArray(redTeams));
                                 } catch (JSONException JE) {
