@@ -172,17 +172,17 @@ public class FieldSetUp extends ActionBarActivity {
             else if (defensesPicked.size() < 4) {
                 Toast.makeText(this, "Input four defenses!!", Toast.LENGTH_LONG).show();
             }
-            else if(defensesPicked.contains("PC") && defensesPicked.contains("CDF")){
+            else if(defensesPicked.contains("pc") && defensesPicked.contains("cdf")){
                 Toast.makeText(this, "PC and CDF can't exist together!", Toast.LENGTH_LONG).show();
             }
-            else if(defensesPicked.contains("DB") && defensesPicked.contains("SP")){
+            else if(defensesPicked.contains("db") && defensesPicked.contains("sp")){
                 Toast.makeText(this, "DB and SP can't exist together!", Toast.LENGTH_LONG).show();
             }
-            else if(defensesPicked.contains("RT") && defensesPicked.contains("RW")){
+            else if(defensesPicked.contains("rt") && defensesPicked.contains("rw")){
                 Toast.makeText(this, "RT and RW can't exist together!", Toast.LENGTH_LONG).show();
             }
-            else if(defensesPicked.contains("RP") && defensesPicked.contains("MT")){
-                Toast.makeText(this, "RP and MTgit  can't exist together!", Toast.LENGTH_LONG).show();
+            else if(defensesPicked.contains("rp") && defensesPicked.contains("mt")){
+                Toast.makeText(this, "RP and MT can't exist together!", Toast.LENGTH_LONG).show();
             }
             else if(defensesPicked.size() == 4) {
                 new Thread() {
