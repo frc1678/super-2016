@@ -65,20 +65,6 @@ import org.json.JSONObject;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
-    Map<String, String> defenseCategories = new HashMap<String, String>(){
-        //each defense with is own category
-        {
-            put("cdf", "a");
-            put("pc", "a");
-            put("mt", "b");
-            put("rp", "b");
-            put("db", "c");
-            put("sp", "c");
-            put("rt", "d");
-            put("rw", "d");
-            put("lb", "e");
-        }
-    };
     public AcceptThread(Activity context, BluetoothSocket socket) {
         this.socket = socket;
         this.context = context;
@@ -315,16 +301,16 @@ import org.json.JSONObject;
                                     }
                                     try {
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                         }
                                         for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                                         }
                                         for (int i = 0; i < successDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                                         }
                                         for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                                         }
                                     } catch (JSONException JE) {
                                         Log.e("json failure", "failed loop red");

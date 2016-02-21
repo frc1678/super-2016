@@ -74,20 +74,6 @@ public class MainActivity extends ActionBarActivity {
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
     private boolean scoutOrSuperFiles;
-    Map<String, String> defenseCategories = new HashMap<String, String>() {
-        //each defense with is own category
-        {
-            put("cdf", "a");
-            put("pc", "a");
-            put("mt", "b");
-            put("rp", "b");
-            put("db", "c");
-            put("sp", "c");
-            put("rt", "d");
-            put("rw", "d");
-            put("lb", "e");
-        }
-    };
     ArrayAdapter<String> adapter;
 
     @Override
@@ -493,7 +479,7 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < defenses.size(); i++){
                                 dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
                             }
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("4").setValue("LB");
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("4").setValue("lb");
                             dataBase.child("Matches").child(matchNum).child("blueScore").setValue(Integer.parseInt(superData.get("Blue Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidCapture").setValue(superData.get("didCapture"));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidBreach").setValue(superData.get("didBreach"));
@@ -501,7 +487,7 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < defenses.size(); i++){
                                 dataBase.child("Matches").child(matchNum).child("redDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
                             }
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("4").setValue("LB");
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("4").setValue("lb");
                             dataBase.child("Matches").child(matchNum).child("redScore").setValue(Integer.parseInt(superData.get("Red Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("redAllianceDidCapture").setValue(superData.get("didCapture"));
                             dataBase.child("Matches").child(matchNum).child("redAllianceDidBreach").setValue(superData.get("didBreach"));
@@ -644,16 +630,16 @@ public class MainActivity extends ActionBarActivity {
                                 Log.e("defenses", defenses.toString());
                             }
                             for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                             }
                             for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                             }
                             for (int i = 0; i < successDefenseTele.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                             }
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
                         } catch (JSONException JE) {
                             Log.e("json failure", "failed loop blue");
@@ -674,16 +660,16 @@ public class MainActivity extends ActionBarActivity {
                         }
                         try {
                             for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                             }
                             for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                             }
                             for (int i = 0; i < successDefenseTele.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                             }
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
 
                         } catch (JSONException JE) {
