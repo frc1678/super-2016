@@ -574,7 +574,7 @@ public class MainActivity extends ActionBarActivity {
                         dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                     }
                     try {
-                        Firebase pathToBallsIntakedAuto = new Firebase("https://1678-scouting-2016.firebaseio.com/TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
+                        Firebase pathToBallsIntakedAuto = new Firebase(dataBaseUrl + "TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
                         JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                         if (jsonArrayToArray(balls).size() < 1) {
                             Log.e("balls", "is Null!");
@@ -641,6 +641,7 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
+                            toasts("Resent Scout data");
                         } catch (JSONException JE) {
                             Log.e("json failure", "failed loop blue");
                             toasts("Failed to resend scout data");
