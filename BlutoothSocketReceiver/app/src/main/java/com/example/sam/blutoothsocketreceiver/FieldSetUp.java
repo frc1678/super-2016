@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,8 +113,8 @@ public class FieldSetUp extends ActionBarActivity {
             layout.addView(column_number);
             layout.addView(columns);
         }
-
     }
+
     @Override
     public void onBackPressed(){
         final Activity activity = this;
@@ -155,7 +156,7 @@ public class FieldSetUp extends ActionBarActivity {
             checkDefensesPicked.clear();
             for (int i = 0; i < toggleButtonList.size(); i++) {
                 if (toggleButtonList.get(i).isChecked()) {
-                    defensesPicked.add(toggleButtonList.get(i).getText().toString());
+                    defensesPicked.add((toggleButtonList.get(i).getText().toString()).toLowerCase());
                     //checkDefensesPicked.add(toggleButtonList.get(i).getText().toString());
                 }
             }
@@ -187,22 +188,12 @@ public class FieldSetUp extends ActionBarActivity {
                 new Thread() {
                     @Override
                     public void run() {
-                        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                            @Override
-                            public void onAuthenticated(AuthData authData) {
-                            }
-
-                            @Override
-                            public void onAuthenticationError(FirebaseError firebaseError) {
-                            }
-                        };
-                        firebaseRef.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
                         if (alliance.equals("Blue Alliance")) {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(2));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(3));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("LB");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("lb");
                             Log.e("blue alliance", "Sent defense position of Blue");
 
                         } else if (alliance.equals("Red Alliance")) {
@@ -210,7 +201,7 @@ public class FieldSetUp extends ActionBarActivity {
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(1));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(2));
                             firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(3));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("LB");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("lb");
                             Log.e("red alliance", "Sent defense position of Red");
                         }
                     }

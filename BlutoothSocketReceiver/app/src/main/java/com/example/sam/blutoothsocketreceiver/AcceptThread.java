@@ -106,14 +106,7 @@ import org.json.JSONObject;
                 final int size = Integer.parseInt(byteSize);
                 //If the scout requests the schedule
                 if (size == -1) {
-                    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-                        @Override
-                        public void onAuthenticated(AuthData authData) {}
-                        @Override
-                        public void onAuthenticationError(FirebaseError firebaseError) {}
-                    };
-                    final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/Matches");
-                    dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
+                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/Matches");
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -252,7 +245,7 @@ import org.json.JSONObject;
                                     "didChallengeTele", "didReachAuto", "scoutName"));
 
                             scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                            final Firebase dataBase = new Firebase("https://1678-scouting-2016.firebaseio.com/");
+                            final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
                             for (int i = 0; i < checkNumKeys.size(); i++) {
                                 stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
@@ -262,7 +255,7 @@ import org.json.JSONObject;
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                             }
                             try {
-                                Firebase pathToBallsIntakedAuto = new Firebase("https://1678-scouting-2016.firebaseio.com/TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
+                                Firebase pathToBallsIntakedAuto = new Firebase("https://1678-dev-2016.firebaseio.com/TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
                                 JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                                 if(jsonArrayToArray(balls).size() < 1){
                                     Log.e("balls", "is Null!");
@@ -290,20 +283,20 @@ import org.json.JSONObject;
                                     List<String> blueDefenseList = FirebaseLists.matchesList.getFirebaseObjectByKey(Integer.toString(matchNum)).blueDefensePositions;
                                     try {
                                         for (int i = 0; i < 5; i++) {
-                                            String tmp = (blueDefenseList.get(i)).toLowerCase();
+                                            String tmp = (blueDefenseList.get(i));
                                             defenses.add(tmp);
                                         }
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                         }
                                         for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                                         }
                                         for (int i = 0; i < successDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                                         }
                                         for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenseCategories.get(defenses.get(i))).child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                                         }
                                     } catch (JSONException JE) {
                                         Log.e("json failure", "failed loop red");
