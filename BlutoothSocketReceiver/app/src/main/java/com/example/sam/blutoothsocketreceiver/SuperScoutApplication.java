@@ -16,15 +16,14 @@ import com.firebase.client.FirebaseError;
  */
 
 public class SuperScoutApplication extends Application {
-
+    String url = "https://1678-scouting-2016.firebaseio.com/";
     @Override
     public void onCreate() {
         super.onCreate();
 
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase firebase = new Firebase("https://1678-dev-2016.firebaseio.com/");
-        String url = "https://1678-dev-2016.firebaseio.com/";
+        Firebase firebase = new Firebase(url);
         Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {}

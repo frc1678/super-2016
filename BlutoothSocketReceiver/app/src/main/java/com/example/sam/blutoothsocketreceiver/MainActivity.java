@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
-    final static String dataBaseUrl = "https://1678-dev-2016.firebaseio.com/";
+    final static String dataBaseUrl = "https://1678-scouting-2016.firebaseio.com/";
     int matchNum;
     int stringIndex;
     int intIndex;
@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         context = this;
         //Start the class that continuosly accepts connection from scout
-        accept_loop loop = new accept_loop(context);
+        accept_loop loop = new accept_loop(context, dataBaseUrl);
         loop.start();
         Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);

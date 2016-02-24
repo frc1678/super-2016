@@ -2,22 +2,12 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.sam.blutoothsocketreceiver.firebase_classes.TeamInMatchData;
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.shaded.fasterxml.jackson.core.JsonParser;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -50,6 +38,8 @@ import org.json.JSONObject;
     String firstKey;
     String keys;
     String scoutAlliance;
+    String dataBaseUrl;
+    String teamNumber;
     int stringIndex;
     int intIndex;
     int matchNum;
@@ -65,9 +55,10 @@ import org.json.JSONObject;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
-    public AcceptThread(Activity context, BluetoothSocket socket) {
+    public AcceptThread(Activity context, BluetoothSocket socket, String dataBaseUrl) {
         this.socket = socket;
         this.context = context;
+        this.dataBaseUrl = dataBaseUrl;
     }
 
     public void run() {
@@ -92,7 +83,7 @@ import org.json.JSONObject;
                 final int size = Integer.parseInt(byteSize);
                 //If the scout requests the schedule
                 if (size == -1) {
-                    final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/Matches");
+                    final Firebase dataBase = new Firebase(dataBaseUrl + "Matches");
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -185,6 +176,7 @@ import org.json.JSONObject;
                                 //split first key to get only match number
                                 String[] teamAndMatchNumbers = firstKey.split("Q");
                                 matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
+                                teamNumber = (teamAndMatchNumbers[0].replace("Q", ""));
                                 try {
                                     jsonUnderKey = scoutData.getJSONObject(firstKey);
                                     System.out.println("First Key: " + firstKey);
@@ -231,7 +223,7 @@ import org.json.JSONObject;
                                     "didChallengeTele", "didReachAuto", "scoutName"));
 
                             scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                            final Firebase dataBase = new Firebase("https://1678-dev-2016.firebaseio.com/");
+                            final Firebase dataBase = new Firebase(dataBaseUrl);
                             for (int i = 0; i < checkNumKeys.size(); i++) {
                                 stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
@@ -241,7 +233,7 @@ import org.json.JSONObject;
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                             }
                             try {
-                                Firebase pathToBallsIntakedAuto = new Firebase("https://1678-dev-2016.firebaseio.com/TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
+                                Firebase pathToBallsIntakedAuto = new Firebase(dataBaseUrl + "TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
                                 JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                                 if(jsonArrayToArray(balls).size() < 1){
                                     Log.e("balls", "is Null!");
@@ -329,7 +321,7 @@ import org.json.JSONObject;
                                 //make file and directory for Scout data
                                 File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                                 dir.mkdir();
-                                file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()))));
+                                file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + "_" + teamNumber)));
                                 file.println(scoutData.toString());
                                 file.close();
                             } catch (IOException IOE) {

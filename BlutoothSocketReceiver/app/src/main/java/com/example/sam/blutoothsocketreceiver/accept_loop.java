@@ -33,11 +33,13 @@ public class accept_loop extends Thread {
     BluetoothAdapter mBluetoothAdapter;
     BluetoothSocket socket;
     String uuid;
+    String dataBaseUrl;
     Activity context;
     TextView changing;
 
-    public accept_loop(Activity context){
+    public accept_loop(Activity context, String dataBaseUrl){
         this.context = context;
+        this.dataBaseUrl = dataBaseUrl;
     }
     public void run() {
         //continously checking for connection
@@ -74,7 +76,7 @@ public class accept_loop extends Thread {
                 System.out.println("before .accept");
                 socket = mmServerSocket.accept();
                 System.out.println("after .accept");
-                AcceptThread acceptThread = new AcceptThread(context, socket);
+                AcceptThread acceptThread = new AcceptThread(context, socket, dataBaseUrl);
                 acceptThread.start();
                 System.out.println("after .start");
 
