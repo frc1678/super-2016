@@ -287,11 +287,11 @@ import org.json.JSONObject;
                                 } else if (scoutAlliance.equals("red")) {
                                     List<String> defenses = new ArrayList<>();
                                     List<String> redDefenseList = FirebaseLists.matchesList.getFirebaseObjectByKey(Integer.toString(matchNum)).redDefensePositions;
-                                    for (int i = 0; i < 5; i++) {
-                                        String tmp = (redDefenseList.get(i)).toLowerCase();
-                                        defenses.add(tmp);
-                                    }
                                     try {
+                                        for (int i = 0; i < 5; i++) {
+                                            String tmp = (redDefenseList.get(i)).toLowerCase();
+                                            defenses.add(tmp);
+                                        }
                                         for (int i = 0; i < successDefenseAuto.length(); i++) {
                                             dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                         }
