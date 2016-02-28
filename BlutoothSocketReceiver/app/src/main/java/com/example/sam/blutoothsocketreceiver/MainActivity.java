@@ -583,7 +583,6 @@ public class MainActivity extends ActionBarActivity {
                         } else {
                             for (int i = 0; i < balls.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
-
                             }
                         }
                     } catch (JSONException JE) {
