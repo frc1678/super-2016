@@ -112,11 +112,12 @@ public class Super_Scouting extends ActionBarActivity {
 
         final Dialog dialog = new Dialog(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        final EditText note = (EditText) dialogView.findViewById(R.id.note);
+        note.setText(teamOneNote);
         Button ok = (Button) dialogView.findViewById(R.id.OKButton);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText note = (EditText) dialogView.findViewById(R.id.note);
                 teamOneNote = note.getText().toString();
                 dialog.dismiss();
             }
@@ -135,11 +136,12 @@ public class Super_Scouting extends ActionBarActivity {
     public void teamTwoNoteClick(View view){
         final Dialog dialog = new Dialog(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        final EditText note = (EditText) dialogView.findViewById(R.id.note);
+        note.setText(teamTwoNote);
         Button ok = (Button) dialogView.findViewById(R.id.OKButton);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText note = (EditText) dialogView.findViewById(R.id.note);
                 teamTwoNote = note.getText().toString();
                 dialog.dismiss();
             }
@@ -158,11 +160,12 @@ public class Super_Scouting extends ActionBarActivity {
     public void teamThreeNoteClick(View view){
         final Dialog dialog = new Dialog(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
+        final EditText note = (EditText) dialogView.findViewById(R.id.note);
+        note.setText(teamThreeNote);
         Button ok = (Button) dialogView.findViewById(R.id.OKButton);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText note = (EditText) dialogView.findViewById(R.id.note);
                 teamThreeNote = note.getText().toString();
                 dialog.dismiss();
             }

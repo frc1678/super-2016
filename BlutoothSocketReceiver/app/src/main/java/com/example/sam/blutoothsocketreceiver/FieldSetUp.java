@@ -80,7 +80,7 @@ public class FieldSetUp extends ActionBarActivity {
         //create the 4 by 7 of buttons
         for (int i = 0; i < 4; i++) {
             TextView column_number = new TextView(this);
-            column_number.setText("Defense" + " " + Integer.toString(i + 1));
+            column_number.setText("Defense" + " " + Integer.toString(i + 2));
             LinearLayout columns = new LinearLayout(this);
             columns.setOrientation(LinearLayout.HORIZONTAL);
             columns.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
@@ -189,19 +189,19 @@ public class FieldSetUp extends ActionBarActivity {
                     @Override
                     public void run() {
                         if (alliance.equals("Blue Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue(defensesPicked.get(0));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(1));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(2));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(3));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue("lb");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue("lb");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(0));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(1));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(2));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue(defensesPicked.get(3));
                             Log.e("blue alliance", "Sent defense position of Blue");
 
                         } else if (alliance.equals("Red Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue(defensesPicked.get(0));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(1));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(2));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(3));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue("lb");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue("lb");
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(0));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(1));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(2));
+                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue(defensesPicked.get(3));
                             Log.e("red alliance", "Sent defense position of Red");
                         }
                     }

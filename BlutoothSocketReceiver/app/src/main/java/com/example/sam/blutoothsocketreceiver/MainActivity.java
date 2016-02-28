@@ -655,11 +655,11 @@ public class MainActivity extends ActionBarActivity {
                     } else if (scoutAlliance.equals("red")) {
                         List<String> defenses = new ArrayList<>();
                         List<String> redDefenseList = FirebaseLists.matchesList.getFirebaseObjectByKey(Integer.toString(matchNum)).redDefensePositions;
-                        for (int i = 0; i < 5; i++) {
-                            String tmp = (redDefenseList.get(i)).toLowerCase();
-                            defenses.add(tmp);
-                        }
                         try {
+                            for (int i = 0; i < 5; i++) {
+                                String tmp = (redDefenseList.get(i)).toLowerCase();
+                                defenses.add(tmp);
+                            }
                             for (int i = 0; i < successDefenseAuto.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                             }
@@ -672,7 +672,6 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
-
                         } catch (JSONException JE) {
                             Log.e("json failure", "failed loop red");
                             toasts("Failed to resend Scout Data");
