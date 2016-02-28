@@ -49,7 +49,7 @@ import org.json.JSONObject;
     ArrayList<String> valueOfKeys;
     ArrayList<String> checkNumKeys;
     ArrayList<String> checkStringKeys;
-    List<Match> listOfMatchNumbers = FirebaseLists.matchesList.getValues();
+    //List<Match> listOfMatchNumbers = FirebaseLists.matchesList.getValues();
     PrintWriter file = null;
     JSONObject jsonUnderKey;
     JSONObject scoutData;
