@@ -18,7 +18,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 public class SuperNotes extends ActionBarActivity {
-    Intent notes;
+    Intent toNotes;
     String alliance;
     String numberOfMatch;
     String teamOne;
@@ -42,7 +42,7 @@ public class SuperNotes extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.super_notes);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        notes = getIntent();
+        toNotes = getIntent();
         superNoteTextView = (TextView)findViewById(R.id.allianceNotesTextView);
         teamOneTextView = (TextView)findViewById(R.id.teamOneNoteTextView);
         teamTwoTextView = (TextView)findViewById(R.id.teamTwoNoteTextView);
@@ -71,15 +71,7 @@ public class SuperNotes extends ActionBarActivity {
         teamOneEditText.setText(teamOneNote);
         teamTwoEditText.setText(teamTwoNote);
         teamThreeEditText.setText(teamThreeNote);
-
-        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {}
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {}
-        };
         dataBase = new Firebase(dataBaseUrl);
-        dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
     }
     public void onBackPressed(){
         final Activity activity = this;
@@ -138,15 +130,15 @@ public class SuperNotes extends ActionBarActivity {
         }
 
     public void getSuperNotesExtra(){
-        alliance = notes.getExtras().getString("alliance");
-        numberOfMatch = notes.getStringExtra("matchNumber");
-        teamOne = notes.getStringExtra("teamOne");
-        teamTwo = notes.getStringExtra("teamTwo");
-        teamThree = notes.getStringExtra("teamThree");
-        teamOneNote = notes.getStringExtra("teamOneNote");
-        teamTwoNote = notes.getStringExtra("teamTwoNote");
-        teamThreeNote = notes.getStringExtra("teamThreeNote");
-        dataBaseUrl = notes.getExtras().getString("dataBaseUrl");
+        alliance = toNotes.getExtras().getString("alliance");
+        numberOfMatch = toNotes.getStringExtra("matchNumber");
+        teamOne = toNotes.getStringExtra("teamOne");
+        teamTwo = toNotes.getStringExtra("teamTwo");
+        teamThree = toNotes.getStringExtra("teamThree");
+        teamOneNote = toNotes.getStringExtra("teamOneNote");
+        teamTwoNote = toNotes.getStringExtra("teamTwoNote");
+        teamThreeNote = toNotes.getStringExtra("teamThreeNote");
+        dataBaseUrl = toNotes.getExtras().getString("dataBaseUrl");
     }
 
     }

@@ -648,8 +648,9 @@ public class MainActivity extends ActionBarActivity {
                             return;
                         } catch (NullPointerException NPE) {
                             Log.e("If Blue", "9");
-                            toasts("Failed to resend scout data");
+                            toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
                             Log.e("Toast", "should have been seen");
+                            return;
                         }
 
                     } else if (scoutAlliance.equals("red")) {
@@ -678,9 +679,7 @@ public class MainActivity extends ActionBarActivity {
                             toasts("Failed to resend Scout Data");
                             return;
                         } catch (NullPointerException npe) {
-
-                            toasts("Failed to resend Scout Data");
-                            toasts("Make sure you did this match!");
+                            toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
                             return;
                         }
                         Log.e("reached", "toast");
