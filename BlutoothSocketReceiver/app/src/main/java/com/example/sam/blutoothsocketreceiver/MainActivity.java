@@ -50,8 +50,8 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberTwo;
     EditText teamNumberThree;
     TextView alliance;
-    Boolean isRed = new Boolean(false);
-    Integer matchNumber = new Integer(0);
+    Boolean isRed = false;
+    Integer matchNumber = 0;
     Firebase dataBase;
     String firstKey;
     String keys;
@@ -354,13 +354,9 @@ public class MainActivity extends ActionBarActivity {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -474,17 +470,19 @@ public class MainActivity extends ActionBarActivity {
                         }
                         if (!isRed){
                             for (int i = 0; i < defenses.size(); i++){
-                                dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
+                                dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child(Integer.toString(i + 1)).setValue(superData.get(defenses.get(i)));
+                                Log.e("defense position: " + Integer.toString(i), superData.get(defenses.get(i)).toString());
+                                System.out.println(superData);
                             }
-                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("4").setValue("lb");
+                            dataBase.child("Matches").child(matchNum).child("blueDefensePositions").child("0").setValue("lb");
                             dataBase.child("Matches").child(matchNum).child("blueScore").setValue(Integer.parseInt(superData.get("Blue Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidCapture").setValue(superData.get("didCapture"));
                             dataBase.child("Matches").child(matchNum).child("blueAllianceDidBreach").setValue(superData.get("didBreach"));
                         }else{
                             for (int i = 0; i < defenses.size(); i++){
-                                dataBase.child("Matches").child(matchNum).child("redDefensePositions").child(Integer.toString(i)).setValue(superData.get(defenses.get(i)));
+                                dataBase.child("Matches").child(matchNum).child("redDefensePositions").child(Integer.toString(i + 1)).setValue(superData.get(defenses.get(i)));
                             }
-                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("4").setValue("lb");
+                            dataBase.child("Matches").child(matchNum).child("redDefensePositions").child("0").setValue("lb");
                             dataBase.child("Matches").child(matchNum).child("redScore").setValue(Integer.parseInt(superData.get("Red Alliance Score").toString()));
                             dataBase.child("Matches").child(matchNum).child("redAllianceDidCapture").setValue(superData.get("didCapture"));
                             dataBase.child("Matches").child(matchNum).child("redAllianceDidBreach").setValue(superData.get("didBreach"));
