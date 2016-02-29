@@ -217,7 +217,7 @@ public class Super_Scouting extends ActionBarActivity {
                 int current = Integer.parseInt(incrementor.getText().toString());
                 current++;
                 if (current > 4) {
-                    incrementor.setText(Integer.toString(4));
+                    incrementor.setText(Integer.toString(0));
                 } else {
                     incrementor.setText(Integer.toString(current));
                 }
@@ -230,7 +230,7 @@ public class Super_Scouting extends ActionBarActivity {
                 int current = Integer.parseInt(incrementor.getText().toString());
                 current--;
                 if (current < 0) {
-                    incrementor.setText(Integer.toString(0));
+                    incrementor.setText(Integer.toString(4));
                 } else {
                     incrementor.setText(Integer.toString(current));
                 }
