@@ -281,8 +281,12 @@ import org.json.JSONObject;
                                             Log.e("json failure", "failed loop red");
                                             return;
                                         } catch (NullPointerException npe) {
-                                            toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
-
+                                            context.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(context, "Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", Toast.LENGTH_LONG ).show();
+                                                }
+                                            });
                                         }
 
                                     } else if (scoutAlliance.equals("red")) {
