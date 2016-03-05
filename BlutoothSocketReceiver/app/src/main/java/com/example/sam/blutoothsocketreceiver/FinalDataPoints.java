@@ -188,6 +188,12 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("teamTwo", teamNumberTwo);
                         superExternalData.put("teamThree", teamNumberThree);
 
+                        ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamNumberOne, teamNumberTwo, teamNumberThree));
+                        for (int i = 0; i < teamNumbers.size(); i++){
+                            firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
+                            firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+                        }
+
                     }catch(JSONException JE){
                         Log.e("JSON Error", "couldn't put keys and values in json object");
                     }

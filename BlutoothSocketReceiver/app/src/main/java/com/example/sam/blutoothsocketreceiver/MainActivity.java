@@ -454,6 +454,12 @@ public class MainActivity extends ActionBarActivity {
                         Iterator getTeamOneKeys = teamOneKeyNames.keys();
                         Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
                         Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
+
+                        ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamOneNumber, teamTwoNumber, teamThreeNumber));
+                        for (int i = 0; i < teamNumbers.size(); i++){
+                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
+                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(matchNum));
+                        }
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child(teamOneKeys).setValue(Integer.parseInt(teamOneData.get(teamOneKeys).toString()));
