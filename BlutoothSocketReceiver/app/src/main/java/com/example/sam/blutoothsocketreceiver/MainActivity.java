@@ -500,19 +500,14 @@ public class MainActivity extends ActionBarActivity {
                     }
                     // new ConnectThread(context, superName, uuid, name, text).start();
                 }
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Resent Super Data", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                toasts("Resent Super data!", false);
             }
         }.start();
     }
 
     public void resendScoutData(final List<JSONObject> datapoints) {
         //read data from file
-        toasts("Please Wait...Do not do anything");
+        toasts("Please Wait...Do not do anything", false);
         new Thread() {
             @Override
             public void run() {
@@ -643,21 +638,20 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
-                            toasts("Resent Scout data");
+                            toasts("Resent Scout data", false);
                         } catch (JSONException JE) {
                             Log.e("json failure", "failed loop blue");
-                            toasts("Failed to resend scout data");
+                            toasts("Failed to resend scout data", false);
                             return;
                         } catch (NullPointerException NPE) {
                             Log.e("If Blue", "9");
-                            toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
+                            toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                             Log.e("Toast", "should have been seen");
                             return;
                         }
                     }catch (FirebaseException FE){
-
                             Log.e("FirebaseException", "blueMain");
-                            toasts("Resent scout data match number does not exist!");
+                            toasts("Resent scout data match number does not exist!", true);
                         }
                     } else if (scoutAlliance.equals("red")) {
                         try {
@@ -682,18 +676,18 @@ public class MainActivity extends ActionBarActivity {
                                 }
                             } catch (JSONException JE) {
                                 Log.e("json failure", "failed loop red");
-                                toasts("Failed to resend Scout Data");
+                                toasts("Failed to resend Scout Data", false);
                                 return;
                             } catch (NullPointerException npe) {
-                                toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
+                                toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                 return;
                             }
                             Log.e("reached", "toast");
-                            toasts("Resent Scout Data");
+                            toasts("Resent Scout Data", false);
                         }catch(FirebaseException FE){
 
                             Log.e("FirebaseException", "redMain");
-                            toasts("Resent scout data match number does not exist!");
+                            toasts("Resent scout data match number does not exist!", true);
                         }
                     }
                 }
@@ -701,13 +695,22 @@ public class MainActivity extends ActionBarActivity {
 
         }.start();
     }
-    public void toasts(final String message){
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void toasts(final String message, boolean isLongMessage) {
+        if (!isLongMessage) {
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
 

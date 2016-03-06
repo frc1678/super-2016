@@ -50,7 +50,6 @@ import org.json.JSONObject;
     ArrayList<String> valueOfKeys;
     ArrayList<String> checkNumKeys;
     ArrayList<String> checkStringKeys;
-    //List<Match> listOfMatchNumbers = FirebaseLists.matchesList.getValues();
     PrintWriter file = null;
     JSONObject jsonUnderKey;
     JSONObject scoutData;
@@ -124,10 +123,10 @@ import org.json.JSONObject;
                                 out.println(data.toString());
                                 out.println("\0");
                                 out.flush();
-                                toasts("Schedule sent to Scout");
+                                toasts("Schedule sent to Scout", false);
 
                             } catch (IOException IOE) {
-                                toasts("Failed to send schedule to scout");
+                                toasts("Failed to send schedule to scout", false);
                                 return;
                             }
                         }
@@ -163,13 +162,13 @@ import org.json.JSONObject;
                         //0 = no error, 1 = ERROR!
                         out.println("1");
                         out.flush();
-                        toasts("ERROR message sent");
+                        toasts("ERROR message sent", false);
                         Log.e("Error", "Error message sent");
                         //I the byte size of actual is equal to the byte size received
                     } else {
                         out.println("0");
                         out.flush();
-                        toasts("Data transfer Success!");
+                        toasts("Data transfer Success!", false);
                         for (int j = 0; j < dataPoints.size(); j++) {
                             scoutData = dataPoints.get(j);
                             //get first key of the scout data that contains the match and the team number
@@ -284,16 +283,11 @@ import org.json.JSONObject;
                                                 Log.e("json failure", "failed loop red");
                                                 return;
                                             } catch (NullPointerException npe) {
-                                                context.runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(context, "Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
+                                                toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
                                         }catch(FirebaseException FE){
                                             Log.e("FirebaseException", "blue");
-                                            toasts("Scout data match number does not exist!");
+                                            toasts("Scout data match number does not exist!", true);
                                         }
 
                                     } else if (scoutAlliance.equals("red")) {
@@ -323,11 +317,11 @@ import org.json.JSONObject;
                                                 return;
                                             } catch (NullPointerException npe) {
                                                 Log.e("asdf", "defense is null");
-                                                toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!");
+                                                toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
                                         }catch(FirebaseException FE){
                                             Log.e("FirebaseException", "red");
-                                            toasts("Scout data match number does not exist!");
+                                            toasts("Scout data match number does not exist!", true);
                                         }
                                     }
                                 } catch (JSONException JE) {
@@ -358,13 +352,22 @@ import org.json.JSONObject;
     }
 }
 
-    public void toasts(final String message) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void toasts(final String message, boolean isLongMessage) {
+        if (!isLongMessage) {
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public List<Object> jsonArrayToArray(JSONArray array) {
