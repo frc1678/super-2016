@@ -285,7 +285,7 @@ import org.json.JSONObject;
                                             } catch (NullPointerException npe) {
                                                 toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
-                                        }catch(FirebaseException FE){
+                                        }catch(IndexOutOfBoundsException IOBE){
                                             Log.e("FirebaseException", "blue");
                                             toasts("Scout data match number does not exist!", true);
                                         }
@@ -319,7 +319,7 @@ import org.json.JSONObject;
                                                 Log.e("asdf", "defense is null");
                                                 toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
-                                        }catch(FirebaseException FE){
+                                        }catch(IndexOutOfBoundsException IOBE){
                                             Log.e("FirebaseException", "red");
                                             toasts("Scout data match number does not exist!", true);
                                         }

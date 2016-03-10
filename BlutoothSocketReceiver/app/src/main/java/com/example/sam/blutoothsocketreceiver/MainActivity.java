@@ -338,9 +338,10 @@ public class MainActivity extends ActionBarActivity {
             teamNumberTwo.setText(teamsOnAlliance.get(1).toString());
             teamNumberThree.setText(teamsOnAlliance.get(2).toString());
         } else {
-            teamNumberOne.setText("");
-            teamNumberTwo.setText("");
-            teamNumberThree.setText("");
+            teamNumberOne.setText("Not Available");
+            teamNumberTwo.setText("Not Available");
+            teamNumberThree.setText("Not Available");
+
         }
     }
 
@@ -458,8 +459,9 @@ public class MainActivity extends ActionBarActivity {
 
                         ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamOneNumber, teamTwoNumber, teamThreeNumber));
                         for (int i = 0; i < teamNumbers.size(); i++){
-                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
-                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(matchNum));
+                            //Log.e("path", teamNumbers.get(i) + "Q" + numberOfMatch.toString());
+                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
+                            dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("matchNumber").setValue(Integer.parseInt(matchNum));
                         }
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
@@ -649,7 +651,7 @@ public class MainActivity extends ActionBarActivity {
                             Log.e("Toast", "should have been seen");
                             return;
                         }
-                    }catch (FirebaseException FE){
+                    }catch (IndexOutOfBoundsException IOB) {
                             Log.e("FirebaseException", "blueMain");
                             toasts("Resent scout data match number does not exist!", true);
                         }
@@ -684,8 +686,7 @@ public class MainActivity extends ActionBarActivity {
                             }
                             Log.e("reached", "toast");
                             toasts("Resent Scout Data", false);
-                        }catch(FirebaseException FE){
-
+                        }catch(IndexOutOfBoundsException IOB){
                             Log.e("FirebaseException", "redMain");
                             toasts("Resent scout data match number does not exist!", true);
                         }
