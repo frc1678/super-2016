@@ -123,7 +123,11 @@ public class MainActivity extends ActionBarActivity {
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateUI();
+                try {
+                    updateUI();
+                }catch (NullPointerException NPE){
+                    toasts("Teams not available", true);
+                }
             }
         }, new IntentFilter("matches_updated"));
 
@@ -327,21 +331,25 @@ public class MainActivity extends ActionBarActivity {
     }
 //updates the team numbers in the front screen according to the match number and the alliance;
     private void updateUI() {
-        if (FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())) {
-            Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchNumber.toString());
+        try {
+            if (FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())) {
+                Match match = FirebaseLists.matchesList.getFirebaseObjectByKey(matchNumber.toString());
 
-            List<Integer> teamsOnAlliance = new ArrayList<>();
-            teamsOnAlliance.addAll((isRed) ? match.redAllianceTeamNumbers : match.blueAllianceTeamNumbers);
-            alliance.setTextColor((isRed) ? Color.RED : Color.BLUE);
-            alliance.setText((isRed) ? "Red Alliance" : "Blue Alliance");
-            teamNumberOne.setText(teamsOnAlliance.get(0).toString());
-            teamNumberTwo.setText(teamsOnAlliance.get(1).toString());
-            teamNumberThree.setText(teamsOnAlliance.get(2).toString());
-        } else {
-            teamNumberOne.setText("Not Available");
-            teamNumberTwo.setText("Not Available");
-            teamNumberThree.setText("Not Available");
+                List<Integer> teamsOnAlliance = new ArrayList<>();
+                teamsOnAlliance.addAll((isRed) ? match.redAllianceTeamNumbers : match.blueAllianceTeamNumbers);
+                alliance.setTextColor((isRed) ? Color.RED : Color.BLUE);
+                alliance.setText((isRed) ? "Red Alliance" : "Blue Alliance");
+                teamNumberOne.setText(teamsOnAlliance.get(0).toString());
+                teamNumberTwo.setText(teamsOnAlliance.get(1).toString());
+                teamNumberThree.setText(teamsOnAlliance.get(2).toString());
+            } else {
+                teamNumberOne.setText("Not Available");
+                teamNumberTwo.setText("Not Available");
+                teamNumberThree.setText("Not Available");
 
+            }
+        }catch(NullPointerException NPE){
+            toasts("Teams not available", true);
         }
     }
 
