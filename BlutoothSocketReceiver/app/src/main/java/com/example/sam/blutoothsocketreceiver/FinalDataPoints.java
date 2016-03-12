@@ -82,15 +82,7 @@ public class FinalDataPoints extends ActionBarActivity {
         }else if(alliance.equals("Red Alliance")){
             finalScore.setTextColor(Color.RED);
         }
-        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {}
-
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {}
-        };
         firebaseRef = new Firebase(dataBaseUrl);
-        firebaseRef.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee1", authResultHandler);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);

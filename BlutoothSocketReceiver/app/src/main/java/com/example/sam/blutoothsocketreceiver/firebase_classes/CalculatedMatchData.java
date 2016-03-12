@@ -39,6 +39,8 @@ public class CalculatedMatchData extends Object {
     public Float redCaptureChance;
     public Float blueCaptureChance;
     public Float scoreContribution;
+    public Float sdPredictedRedScore;
+    public Float sdPredictedBlueScore;
     public List<String> optimalRedDefenses;
     public List<String> optimalBlueDefenses;
 
