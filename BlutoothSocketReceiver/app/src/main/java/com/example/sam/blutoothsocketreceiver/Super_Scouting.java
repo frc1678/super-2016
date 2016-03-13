@@ -65,16 +65,9 @@ public class Super_Scouting extends ActionBarActivity {
         object = new JSONObject();
         getExtrasForScouting();
         //Get authorized to use the database
-        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {}
 
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {}
-        };
-        Log.e("firebase url", dataBaseUrl);
+        Log.e("Super Scouting", dataBaseUrl);
         dataBase = new Firebase(dataBaseUrl);
-        dataBase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
         teamNumber1 = (TextView) findViewById(R.id.team1);
         teamNumber2 = (TextView) findViewById(R.id.team2);
         teamNumber3 = (TextView) findViewById(R.id.team3);

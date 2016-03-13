@@ -2,10 +2,12 @@ package com.example.sam.blutoothsocketreceiver;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -83,6 +85,7 @@ public class FinalDataPoints extends ActionBarActivity {
             finalScore.setTextColor(Color.RED);
         }
         firebaseRef = new Firebase(dataBaseUrl);
+        Log.e("finalDataPoints", dataBaseUrl);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
@@ -133,6 +136,15 @@ public class FinalDataPoints extends ActionBarActivity {
             toNotes.putExtra("teamThreeNote", teamThreeNote);
             toNotes.putExtra("dataBaseUrl", dataBaseUrl);
             startActivity(toNotes);
+        }
+        if(id == R.id.forgotAllianceScore){
+            Toast.makeText(this, "Shame...", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setData(Uri.parse("URL TO SAC REGIONAL BLUE ALLIANCE"));
+            startActivity(intent);
+
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.Submit) {

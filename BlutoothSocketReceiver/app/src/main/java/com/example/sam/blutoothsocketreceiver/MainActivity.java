@@ -38,7 +38,6 @@ import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.FirebaseException;
 import com.firebase.client.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -340,8 +339,12 @@ public class MainActivity extends ActionBarActivity {
                 alliance.setTextColor((isRed) ? Color.RED : Color.BLUE);
                 alliance.setText((isRed) ? "Red Alliance" : "Blue Alliance");
                 teamNumberOne.setText(teamsOnAlliance.get(0).toString());
+                Log.e("teamNumberOne", teamsOnAlliance.get(0).toString());
                 teamNumberTwo.setText(teamsOnAlliance.get(1).toString());
+                Log.e("teamNumberTwo", teamsOnAlliance.get(1).toString());
                 teamNumberThree.setText(teamsOnAlliance.get(2).toString());
+                Log.e("teamNumberThree", teamsOnAlliance.get(2).toString());
+
             } else {
                 teamNumberOne.setText("Not Available");
                 teamNumberTwo.setText("Not Available");
