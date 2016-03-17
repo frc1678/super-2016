@@ -47,6 +47,7 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamTwoNote;
     String teamThreeNote;
     String dataBaseUrl;
+    String allianceScoreData;
     TextView finalScore;
     EditText allianceScore;
     JSONObject superExternalData;
@@ -88,6 +89,7 @@ public class FinalDataPoints extends ActionBarActivity {
         Log.e("finalDataPoints", dataBaseUrl);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
+        allianceScore.setText(allianceScoreData);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
         breachCheck = (ToggleButton) findViewById(R.id.didBreach);
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
@@ -282,5 +284,7 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoNote = intent.getStringExtra("teamTwoNote");
         teamThreeNote = intent.getStringExtra("teamThreeNote");
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
+        allianceScoreData = intent.getExtras().getString("allianceScore");
+
     }
 }

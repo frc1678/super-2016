@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    
+    <item
+        android:id="@+id/forgotAllianceScore"
+        android:title="AllianceScore"
+        app:showAsAction = "always"/>
     <item
         android:id="@+id/superNotes"
         android:title="Notes"
@@ -10,9 +14,6 @@
         android:id="@+id/Submit"
         android:title="Submit"
         app:showAsAction = "always"/>
-    <item
-        android:id="@+id/forgotAllianceScore"
-        android:title="AllianceScore"
-        app:showAsAction = "always"/>
+
 
 </menu>

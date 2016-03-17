@@ -16,7 +16,7 @@ import com.firebase.client.FirebaseError;
  */
 
 public class SuperScoutApplication extends Application {
-    String url = "https://1678-scouting-2016.firebaseio.com/";
+    String url = "https://1678-dev3-2016.firebaseio.com/";
     @Override
     public void onCreate() {
         super.onCreate();

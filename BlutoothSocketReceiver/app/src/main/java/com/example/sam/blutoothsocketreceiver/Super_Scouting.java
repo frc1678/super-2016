@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +44,7 @@ public class Super_Scouting extends ActionBarActivity {
     String teamTwoNote = "";
     String teamThreeNote = "";
     String dataBaseUrl;
+    String allianceScoreData;
     ArrayList<String> defenses;
     ArrayList<String> dataScore;
     ArrayList<String> teamOneDataName;
@@ -244,6 +246,31 @@ public class Super_Scouting extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
+        if(id == R.id.getAllianceScore){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Input Alliance Score: ");
+            final EditText input = new EditText(this);
+            input.setText(allianceScoreData);
+            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            input.setGravity(1);
+            builder.setView(input);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    allianceScoreData = input.getText().toString();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }
         if (id == R.id.finalNext) {
             Intent intent = new Intent(this, FinalDataPoints.class);
             intent.putExtra("matchNumber", numberOfMatch);
@@ -259,6 +286,8 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("teamTwoNote", teamTwoNote);
             intent.putExtra("teamThreeNote", teamThreeNote);
             intent.putExtra("dataBaseUrl", dataBaseUrl);
+            intent.putExtra("allianceScore", allianceScoreData);
+
 
             getEachDataNameAndValue();
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);

@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/getAllianceScore"
+        android:title="AllianceScore"
+        app:showAsAction = "always"/>
+    <item
         android:id="@+id/finalNext"
         android:title="Next >>"
         app:showAsAction = "always"/>
-
-
+    
 </menu>
