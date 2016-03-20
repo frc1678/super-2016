@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
-    final static String dataBaseUrl = "https://1678-dev3-2016.firebaseio.com/";
+    final static String dataBaseUrl = Constants.dataBaseUrl;
     int matchNum;
     int stringIndex;
     int intIndex;
