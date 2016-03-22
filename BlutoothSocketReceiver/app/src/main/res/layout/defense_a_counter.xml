@@ -10,7 +10,7 @@
         <Button
             android:id="@+id/rank1"
             android:text="1"
-            android:textSize="10sp"
+            android:textSize="7sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"/>
@@ -19,14 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_below="@id/rank1"
             android:layout_marginLeft="40dp"/>
 
         <Button
             android:id="@+id/rank3"
             android:text="3"
-            android:textSize="10sp"
+            android:textSize="7sp"
             android:layout_marginLeft="175dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_below="@+id/rank2"
             android:layout_centerHorizontal="true"/>
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
-            android:textSize="10sp"
+            android:textSize="7sp"
             android:layout_centerHorizontal="true"
             android:clickable="true"/>
         <TextView
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_below="@id/rank3"
             android:layout_marginLeft="215dp"/>
     </RelativeLayout>

@@ -54,6 +54,9 @@ public class Super_Scouting extends ActionBarActivity {
     ArrayList<String> teamThreeDataName;
     ArrayList<String> teamThreeDataScore;
     ArrayList<String> data;
+    ArrayList<String> teamOneDefenseARanks;
+    ArrayList<String> teamTwoDefenseARanks;
+    ArrayList<String> teamThreeDefenseARanks;
     JSONObject object;
     Intent next;
     Firebase dataBase;
@@ -97,7 +100,7 @@ public class Super_Scouting extends ActionBarActivity {
         teamTwoDataScore = new ArrayList<>();
         teamThreeDataName = new ArrayList<>();
         teamThreeDataScore = new ArrayList<>();
-        data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Evasion", "Ball Control"));
+        data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Agility", "Ball Control"));
 
         setUpDataRanking();
 
@@ -237,9 +240,8 @@ public class Super_Scouting extends ActionBarActivity {
         });
         return counter;
     }
-
+    //Added Stuff
     private View createDefenseACounter() {
-
         LayoutInflater inflater = getLayoutInflater();
         View counter = inflater.inflate(R.layout.defense_a_counter, null);
         final TextView rankOneIncrementor = (TextView) counter.findViewById(R.id.rankOneCounter);
@@ -274,7 +276,7 @@ public class Super_Scouting extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
-                current--;
+                current++;
                 rankTwoIncrementor.setText(Integer.toString(current));
             }
         });
@@ -295,7 +297,7 @@ public class Super_Scouting extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
-                current--;
+                current++;
                 rankThreeIncrementor.setText(Integer.toString(current));
             }
         });
@@ -369,8 +371,8 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("dataBaseUrl", dataBaseUrl);
             intent.putExtra("allianceScore", allianceScoreData);
 
-
             getEachDataNameAndValue();
+
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
             intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
             intent.putStringArrayListExtra("dataNameTwo", teamTwoDataName);
@@ -423,40 +425,77 @@ public class Super_Scouting extends ActionBarActivity {
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+        //Added Stuff
+        View defenseATeamOneId = teamOneRelativeLayout.getChildAt(teamOneRelativeLayout.getChildCount());
+        View defenseATeamTwoId = teamOneRelativeLayout.getChildAt(teamOneRelativeLayout.getChildCount());
+        View defenseATeamThreeId = teamOneRelativeLayout.getChildAt(teamOneRelativeLayout.getChildCount());
+        //Added Stuff
+        TextView rankOneIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankOneCounter);
+        TextView rankTwoIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankTwoCounter);
+        TextView rankThreeIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankThreeCounter);
+        TextView rankOneIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankOneCounter);
+        TextView rankTwoIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankTwoCounter);
+        TextView rankThreeIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankThreeCounter);
+        TextView rankOneIncrementor3 = (TextView) defenseATeamThreeId.findViewById(R.id.rankOneCounter);
+        TextView rankTwoIncrementor3 = (TextView) defenseATeamThreeId.findViewById(R.id.rankTwoCounter);
+        TextView rankThreeIncrementor3 = (TextView) defenseATeamThreeId.findViewById(R.id.rankThreeCounter);
+
         teamOneDataName.clear();
         teamOneDataScore.clear();
         teamTwoDataName.clear();
         teamTwoDataScore.clear();
         teamThreeDataName.clear();
         teamThreeDataScore.clear();
-        for (int i = 0; i < teamOneRelativeLayout.getChildCount(); i++) {
+        //Added "-1"
+        for (int i = 0; i < teamOneRelativeLayout.getChildCount() - 1; i++) {
             View teamOneLayout = teamOneRelativeLayout.getChildAt(i);
             TextView nameOfData1 = (TextView) teamOneLayout.findViewById(R.id.dataName);
             TextView scoreOfData1 = (TextView) teamOneLayout.findViewById(R.id.scoreCounter);
             teamOneDataName.add(("rank" + (nameOfData1.getText().toString())).replace(" ", ""));
             teamOneDataScore.add(scoreOfData1.getText().toString());
         }
-        for (int j = 0; j < teamTwoRelativeLayout.getChildCount(); j++) {
+        //Added Stuff
+        teamOneDefenseARanks.add(rankOneIncrementor1.getText().toString());
+        teamOneDefenseARanks.add(rankTwoIncrementor1.getText().toString());
+        teamOneDefenseARanks.add(rankThreeIncrementor1.getText().toString());
+        Log.e("teamOneDefenseARanks", teamOneDefenseARanks.toString());
+
+        for (int j = 0; j < teamTwoRelativeLayout.getChildCount() - 1; j++) {
             View teamTwoLayout = teamTwoRelativeLayout.getChildAt(j);
             TextView nameOfData2 = (TextView) teamTwoLayout.findViewById(R.id.dataName);
             TextView scoreOfData2 = (TextView) teamTwoLayout.findViewById(R.id.scoreCounter);
             teamTwoDataName.add(("rank" + (nameOfData2.getText().toString())).replace(" ", ""));
             teamTwoDataScore.add(scoreOfData2.getText().toString());
         }
-        for (int k = 0; k < teamThreeRelativeLayout.getChildCount(); k++) {
+        //Added Stuff
+        teamTwoDefenseARanks.add(rankOneIncrementor2.getText().toString());
+        teamTwoDefenseARanks.add(rankTwoIncrementor2.getText().toString());
+        teamTwoDefenseARanks.add(rankThreeIncrementor2.getText().toString());
+        Log.e("teamTwoDefenseARanks", teamTwoDefenseARanks.toString());
+
+
+        for (int k = 0; k < teamThreeRelativeLayout.getChildCount() - 1; k++) {
             View teamThreeLayout = teamThreeRelativeLayout.getChildAt(k);
             TextView nameOfData3 = (TextView) teamThreeLayout.findViewById(R.id.dataName);
             TextView scoreOfData3 = (TextView) teamThreeLayout.findViewById(R.id.scoreCounter);
             teamThreeDataName.add(("rank" + (nameOfData3.getText().toString())).replace(" ", ""));
             teamThreeDataScore.add(scoreOfData3.getText().toString());
         }
+        //Added Stuff
+        teamOneDefenseARanks.add(rankOneIncrementor3.getText().toString());
+        teamOneDefenseARanks.add(rankTwoIncrementor3.getText().toString());
+        teamOneDefenseARanks.add(rankThreeIncrementor3.getText().toString());
+        Log.e("teamThreeDefenseARanks", teamThreeDefenseARanks.toString());
+
     }
     //sets up the counters to add value
     public void setUpDataRanking(){
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+        //Added Stuff
         View defenseACounter = createDefenseACounter();
+        //
 
         for (String title : data) {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -465,6 +504,7 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setLayoutParams(param);
             teamOneRelativeLayout.addView(counter);
         }
+        //Added Stuff
         LinearLayout.LayoutParams paramForTeamOne = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
         defenseACounter.setLayoutParams(paramForTeamOne);
         teamOneRelativeLayout.addView(defenseACounter);
@@ -476,6 +516,7 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setLayoutParams(param);
             teamTwoRelativeLayout.addView(counter);
         }
+        //Added Stuff
         LinearLayout.LayoutParams paramForTeamTwo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
         defenseACounter.setLayoutParams(paramForTeamTwo);
         teamTwoRelativeLayout.addView(defenseACounter);
@@ -486,7 +527,8 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setId(3 + data.indexOf(title));
             counter.setLayoutParams(param);
             teamThreeRelativeLayout.addView(counter);
-        }
+        }        
+        //Added Stuff
         LinearLayout.LayoutParams paramForTeamThree = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
         defenseACounter.setLayoutParams(paramForTeamThree);
         teamThreeRelativeLayout.addView(defenseACounter);
