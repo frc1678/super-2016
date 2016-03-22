@@ -102,7 +102,8 @@ public class Super_Scouting extends ActionBarActivity {
         setUpDataRanking();
 
     }
-//Dialog pops up and lets the user input notes for each team
+
+    //Dialog pops up and lets the user input notes for each team
     public void teamOneNoteClick(View view) {
 
         final Dialog dialog = new Dialog(this);
@@ -128,7 +129,8 @@ public class Super_Scouting extends ActionBarActivity {
         dialog.setContentView(dialogView);
         dialog.show();
     }
-    public void teamTwoNoteClick(View view){
+
+    public void teamTwoNoteClick(View view) {
         final Dialog dialog = new Dialog(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
         final EditText note = (EditText) dialogView.findViewById(R.id.note);
@@ -152,7 +154,8 @@ public class Super_Scouting extends ActionBarActivity {
         dialog.setContentView(dialogView);
         dialog.show();
     }
-    public void teamThreeNoteClick(View view){
+
+    public void teamThreeNoteClick(View view) {
         final Dialog dialog = new Dialog(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
         final EditText note = (EditText) dialogView.findViewById(R.id.note);
@@ -176,9 +179,10 @@ public class Super_Scouting extends ActionBarActivity {
         dialog.setContentView(dialogView);
         dialog.show();
     }
+
     //warns the user that going back will change data
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         final Activity activity = this;
         new AlertDialog.Builder(this)
                 .setTitle("WARNING")
@@ -197,7 +201,7 @@ public class Super_Scouting extends ActionBarActivity {
                 .show();
     }
 
-//a view that will be added in a loop
+    //a view that will be added in a loop
     private View createCounter(String title) {
 
         LayoutInflater inflater = getLayoutInflater();
@@ -234,6 +238,83 @@ public class Super_Scouting extends ActionBarActivity {
         return counter;
     }
 
+    private View createDefenseACounter() {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View counter = inflater.inflate(R.layout.defense_a_counter, null);
+        final TextView rankOneIncrementor = (TextView) counter.findViewById(R.id.rankOneCounter);
+        final TextView rankTwoIncrementor = (TextView) counter.findViewById(R.id.rankTwoCounter);
+        final TextView rankThreeIncrementor = (TextView) counter.findViewById(R.id.rankThreeCounter);
+        Button rankOne = (Button) counter.findViewById(R.id.rank1);
+        Button rankTwo = (Button) counter.findViewById(R.id.rank2);
+        Button rankThree = (Button) counter.findViewById(R.id.rank3);
+
+        rankOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(rankOneIncrementor.getText().toString());
+                current++;
+                rankOneIncrementor.setText(Integer.toString(current));
+            }
+        });
+        rankOne.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int current = Integer.parseInt(rankOneIncrementor.getText().toString());
+                current--;
+                if (Integer.parseInt(rankOneIncrementor.getText().toString()) < 0) {
+                    rankOneIncrementor.setText(Integer.toString(0));
+                } else {
+                    rankOneIncrementor.setText(Integer.toString(current));
+                }
+                return true;
+            }
+        });
+        rankTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
+                current--;
+                rankTwoIncrementor.setText(Integer.toString(current));
+            }
+        });
+        rankTwo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
+                current--;
+                if (Integer.parseInt(rankTwoIncrementor.getText().toString()) < 0) {
+                    rankTwoIncrementor.setText(Integer.toString(0));
+                } else {
+                    rankTwoIncrementor.setText(Integer.toString(current));
+                }
+                return true;
+            }
+        });
+        rankThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
+                current--;
+                rankThreeIncrementor.setText(Integer.toString(current));
+            }
+        });
+        rankOne.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
+                current--;
+                if (Integer.parseInt(rankThreeIncrementor.getText().toString()) < 0) {
+                    rankThreeIncrementor.setText(Integer.toString(0));
+                } else {
+                    rankThreeIncrementor.setText(Integer.toString(current));
+                }
+                return true;
+            }
+        });
+
+        return counter;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -375,6 +456,7 @@ public class Super_Scouting extends ActionBarActivity {
         LinearLayout teamOneRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam1);
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
+        View defenseACounter = createDefenseACounter();
 
         for (String title : data) {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -383,6 +465,10 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setLayoutParams(param);
             teamOneRelativeLayout.addView(counter);
         }
+        LinearLayout.LayoutParams paramForTeamOne = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
+        defenseACounter.setLayoutParams(paramForTeamOne);
+        teamOneRelativeLayout.addView(defenseACounter);
+
         for (String title : data) {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
@@ -390,6 +476,10 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setLayoutParams(param);
             teamTwoRelativeLayout.addView(counter);
         }
+        LinearLayout.LayoutParams paramForTeamTwo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
+        defenseACounter.setLayoutParams(paramForTeamTwo);
+        teamTwoRelativeLayout.addView(defenseACounter);
+
         for (String title : data) {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
             View counter = createCounter(title);
@@ -397,6 +487,9 @@ public class Super_Scouting extends ActionBarActivity {
             counter.setLayoutParams(param);
             teamThreeRelativeLayout.addView(counter);
         }
+        LinearLayout.LayoutParams paramForTeamThree = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 1f);
+        defenseACounter.setLayoutParams(paramForTeamThree);
+        teamThreeRelativeLayout.addView(defenseACounter);
     }
     public void getExtrasForScouting(){
 

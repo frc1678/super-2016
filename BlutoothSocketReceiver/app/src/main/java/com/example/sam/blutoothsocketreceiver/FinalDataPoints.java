@@ -144,7 +144,7 @@ public class FinalDataPoints extends ActionBarActivity {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse("URL TO SAC REGIONAL BLUE ALLIANCE"));
+            intent.setData(Uri.parse("http://www.thebluealliance.com/match/2016cama_qm" + numberOfMatch));
             startActivity(intent);
 
         }
