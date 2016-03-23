@@ -341,12 +341,10 @@ public class MainActivity extends ActionBarActivity {
                 teamsOnAlliance.addAll((isRed) ? match.redAllianceTeamNumbers : match.blueAllianceTeamNumbers);
                 alliance.setTextColor((isRed) ? Color.RED : Color.BLUE);
                 alliance.setText((isRed) ? "Red Alliance" : "Blue Alliance");
+
                 teamNumberOne.setText(teamsOnAlliance.get(0).toString());
-                Log.e("teamNumberOne", teamsOnAlliance.get(0).toString());
                 teamNumberTwo.setText(teamsOnAlliance.get(1).toString());
-                Log.e("teamNumberTwo", teamsOnAlliance.get(1).toString());
                 teamNumberThree.setText(teamsOnAlliance.get(2).toString());
-                Log.e("teamNumberThree", teamsOnAlliance.get(2).toString());
 
             } else {
                 teamNumberOne.setText("Not Available");
@@ -370,9 +368,13 @@ public class MainActivity extends ActionBarActivity {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -459,7 +461,11 @@ public class MainActivity extends ActionBarActivity {
                         String teamOneNumber = superData.getString("teamOne");
                         String teamTwoNumber = superData.getString("teamTwo");
                         String teamThreeNumber = superData.getString("teamThree");
-
+                        Log.e("defenseARanks", "getTeamDefenseARanks");
+                        JSONArray teamOneDefenseARanks = superData.getJSONArray("teamOneDefenseARanks");
+                        JSONArray teamTwoDefenseARanks = superData.getJSONArray("teamTwoDefenseARanks");
+                        JSONArray teamThreeDefenseARanks = superData.getJSONArray("teamThreeDefenseARanks");
+                        Log.e("defenseARanks", "received");
                         JSONObject teamOneData = superData.getJSONObject(teamOneNumber);
                         JSONObject teamTwoData = superData.getJSONObject(teamTwoNumber);
                         JSONObject teamThreeData = superData.getJSONObject(teamThreeNumber);
@@ -471,11 +477,25 @@ public class MainActivity extends ActionBarActivity {
                         Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
                         Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
 
+                        ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
                         ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamOneNumber, teamTwoNumber, teamThreeNumber));
                         for (int i = 0; i < teamNumbers.size(); i++){
                             //Log.e("path", teamNumbers.get(i) + "Q" + numberOfMatch.toString());
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("matchNumber").setValue(Integer.parseInt(matchNum));
+                        }
+                        Log.e("teamOneResend", (jsonArrayToArray(teamOneDefenseARanks).toString()));
+                        Log.e("teamTwoResend", (jsonArrayToArray(teamTwoDefenseARanks).toString()));
+                        Log.e("teamThreeResend", (jsonArrayToArray(teamThreeDefenseARanks).toString()));
+
+                        for (int i = 0; i < 3; i++) {
+                            dataBase.child("TeamInMatchDatas").child(teamOneNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamOneDefenseARanks)).get(i).toString()));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            dataBase.child("TeamInMatchDatas").child(teamTwoNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamTwoDefenseARanks)).get(i).toString()));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            dataBase.child("TeamInMatchDatas").child(teamThreeNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamThreeDefenseARanks)).get(i).toString()));
                         }
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
