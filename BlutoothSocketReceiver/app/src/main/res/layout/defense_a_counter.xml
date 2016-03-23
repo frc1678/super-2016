@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/defenseACounterLayout">
+    <TextView
+        android:id="@+id/categoryADefenseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DefenseA"
+        android:layout_centerHorizontal="true" />
 
     <RelativeLayout
+        android:id="@+id/rankingLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/categoryADefenseName">
 
         <Button
             android:id="@+id/rank1"
             android:text="1"
-            android:textSize="7sp"
+            android:textSize="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"/>
@@ -26,7 +35,7 @@
         <Button
             android:id="@+id/rank3"
             android:text="3"
-            android:textSize="7sp"
+            android:textSize="10sp"
             android:layout_marginLeft="175dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
-            android:textSize="7sp"
+            android:textSize="10sp"
             android:layout_centerHorizontal="true"
             android:clickable="true"/>
         <TextView
