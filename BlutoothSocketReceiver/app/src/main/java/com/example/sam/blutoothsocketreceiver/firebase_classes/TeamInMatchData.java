@@ -16,7 +16,7 @@ public class TeamInMatchData extends Object {
 
 	public Integer rankTorque;
 	public Integer rankSpeed;
-	public Integer rankEvasion;
+	public Integer rankAgility;
 	public Integer rankDefense;
 	public Integer rankBallControl;
 
@@ -38,6 +38,9 @@ public class TeamInMatchData extends Object {
 	public Integer numLowShotsMissedTele;
 	public Integer numGroundIntakesTele;
 	public Integer numShotsBlockedTele;
+	public Integer numTimesBeached;
+	public Integer numTimesSlowed;
+	public Integer numTimesUnaffected;
 	public Boolean didScaleTele;
 	public Boolean didChallengeTele;
 	public Map<String, Map<String, List<Long>>> timesSuccessfulDefensesCrossedTele;

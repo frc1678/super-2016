@@ -274,7 +274,7 @@ public class MainActivity extends ActionBarActivity {
                             Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
                         } else if (teamNumberThree.getText().toString().equals("")) {
                             Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
-                        } else if(teamNumberOne.equals("Not Available")){
+                        } else if(teamNumberOne.getText().toString().equals("Not Available")){
                             Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_SHORT).show();
                         }
                         else {

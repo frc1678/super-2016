@@ -60,6 +60,9 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamTwoDataScore;
     ArrayList<String> teamThreeDataName;
     ArrayList<String> teamThreeDataScore;
+    ArrayList<String> teamOneDefenseARanks;
+    ArrayList<String> teamTwoDefenseARanks;
+    ArrayList<String> teamThreeDefenseARanks;
     ToggleButton captureCheck;
     ToggleButton breachCheck;
     File dir;
@@ -193,11 +196,30 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("teamOne", teamNumberOne);
                         superExternalData.put("teamTwo", teamNumberTwo);
                         superExternalData.put("teamThree", teamNumberThree);
-
+                        superExternalData.put("teamOneDefenseARanks", teamOneDefenseARanks);
+                        superExternalData.put("teamTwoDefenseARanks", teamTwoDefenseARanks);
+                        superExternalData.put("teamThreeDefenseARanks", teamThreeDefenseARanks);
+                        Log.e("teamOne", teamOneDefenseARanks.toString());
+                        Log.e("teamTwo", teamTwoDefenseARanks.toString());
+                        Log.e("teamThree", teamThreeDefenseARanks.toString());
+                        ArrayList<ArrayList> teamsDefenseARanks = new ArrayList<ArrayList>(Arrays.asList(teamOneDefenseARanks, teamTwoDefenseARanks, teamThreeDefenseARanks));
+                        Log.e("array2", teamsDefenseARanks.toString());
+                        ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
                         ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamNumberOne, teamNumberTwo, teamNumberThree));
+                        Log.e("team number one", teamNumberOne);
                         for (int i = 0; i < teamNumbers.size(); i++){
                             firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
                             firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+                        }
+                        Log.e("teamOneDefenseARanks", teamOneDefenseARanks.toString());
+                        for (int i = 0; i < 3; i++) {
+                            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamOneDefenseARanks.get(i)));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamTwoDefenseARanks.get(i)));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamThreeDefenseARanks.get(i)));
                         }
 
                     }catch(JSONException JE){
@@ -280,6 +302,10 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
+        teamOneDefenseARanks = intent.getStringArrayListExtra("teamOneDefenseARanks");
+        Log.e("teamOneInFinal", teamOneDefenseARanks.toString());
+        teamTwoDefenseARanks = intent.getStringArrayListExtra("teamTwoDefenseARanks");
+        teamThreeDefenseARanks = intent.getStringArrayListExtra("teamThreeDefenseARanks");
         teamOneNote = intent.getStringExtra("teamOneNote");
         teamTwoNote = intent.getStringExtra("teamTwoNote");
         teamThreeNote = intent.getStringExtra("teamThreeNote");
