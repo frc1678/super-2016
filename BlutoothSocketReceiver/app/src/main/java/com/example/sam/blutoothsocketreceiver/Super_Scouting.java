@@ -3,14 +3,17 @@ package com.example.sam.blutoothsocketreceiver;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -103,6 +106,9 @@ public class Super_Scouting extends ActionBarActivity {
         teamTwoDataScore = new ArrayList<>();
         teamThreeDataName = new ArrayList<>();
         teamThreeDataScore = new ArrayList<>();
+        teamOneDefenseARanks = new ArrayList<>();
+        teamTwoDefenseARanks = new ArrayList<>();
+        teamThreeDefenseARanks = new ArrayList<>();
         data = new ArrayList<>(Arrays.asList("Speed", "Torque", "Defense", "Agility", "Ball Control"));
 
         setUpDataRanking();
@@ -261,6 +267,7 @@ public class Super_Scouting extends ActionBarActivity {
             chosenCatergoryADefense = "CDF";
         }
         defenseAName.setText(chosenCatergoryADefense);
+
         rankOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,9 +279,13 @@ public class Super_Scouting extends ActionBarActivity {
         rankOne.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Log.e("rankOne", "LongClickPressed");
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                Vibrator v1= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v1.vibrate(500);
                 int current = Integer.parseInt(rankOneIncrementor.getText().toString());
                 current--;
-                if (Integer.parseInt(rankOneIncrementor.getText().toString()) < 0) {
+                if (current < 0) {
                     rankOneIncrementor.setText(Integer.toString(0));
                 } else {
                     rankOneIncrementor.setText(Integer.toString(current));
@@ -293,9 +304,11 @@ public class Super_Scouting extends ActionBarActivity {
         rankTwo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Log.e("rankTwo", "LongClickPressed");
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
                 current--;
-                if (Integer.parseInt(rankTwoIncrementor.getText().toString()) < 0) {
+                if (current < 0) {
                     rankTwoIncrementor.setText(Integer.toString(0));
                 } else {
                     rankTwoIncrementor.setText(Integer.toString(current));
@@ -311,12 +324,14 @@ public class Super_Scouting extends ActionBarActivity {
                 rankThreeIncrementor.setText(Integer.toString(current));
             }
         });
-        rankOne.setOnLongClickListener(new View.OnLongClickListener() {
+        rankThree.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Log.e("rankThree", "LongClickPressed");
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
                 current--;
-                if (Integer.parseInt(rankThreeIncrementor.getText().toString()) < 0) {
+                if (current < 0) {
                     rankThreeIncrementor.setText(Integer.toString(0));
                 } else {
                     rankThreeIncrementor.setText(Integer.toString(current));
@@ -436,13 +451,18 @@ public class Super_Scouting extends ActionBarActivity {
         LinearLayout teamTwoRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam2);
         LinearLayout teamThreeRelativeLayout = (LinearLayout) findViewById(R.id.scoutTeam3);
         //Added Stuff
-        View defenseATeamOneId = teamOneRelativeLayout.getChildAt(teamOneRelativeLayout.getChildCount());
-        View defenseATeamTwoId = teamTwoRelativeLayout.getChildAt(teamTwoRelativeLayout.getChildCount());
-        View defenseATeamThreeId = teamThreeRelativeLayout.getChildAt(teamThreeRelativeLayout.getChildCount());
+        View defenseATeamOneId = teamOneRelativeLayout.getChildAt(teamOneRelativeLayout.getChildCount() - 1);
+        Log.e("Sam...grrr...", teamOneRelativeLayout.getChildCount() + "");
+        Log.e("defenseATeamOneId", defenseATeamOneId.toString());
+        View defenseATeamTwoId = teamTwoRelativeLayout.getChildAt(teamTwoRelativeLayout.getChildCount() - 1);
+        View defenseATeamThreeId = teamThreeRelativeLayout.getChildAt(teamThreeRelativeLayout.getChildCount() - 1);
         //Added Stuff
         TextView rankOneIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankOneCounter);
+        Log.e("rankOneIncrementor1", rankOneIncrementor1.getText().toString());
         TextView rankTwoIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankTwoCounter);
+        Log.e("rankTwoIncrementor1", rankTwoIncrementor1.getText().toString());
         TextView rankThreeIncrementor1 = (TextView) defenseATeamOneId.findViewById(R.id.rankThreeCounter);
+        Log.e("rankThreeIncrementor1", rankThreeIncrementor1.getText().toString());
         TextView rankOneIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankOneCounter);
         TextView rankTwoIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankTwoCounter);
         TextView rankThreeIncrementor2 = (TextView) defenseATeamTwoId.findViewById(R.id.rankThreeCounter);
@@ -464,6 +484,8 @@ public class Super_Scouting extends ActionBarActivity {
             teamOneDataName.add(("rank" + (nameOfData1.getText().toString())).replace(" ", ""));
             teamOneDataScore.add(scoreOfData1.getText().toString());
         }
+        Log.e("TeamOneDataNames", teamOneDataName.toString());
+        Log.e("TeamOneDataScore", teamOneDataScore.toString());
         //Added Stuff
         teamOneDefenseARanks.add(rankOneIncrementor1.getText().toString());
         teamOneDefenseARanks.add(rankTwoIncrementor1.getText().toString());
@@ -492,9 +514,9 @@ public class Super_Scouting extends ActionBarActivity {
             teamThreeDataScore.add(scoreOfData3.getText().toString());
         }
         //Added Stuff
-        teamOneDefenseARanks.add(rankOneIncrementor3.getText().toString());
-        teamOneDefenseARanks.add(rankTwoIncrementor3.getText().toString());
-        teamOneDefenseARanks.add(rankThreeIncrementor3.getText().toString());
+        teamThreeDefenseARanks.add(rankOneIncrementor3.getText().toString());
+        teamThreeDefenseARanks.add(rankTwoIncrementor3.getText().toString());
+        teamThreeDefenseARanks.add(rankThreeIncrementor3.getText().toString());
         Log.e("teamThreeDefenseARanks", teamThreeDefenseARanks.toString());
 
     }
