@@ -484,9 +484,6 @@ public class MainActivity extends ActionBarActivity {
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("matchNumber").setValue(Integer.parseInt(matchNum));
                         }
-                        Log.e("teamOneResend", (jsonArrayToArray(teamOneDefenseARanks).toString()));
-                        Log.e("teamTwoResend", (jsonArrayToArray(teamTwoDefenseARanks).toString()));
-                        Log.e("teamThreeResend", (jsonArrayToArray(teamThreeDefenseARanks).toString()));
 
                         for (int i = 0; i < 3; i++) {
                             dataBase.child("TeamInMatchDatas").child(teamOneNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamOneDefenseARanks)).get(i).toString()));

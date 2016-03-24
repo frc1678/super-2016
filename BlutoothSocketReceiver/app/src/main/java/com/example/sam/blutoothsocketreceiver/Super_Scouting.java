@@ -279,10 +279,9 @@ public class Super_Scouting extends ActionBarActivity {
         rankOne.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.e("rankOne", "LongClickPressed");
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                Vibrator v1= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                v1.vibrate(500);
+                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
+                vibe.vibrate(10000);
+                Log.e("vibrateOne", "Vibrated");
                 int current = Integer.parseInt(rankOneIncrementor.getText().toString());
                 current--;
                 if (current < 0) {
@@ -304,8 +303,9 @@ public class Super_Scouting extends ActionBarActivity {
         rankTwo.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.e("rankTwo", "LongClickPressed");
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
+                vibe.vibrate(10000);
+                Log.e("vibrateTwo", "Vibrated");
                 int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
                 current--;
                 if (current < 0) {
@@ -327,8 +327,9 @@ public class Super_Scouting extends ActionBarActivity {
         rankThree.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.e("rankThree", "LongClickPressed");
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
+                vibe.vibrate(10000);
+                Log.e("vibrateThree", "Vibrated");
                 int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
                 current--;
                 if (current < 0) {
