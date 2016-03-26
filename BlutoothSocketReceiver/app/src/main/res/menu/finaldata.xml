@@ -4,11 +4,29 @@
 
     <item
         android:id="@+id/getAllianceScore"
-        android:title="AllianceScore"
+        android:title="Score"
         app:showAsAction = "always"/>
+    <item
+        android:id="@+id/didBreachOrCapture"
+        android:title="Breach/Capture"
+        app:showAsAction = "always">
+        <menu>
+            <item
+                android:id="@+id/scoutDidBreach"
+                android:title="didBreach?"
+                app:showAsAction = "always"/>
+            <item
+                android:id="@+id/scoutDidCapture"
+                android:title="didCapture?"
+                app:showAsAction = "always"/>
+        </menu>
+
+    </item>
+
     <item
         android:id="@+id/finalNext"
         android:title="Next >>"
         app:showAsAction = "always"/>
-    
+
+
 </menu>

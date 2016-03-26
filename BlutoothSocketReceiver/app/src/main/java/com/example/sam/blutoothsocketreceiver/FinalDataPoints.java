@@ -65,6 +65,8 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamThreeDefenseARanks;
     ToggleButton captureCheck;
     ToggleButton breachCheck;
+    Boolean breached;
+    Boolean captured;
     File dir;
     PrintWriter file;
     Firebase firebaseRef;
@@ -79,6 +81,8 @@ public class FinalDataPoints extends ActionBarActivity {
         getExtrasForFinalData();
 
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
+        captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
+        breachCheck = (ToggleButton) findViewById(R.id.didBreach);
         superExternalData = new JSONObject();
         teamOneJson = new JSONObject();
         teamTwoJson = new JSONObject();
@@ -88,13 +92,21 @@ public class FinalDataPoints extends ActionBarActivity {
         }else if(alliance.equals("Red Alliance")){
             finalScore.setTextColor(Color.RED);
         }
+        if(breached){
+            breachCheck.setChecked(true);
+        }else{
+            breachCheck.setChecked(false);
+        }
+        if(captured){
+            captureCheck.setChecked(true);
+        }else{
+            captureCheck.setChecked(false);
+        }
         firebaseRef = new Firebase(dataBaseUrl);
         Log.e("finalDataPoints", dataBaseUrl);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         allianceScore.setText(allianceScoreData);
-        captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
-        breachCheck = (ToggleButton) findViewById(R.id.didBreach);
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
 
     }
@@ -147,7 +159,7 @@ public class FinalDataPoints extends ActionBarActivity {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse("http://www.thebluealliance.com/match/2016cama_qm" + numberOfMatch));
+            intent.setData(Uri.parse("https://www.thebluealliance.com/match/2016cada_qm" + numberOfMatch));
             startActivity(intent);
 
         }
@@ -310,6 +322,8 @@ public class FinalDataPoints extends ActionBarActivity {
         teamThreeNote = intent.getStringExtra("teamThreeNote");
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
         allianceScoreData = intent.getExtras().getString("allianceScore");
+        breached = intent.getExtras().getBoolean("scoutDidBreach");
+        captured = intent.getExtras().getBoolean("scoutDidCapture");
 
     }
 }

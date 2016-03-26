@@ -63,6 +63,8 @@ public class Super_Scouting extends ActionBarActivity {
     ArrayList<String> teamOneDefenseARanks;
     ArrayList<String> teamTwoDefenseARanks;
     ArrayList<String> teamThreeDefenseARanks;
+    Boolean breached = false;
+    Boolean captured = false;
     JSONObject object;
     Intent next;
     Firebase dataBase;
@@ -380,6 +382,24 @@ public class Super_Scouting extends ActionBarActivity {
 
             builder.show();
         }
+        if(id == R.id.scoutDidBreach){
+            if(item.getTitle().equals("Breached")){
+                item.setTitle("didBreach?");
+                breached = false;
+            }else{
+                item.setTitle("Breached");
+                breached = true;
+            }
+        }
+        if(id == R.id.scoutDidCapture){
+            if(item.getTitle().equals("Captured")){
+                item.setTitle("didCapture?");
+                captured = false;
+            }else{
+                item.setTitle("Captured");
+                captured = true;
+            }
+        }
         if (id == R.id.finalNext) {
             Intent intent = new Intent(this, FinalDataPoints.class);
             intent.putExtra("matchNumber", numberOfMatch);
@@ -396,6 +416,8 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("teamThreeNote", teamThreeNote);
             intent.putExtra("dataBaseUrl", dataBaseUrl);
             intent.putExtra("allianceScore", allianceScoreData);
+            intent.putExtra("scoutDidBreach", breached);
+            intent.putExtra("scoutDidCapture", captured);
 
             getEachDataNameAndValue();
 
