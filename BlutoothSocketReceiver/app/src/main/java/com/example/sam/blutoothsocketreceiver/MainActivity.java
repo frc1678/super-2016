@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
@@ -315,7 +317,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     public void updateListView() {
-        File dir;
+        final File dir;
         if (scoutOrSuperFiles) {
             dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
         } else {
@@ -329,6 +331,16 @@ public class MainActivity extends ActionBarActivity {
         for (File tmpFile : files) {
             adapter.add(tmpFile.getName());
         }
+        adapter.sort(new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                File lhsFile = new File(dir, lhs);
+                File rhsFile = new File(dir, rhs);
+                Date lhsDate = new Date(lhsFile.lastModified());
+                Date rhsDate = new Date(rhsFile.lastModified());
+                return rhsDate.compareTo(lhsDate);
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 //updates the team numbers in the front screen according to the match number and the alliance;

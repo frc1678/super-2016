@@ -162,7 +162,7 @@ import org.json.JSONObject;
                         //0 = no error, 1 = ERROR!
                         out.println("1");
                         out.flush();
-                        toasts("ERROR message sent", false);
+                        toasts("ERROR message sent", true);
                         Log.e("Error", "Error message sent");
                         //I the byte size of actual is equal to the byte size received
                     } else {
