@@ -29,6 +29,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:id="@+id/linearLayout">
+
             <TextView
                 android:id="@+id/allianceName"
                 android:layout_width="match_parent"
@@ -38,6 +39,7 @@
                 android:textSize="40dp"
                 android:textStyle="bold"
                 android:layout_marginTop="30dp"/>
+
             <EditText
                 android:id="@+id/teamOneNumber"
                 android:layout_width="match_parent"
@@ -65,8 +67,16 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/cat_new"
+            android:layout_marginLeft="260dp"
+            android:layout_marginTop="60dp"
+            android:clickable="true"/>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="fill_parent"
