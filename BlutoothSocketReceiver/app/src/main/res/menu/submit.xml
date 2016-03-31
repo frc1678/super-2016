@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/forgotAllianceScore"
-        android:title="AllianceScore"
+        android:title="Alliance Score"
         app:showAsAction = "always"/>
     <item
         android:id="@+id/superNotes"
