@@ -317,6 +317,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     public void updateListView() {
+        final EditText seachBar = (EditText)findViewById(R.id.searchEditText);
         final File dir;
         if (scoutOrSuperFiles) {
             dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
@@ -326,11 +327,44 @@ public class MainActivity extends ActionBarActivity {
         if (!dir.mkdir()) {
             Log.i("File Info", "Failed to make Directory. Unimportant");
         }
-        File[] files = dir.listFiles();
+        final File[] files = dir.listFiles();
         adapter.clear();
         for (File tmpFile : files) {
             adapter.add(tmpFile.getName());
         }
+        seachBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (seachBar.getText().toString().equals("")){
+                    adapter.clear();
+                    for (File tmpFile : files) {
+                        adapter.add(tmpFile.getName());
+                    }
+                    adapter.sort(new Comparator<String>() {
+                        @Override
+                        public int compare(String lhs, String rhs) {
+                            File lhsFile = new File(dir, lhs);
+                            File rhsFile = new File(dir, rhs);
+                            Date lhsDate = new Date(lhsFile.lastModified());
+                            Date rhsDate = new Date(rhsFile.lastModified());
+                            return rhsDate.compareTo(lhsDate);
+                        }
+                    });
+                }else{
+                    for (int i = 0; i < adapter.getCount();){
+                        if(adapter.getItem(i).startsWith(seachBar.getText().toString()) || adapter.getItem(i).contains(seachBar.getText().toString())){
+                            i++;
+                        }else{
+                            adapter.remove(adapter.getItem(i));
+                        }
+                    }
+                }
+            }
+        });
         adapter.sort(new Comparator<String>() {
             @Override
             public int compare(String lhs, String rhs) {
@@ -375,7 +409,8 @@ public class MainActivity extends ActionBarActivity {
         editor.putBoolean("allianceColor", isRed);
         editor.commit();
     }
-//changes the team numbers while the user changes the match number
+
+    //changes the team numbers while the user changes the match number
     public void changeTeamsByMatchName() {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
@@ -756,6 +791,7 @@ public class MainActivity extends ActionBarActivity {
             });
         }
     }
+
 }
 
 

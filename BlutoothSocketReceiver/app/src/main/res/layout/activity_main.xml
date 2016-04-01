@@ -83,11 +83,12 @@
         android:id="@+id/listLayout"
         android:layout_alignParentRight="true"
         android:layout_weight="1">
+
         <ListView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="330dp"
             android:id="@+id/view_files_received"
-            android:layout_above="@+id/scoutData"/>
+            android:layout_above="@+id/scoutData" />
         <Button
             android:id="@+id/scoutData"
             android:layout_width="wrap_content"
@@ -104,7 +105,8 @@
             android:layout_marginLeft="6dp"
             android:text = "super data"
             android:textSize="10sp"
-            android:onClick="getSuperData"/>
+            android:onClick="getSuperData"
+            android:id="@+id/button" />
         <Button
             android:id="@+id/resendAll"
             android:layout_width="wrap_content"
@@ -114,6 +116,15 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:onClick="resendAllClicked"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search: "
+            android:id="@+id/searchEditText"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/button"
+            android:layout_alignStart="@+id/button" />
 
     </RelativeLayout>
 </LinearLayout>
