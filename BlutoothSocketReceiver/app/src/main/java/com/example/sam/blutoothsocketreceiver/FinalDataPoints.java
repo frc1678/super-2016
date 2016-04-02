@@ -13,6 +13,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +69,7 @@ public class FinalDataPoints extends ActionBarActivity {
     ToggleButton breachCheck;
     Boolean breached;
     Boolean captured;
+    Boolean isMute;
     File dir;
     PrintWriter file;
     Firebase firebaseRef;
@@ -293,6 +296,7 @@ public class FinalDataPoints extends ActionBarActivity {
             }
             Log.e("final data alliance", alliance);
             backToHome.putExtra("number", numberOfMatch);
+            backToHome.putExtra("mute", isMute);
             startActivity(backToHome);
         }
         return super.onOptionsItemSelected(item);
@@ -324,6 +328,7 @@ public class FinalDataPoints extends ActionBarActivity {
         allianceScoreData = intent.getExtras().getString("allianceScore");
         breached = intent.getExtras().getBoolean("scoutDidBreach");
         captured = intent.getExtras().getBoolean("scoutDidCapture");
+        isMute = intent.getExtras().getBoolean("mute");
 
     }
 }

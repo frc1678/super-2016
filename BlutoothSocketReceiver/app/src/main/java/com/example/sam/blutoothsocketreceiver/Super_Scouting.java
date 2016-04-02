@@ -65,6 +65,7 @@ public class Super_Scouting extends ActionBarActivity {
     ArrayList<String> teamThreeDefenseARanks;
     Boolean breached = false;
     Boolean captured = false;
+    Boolean isMute;
     JSONObject object;
     Intent next;
     Firebase dataBase;
@@ -418,6 +419,7 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("allianceScore", allianceScoreData);
             intent.putExtra("scoutDidBreach", breached);
             intent.putExtra("scoutDidCapture", captured);
+            intent.putExtra("mute", isMute);
 
             getEachDataNameAndValue();
 
@@ -603,6 +605,7 @@ public class Super_Scouting extends ActionBarActivity {
         thirdDefense = next.getExtras().getString("thirdDefensePicked");
         fourthDefense = next.getExtras().getString("fourthDefensePicked");
         dataBaseUrl = next.getExtras().getString("dataBaseUrl");
+        isMute = next.getExtras().getBoolean("mute");
     }
 }
 

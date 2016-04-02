@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberOne;
     EditText teamNumberTwo;
     EditText teamNumberThree;
+    EditText searchBar;
     TextView alliance;
     Boolean isRed = false;
     Integer matchNumber = 0;
@@ -79,6 +78,7 @@ public class MainActivity extends ActionBarActivity {
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
     private boolean scoutOrSuperFiles;
+    boolean isMute = false;
     ToggleButton mute;
     ArrayAdapter<String> adapter;
 
@@ -113,6 +113,10 @@ public class MainActivity extends ActionBarActivity {
         } else {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             isRed = prefs.getBoolean("allianceColor", false);
+        }if(!backToHome.hasExtra("mute")){
+            mute.setChecked(false);
+        }else if (backToHome.hasExtra("mute")){
+            mute.setChecked(true);
         }
         updateUI();
         numberOfMatch.setText(matchNumber.toString());
@@ -236,21 +240,29 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getScoutData(View view) {
+        searchBar = (EditText) findViewById(R.id.searchEditText);
+        searchBar.setFocusable(false);
         scoutOrSuperFiles = false;
         //listenForFileListClick();
         updateListView();
+        searchBar.setFocusableInTouchMode(true);
     }
 
     public void getSuperData(View view) {
+        searchBar = (EditText) findViewById(R.id.searchEditText);
+        searchBar.setFocusable(false);
         scoutOrSuperFiles = true;
         //listenForFileListClick();
         updateListView();
+        searchBar.setFocusableInTouchMode(true);
     }
 
     public void catClicked(View view){
         if(mute.isChecked()){
            //Don't Do anything
+            isMute = true;
         }else {
+            isMute = false;
             int randNum = (int) (Math.random() * 3);
             playSound(randNum);
             Log.e("number", randNum + "");
@@ -321,6 +333,7 @@ public class MainActivity extends ActionBarActivity {
                             intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
                             intent.putExtra("alliance", alliance.getText().toString());
                             intent.putExtra("dataBaseUrl", dataBaseUrl);
+                            intent.putExtra("mute", isMute);
                             Log.e("start alliance", alliance.getText().toString());
                             startActivity(intent);
                         }

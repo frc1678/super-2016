@@ -53,6 +53,7 @@ public class FieldSetUp extends ActionBarActivity {
     ArrayList<String> checkDefensesPicked;
     ArrayList<String> sameDefenses;
     ToggleButton defenseButton;
+    Boolean isMute;
     Firebase firebaseRef;
 
     @Override
@@ -67,6 +68,7 @@ public class FieldSetUp extends ActionBarActivity {
         teamThreeNumber = intent.getExtras().getString("teamNumberThree");
         alliance = intent.getExtras().getString("alliance");
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
+        isMute = intent.getExtras().getBoolean("mute");
         Log.e("FieldSet Up", dataBaseUrl);
         firebaseRef = new Firebase(dataBaseUrl);
         toggleButtonList = new ArrayList<>();
@@ -217,6 +219,7 @@ public class FieldSetUp extends ActionBarActivity {
                     next.putExtra("fourthDefensePicked", defensesPicked.get(3));
                     next.putExtra("alliance", alliance);
                     next.putExtra("dataBaseUrl", dataBaseUrl);
+                    next.putExtra("mute", isMute);
                     startActivity(next);
                  } else {
                 Log.i("test", "here");
