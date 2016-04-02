@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -238,6 +239,28 @@ public class MainActivity extends ActionBarActivity {
         scoutOrSuperFiles = true;
         //listenForFileListClick();
         updateListView();
+    }
+
+    public void catClicked(View view){
+        int randNum = (int) (Math.random() * 3);
+        playSound(randNum);
+        Log.e("number", randNum + "");
+        Log.e("cat", "sound");
+    }
+    public void playSound(int playTrak){
+        if (playTrak == 0){
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.catsound);
+            mp.start();
+        }else if(playTrak == 1){
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.catsound2);
+            mp.start();
+        }else if(playTrak == 2){
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.dog);
+            mp.start();
+        }else if(playTrak == 3){
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.kittenmeow);
+            mp.start();
+        }
     }
 
     @Override
