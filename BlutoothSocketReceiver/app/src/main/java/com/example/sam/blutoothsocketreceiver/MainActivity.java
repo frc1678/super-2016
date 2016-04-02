@@ -379,7 +379,7 @@ public class MainActivity extends ActionBarActivity {
                     });
                 }else{
                     for (int i = 0; i < adapter.getCount();){
-                        if(adapter.getItem(i).startsWith(seachBar.getText().toString()) || adapter.getItem(i).contains(seachBar.getText().toString())){
+                        if(adapter.getItem(i).startsWith((seachBar.getText().toString()).toUpperCase()) || adapter.getItem(i).contains((seachBar.getText().toString()).toUpperCase())){
                             i++;
                         }else{
                             adapter.remove(adapter.getItem(i));
