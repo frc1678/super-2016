@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -20,12 +21,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
     private boolean scoutOrSuperFiles;
+    ToggleButton mute;
     ArrayAdapter<String> adapter;
 
     @Override
@@ -91,10 +97,10 @@ public class MainActivity extends ActionBarActivity {
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
         teamNumberThree = (EditText) findViewById(R.id.teamThreeNumber);
+        mute = (ToggleButton) findViewById(R.id.mute);
         alliance = (TextView) findViewById(R.id.allianceName);
         jsonUnderKey = new JSONObject();
         dataBase = new Firebase(dataBaseUrl);
-
         //If got intent from the last activity
         if (backToHome.hasExtra("number")) {
             matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
@@ -242,10 +248,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void catClicked(View view){
-        int randNum = (int) (Math.random() * 3);
-        playSound(randNum);
-        Log.e("number", randNum + "");
-        Log.e("cat", "sound");
+        if(mute.isChecked()){
+           //Don't Do anything
+        }else {
+            int randNum = (int) (Math.random() * 3);
+            playSound(randNum);
+            Log.e("number", randNum + "");
+            Log.e("cat", "sound");
+        }
     }
     public void playSound(int playTrak){
         if (playTrak == 0){
@@ -329,9 +339,12 @@ public class MainActivity extends ActionBarActivity {
                 enableEditTextEditing();
                 item.setTitle("Automate");
             } else if (item.getTitle().toString().equals("Automate")) {
+                View view = context.getCurrentFocus();
                 updateUI();
                 commitSharedPreferences();
                 disenableEditTextEditing();
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 item.setTitle("Override Match and Team Number");
             }
         }
@@ -357,16 +370,22 @@ public class MainActivity extends ActionBarActivity {
         }
         seachBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 if (seachBar.getText().toString().equals("")){
+                    View view = context.getCurrentFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     adapter.clear();
+                    seachBar.setFocusable(false);
                     for (File tmpFile : files) {
                         adapter.add(tmpFile.getName());
                     }
+                    seachBar.setFocusableInTouchMode(true);
                     adapter.sort(new Comparator<String>() {
                         @Override
                         public int compare(String lhs, String rhs) {
