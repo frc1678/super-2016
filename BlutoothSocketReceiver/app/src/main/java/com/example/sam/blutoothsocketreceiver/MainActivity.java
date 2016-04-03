@@ -88,6 +88,8 @@ public class MainActivity extends ActionBarActivity {
         //Start the class that continuosly accepts connection from scout
         accept_loop loop = new accept_loop(context, dataBaseUrl);
         loop.start();
+        ScoutRankListener listener = new ScoutRankListener(context);
+        listener.start();
         Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);

@@ -177,9 +177,6 @@ public class scoutrank extends Thread {
             break;
         }
 
-
-
-
         Log.i("Communications Info", "Done");
         toastText("Data Send Success", Toast.LENGTH_LONG, context);
 
