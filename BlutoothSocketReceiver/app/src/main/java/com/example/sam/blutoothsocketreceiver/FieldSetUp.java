@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.List;
 
 public class FieldSetUp extends ActionBarActivity {
+
     List<ToggleButton> toggleButtonList;
     String numberOfMatch;
     String teamOneNumber;
@@ -52,6 +53,7 @@ public class FieldSetUp extends ActionBarActivity {
     ArrayList<String> defensesPicked;
     ArrayList<String> checkDefensesPicked;
     ArrayList<String> sameDefenses;
+    ArrayList<String> defenses;
     ToggleButton defenseButton;
     Boolean isMute;
     Firebase firebaseRef;
@@ -60,6 +62,7 @@ public class FieldSetUp extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fieldsetup);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent intent = getIntent();
         //get the data the previous activity passed to this one.
         numberOfMatch = intent.getExtras().getString("matchNumber");
@@ -69,14 +72,13 @@ public class FieldSetUp extends ActionBarActivity {
         alliance = intent.getExtras().getString("alliance");
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
         isMute = intent.getExtras().getBoolean("mute");
-        Log.e("FieldSet Up", dataBaseUrl);
+
         firebaseRef = new Firebase(dataBaseUrl);
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
         checkDefensesPicked = new ArrayList<>();
         sameDefenses = new ArrayList<>();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        ArrayList<String> defenses = new ArrayList<>(Arrays.asList("PC", "CDF", "DB", "SP", "RT", "RW", "RP", "MT"));
+        defenses = new ArrayList<>(Arrays.asList("PC", "CDF", "DB", "SP", "RT", "RW", "RP", "MT"));
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.row1_of_buttons);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -109,9 +111,8 @@ public class FieldSetUp extends ActionBarActivity {
                     }
                 });
 
-                columns.addView(defenseButton);
-                toggleButtonList.add(defenseButton);
-
+        columns.addView(defenseButton);
+        toggleButtonList.add(defenseButton);
             }
             layout.addView(column_number);
             layout.addView(columns);
@@ -188,24 +189,14 @@ public class FieldSetUp extends ActionBarActivity {
                 Toast.makeText(this, "RP and MT can't exist together!", Toast.LENGTH_LONG).show();
             }
             else if(defensesPicked.size() == 4) {
+                String split[] = alliance.split(" ");
+                final String allianceColor = split[0].toLowerCase();
                 new Thread() {
                     @Override
                     public void run() {
-                        if (alliance.equals("Blue Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("0").setValue("lb");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("1").setValue(defensesPicked.get(0));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("2").setValue(defensesPicked.get(1));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("3").setValue(defensesPicked.get(2));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueDefensePositions").child("4").setValue(defensesPicked.get(3));
-                            Log.e("blue alliance", "Sent defense position of Blue");
-
-                        } else if (alliance.equals("Red Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("0").setValue("lb");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("1").setValue(defensesPicked.get(0));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("2").setValue(defensesPicked.get(1));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("3").setValue(defensesPicked.get(2));
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redDefensePositions").child("4").setValue(defensesPicked.get(3));
-                            Log.e("red alliance", "Sent defense position of Red");
+                        firebaseRef.child("/Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child("0").setValue("lb");
+                        for(int i =0; i < 4; i++){
+                            firebaseRef.child("/Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child(Integer.toString(i + 1)).setValue(defensesPicked.get(i));
                         }
                     }
                 }.start();

@@ -82,6 +82,7 @@ public class FinalDataPoints extends ActionBarActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         intent = getIntent();
         getExtrasForFinalData();
+        firebaseRef = new Firebase(dataBaseUrl);
 
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
@@ -102,11 +103,9 @@ public class FinalDataPoints extends ActionBarActivity {
         }
         if(captured){
             captureCheck.setChecked(true);
-        }else{
+        }else {
             captureCheck.setChecked(false);
         }
-        firebaseRef = new Firebase(dataBaseUrl);
-        Log.e("finalDataPoints", dataBaseUrl);
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         allianceScore.setText(allianceScoreData);
@@ -278,8 +277,8 @@ public class FinalDataPoints extends ActionBarActivity {
 
                     file.println(superExternalData.toString());
                     file.close();
-                    System.out.println("SUPER EXTERNAL DATA" + superExternalData.toString());
-                    System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
+                    //System.out.println("SUPER EXTERNAL DATA" + superExternalData.toString());
+                    //System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

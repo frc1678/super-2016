@@ -28,7 +28,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,10 +40,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -305,47 +301,35 @@ public class MainActivity extends ActionBarActivity {
             updateUI();
         }
         if (id == R.id.scout) {
-            final Firebase matchesDataBase = new Firebase(dataBaseUrl + "Matches");
-            matchesDataBase.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (!dataSnapshot.hasChild(numberOfMatch.getText().toString())){
-                        Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_LONG).show();
-                        disenableEditTextEditing();
-                    }else{
-                        if (numberOfMatch.getText().toString().equals("")) {
-                            Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
-                        } else if (teamNumberOne.getText().toString().equals("")) {
-                            Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
-                        } else if (teamNumberTwo.getText().toString().equals("")) {
-                            Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
-                        } else if (teamNumberThree.getText().toString().equals("")) {
-                            Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
-                        } else if(teamNumberOne.getText().toString().equals("Not Available")){
-                            Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            commitSharedPreferences();
-                            Intent intent = new Intent(context, FieldSetUp.class);
-                            intent.putExtra("matchNumber", numberOfMatch.getText().toString());
-                            intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
-                            intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
-                            intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
-                            intent.putExtra("alliance", alliance.getText().toString());
-                            intent.putExtra("dataBaseUrl", dataBaseUrl);
-                            intent.putExtra("mute", isMute);
-                            Log.e("start alliance", alliance.getText().toString());
-                            startActivity(intent);
-                        }
-                    }
+            if (!FirebaseLists.matchesList.getKeys().contains(matchNumber.toString())){
+                Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_LONG).show();
+                disenableEditTextEditing();
+            }else{
+                if (numberOfMatch.getText().toString().equals("")) {
+                    Toast.makeText(context, "Input match name!", Toast.LENGTH_SHORT).show();
+                } else if (teamNumberOne.getText().toString().equals("")) {
+                    Toast.makeText(context, "Input team one number!", Toast.LENGTH_SHORT).show();
+                } else if (teamNumberTwo.getText().toString().equals("")) {
+                    Toast.makeText(context, "Input team two number!", Toast.LENGTH_SHORT).show();
+                } else if (teamNumberThree.getText().toString().equals("")) {
+                    Toast.makeText(context, "Input team three number!", Toast.LENGTH_SHORT).show();
+                } else if(teamNumberOne.getText().toString().equals("Not Available")){
+                    Toast.makeText(context, "This Match Does Not Exist!", Toast.LENGTH_SHORT).show();
                 }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
+                else {
+                    commitSharedPreferences();
+                    Intent intent = new Intent(context, FieldSetUp.class);
+                    intent.putExtra("matchNumber", numberOfMatch.getText().toString());
+                    intent.putExtra("teamNumberOne", teamNumberOne.getText().toString());
+                    intent.putExtra("teamNumberTwo", teamNumberTwo.getText().toString());
+                    intent.putExtra("teamNumberThree", teamNumberThree.getText().toString());
+                    intent.putExtra("alliance", alliance.getText().toString());
+                    intent.putExtra("dataBaseUrl", dataBaseUrl);
+                    intent.putExtra("mute", isMute);
+                    Log.e("start alliance", alliance.getText().toString());
+                    startActivity(intent);
                 }
-            });
-            //check to see if all data inputs were filled out before continuing
+            }
 
         } else if (id == R.id.action_override) {
             if (item.getTitle().toString().equals("Override Match and Team Number")) {
@@ -360,13 +344,14 @@ public class MainActivity extends ActionBarActivity {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 item.setTitle("Override Match and Team Number");
             }
+
         }
             return super.onOptionsItemSelected(item);
-        }
+    }
 
 
     public void updateListView() {
-        final EditText seachBar = (EditText)findViewById(R.id.searchEditText);
+        final EditText searchBar = (EditText)findViewById(R.id.searchEditText);
         final File dir;
         if (scoutOrSuperFiles) {
             dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
@@ -381,24 +366,23 @@ public class MainActivity extends ActionBarActivity {
         for (File tmpFile : files) {
             adapter.add(tmpFile.getName());
         }
-        seachBar.addTextChangedListener(new TextWatcher() {
+        searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-                if (seachBar.getText().toString().equals("")){
+                if (searchBar.getText().toString().equals("")){
                     View view = context.getCurrentFocus();
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     adapter.clear();
-                    seachBar.setFocusable(false);
+                    searchBar.setFocusable(false);
                     for (File tmpFile : files) {
                         adapter.add(tmpFile.getName());
                     }
-                    seachBar.setFocusableInTouchMode(true);
+                    searchBar.setFocusableInTouchMode(true);
                     adapter.sort(new Comparator<String>() {
                         @Override
                         public int compare(String lhs, String rhs) {
@@ -411,7 +395,7 @@ public class MainActivity extends ActionBarActivity {
                     });
                 }else{
                     for (int i = 0; i < adapter.getCount();){
-                        if(adapter.getItem(i).startsWith((seachBar.getText().toString()).toUpperCase()) || adapter.getItem(i).contains((seachBar.getText().toString()).toUpperCase())){
+                        if(adapter.getItem(i).startsWith((searchBar.getText().toString()).toUpperCase()) || adapter.getItem(i).contains((searchBar.getText().toString()).toUpperCase())){
                             i++;
                         }else{
                             adapter.remove(adapter.getItem(i));
@@ -470,13 +454,9 @@ public class MainActivity extends ActionBarActivity {
         EditText numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         numberOfMatch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -563,14 +543,15 @@ public class MainActivity extends ActionBarActivity {
                         String teamOneNumber = superData.getString("teamOne");
                         String teamTwoNumber = superData.getString("teamTwo");
                         String teamThreeNumber = superData.getString("teamThree");
-                        Log.e("defenseARanks", "getTeamDefenseARanks");
+
                         JSONArray teamOneDefenseARanks = superData.getJSONArray("teamOneDefenseARanks");
                         JSONArray teamTwoDefenseARanks = superData.getJSONArray("teamTwoDefenseARanks");
                         JSONArray teamThreeDefenseARanks = superData.getJSONArray("teamThreeDefenseARanks");
-                        Log.e("defenseARanks", "received");
+
                         JSONObject teamOneData = superData.getJSONObject(teamOneNumber);
                         JSONObject teamTwoData = superData.getJSONObject(teamTwoNumber);
                         JSONObject teamThreeData = superData.getJSONObject(teamThreeNumber);
+
                         JSONObject teamOneKeyNames = new JSONObject(teamOneData.toString());
                         JSONObject teamTwoKeyNames = new JSONObject(teamTwoData.toString());
                         JSONObject teamThreeKeyNames = new JSONObject(teamThreeData.toString());
@@ -642,7 +623,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void resendScoutData(final List<JSONObject> datapoints) {
         //read data from file
-        toasts("Please Wait...Do not do anything", false);
+        toasts("Please Wait...Don't do anything", false);
         new Thread() {
             @Override
             public void run() {
@@ -679,7 +660,7 @@ public class MainActivity extends ActionBarActivity {
                         Log.e("json failure", "Failed to get keys in the first key");
                         return;
                     }
-                    valueOfKeys = new ArrayList<String>();
+                    valueOfKeys = new ArrayList<>();
                     for (int i = 0; i < keysInKey.size(); i++) {
                         String nameOfKeys = keysInKey.get(i);
                         try {
@@ -693,6 +674,7 @@ public class MainActivity extends ActionBarActivity {
                             "numHighShotsMadeTele", "numLowShotsMissedTele", "numLowShotsMadeTele",
                             "numBallsKnockedOffMidlineAuto", "numShotsBlockedTele", "numHighShotsMadeAuto",
                             "numLowShotsMissedAuto", "numLowShotsMadeAuto", "numGroundIntakesTele"));
+
                     checkStringKeys = new ArrayList<>(Arrays.asList("didScaleTele", "didGetDisabled", "didGetIncapacitated",
                             "didChallengeTele", "didReachAuto", "scoutName"));
 

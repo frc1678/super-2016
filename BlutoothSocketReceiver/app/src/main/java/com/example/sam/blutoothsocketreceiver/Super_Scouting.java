@@ -259,9 +259,11 @@ public class Super_Scouting extends ActionBarActivity {
         final TextView rankOneIncrementor = (TextView) counter.findViewById(R.id.rankOneCounter);
         final TextView rankTwoIncrementor = (TextView) counter.findViewById(R.id.rankTwoCounter);
         final TextView rankThreeIncrementor = (TextView) counter.findViewById(R.id.rankThreeCounter);
+
         Button rankOne = (Button) counter.findViewById(R.id.rank1);
         Button rankTwo = (Button) counter.findViewById(R.id.rank2);
         Button rankThree = (Button) counter.findViewById(R.id.rank3);
+
         TextView defenseAName = (TextView) counter.findViewById(R.id.categoryADefenseName);
         ArrayList<String> defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense, thirdDefense, fourthDefense));
         if (defenses.contains("pc")){
@@ -271,80 +273,40 @@ public class Super_Scouting extends ActionBarActivity {
         }
         defenseAName.setText(chosenCatergoryADefense);
 
-        rankOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = Integer.parseInt(rankOneIncrementor.getText().toString());
-                current++;
-                rankOneIncrementor.setText(Integer.toString(current));
-            }
-        });
-        rankOne.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
-                vibe.vibrate(10000);
-                Log.e("vibrateOne", "Vibrated");
-                int current = Integer.parseInt(rankOneIncrementor.getText().toString());
-                current--;
-                if (current < 0) {
-                    rankOneIncrementor.setText(Integer.toString(0));
-                } else {
-                    rankOneIncrementor.setText(Integer.toString(current));
-                }
-                return true;
-            }
-        });
-        rankTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
-                current++;
-                rankTwoIncrementor.setText(Integer.toString(current));
-            }
-        });
-        rankTwo.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
-                vibe.vibrate(10000);
-                Log.e("vibrateTwo", "Vibrated");
-                int current = Integer.parseInt(rankTwoIncrementor.getText().toString());
-                current--;
-                if (current < 0) {
-                    rankTwoIncrementor.setText(Integer.toString(0));
-                } else {
-                    rankTwoIncrementor.setText(Integer.toString(current));
-                }
-                return true;
-            }
-        });
-        rankThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
-                current++;
-                rankThreeIncrementor.setText(Integer.toString(current));
-            }
-        });
-        rankThree.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Vibrator vibe = (Vibrator) Super_Scouting.this.getSystemService(Context.VIBRATOR_SERVICE);
-                vibe.vibrate(10000);
-                Log.e("vibrateThree", "Vibrated");
-                int current = Integer.parseInt(rankThreeIncrementor.getText().toString());
-                current--;
-                if (current < 0) {
-                    rankThreeIncrementor.setText(Integer.toString(0));
-                } else {
-                    rankThreeIncrementor.setText(Integer.toString(current));
-                }
-                return true;
-            }
-        });
+        setIncrementor(rankOneIncrementor, rankOne);
+        setIncrementor(rankTwoIncrementor, rankTwo);
+        setIncrementor(rankThreeIncrementor, rankThree);
+
+        setDecrementor(rankOneIncrementor, rankOne);
+        setDecrementor(rankTwoIncrementor, rankTwo);
+        setDecrementor(rankThreeIncrementor, rankThree);
 
         return counter;
+    }
+    public void setIncrementor(final TextView view, Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = Integer.parseInt(view.getText().toString());
+                current++;
+                view.setText(Integer.toString(current));
+            }
+        });
+    }
+    public void setDecrementor(final TextView view, Button button){
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int current = Integer.parseInt(view.getText().toString());
+                current--;
+                if (current < 0) {
+                    view.setText(Integer.toString(0));
+                } else {
+                    view.setText(Integer.toString(current));
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -433,43 +395,30 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putStringArrayListExtra("teamTwoDefenseARanks", teamTwoDefenseARanks);
             intent.putStringArrayListExtra("teamThreeDefenseARanks", teamThreeDefenseARanks);
             if(!teamOneNote.equals("")) {
-                sendTeamOneNotes(teamOneNote);
+                sendNotes(teamNumberOne, teamOneNote);
             }else {
-                sendTeamOneNotes("No_Notes");
+                sendNotes(teamNumberOne, "No_Notes");
             }
             if(!teamTwoNote.equals("")) {
-                sendTeamTwoNotes(teamTwoNote);
+                sendNotes(teamNumberTwo, teamTwoNote);
             }else {
-                sendTeamTwoNotes("No_Notes");
+                sendNotes(teamNumberTwo, "No_Notes");
             }
             if(!teamThreeNote.equals("")) {
-                sendTeamThreeNotes(teamThreeNote);
+                sendNotes(teamNumberThree, teamThreeNote);
             }else {
-                sendTeamThreeNotes("No_Notes");
+                sendNotes(teamNumberThree, "No_Notes");
             }
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
-    public void sendTeamOneNotes(final String notes){
+
+    public void sendNotes(final String teamNumber, final String note){
         new Thread(){
             public void run(){
-                dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child("superNotes").setValue(notes);
-            }
-        }.start();
-    }
-    public void sendTeamTwoNotes(final String notes){
-        new Thread(){
-            public void run(){
-                dataBase.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child("superNotes").setValue(notes);
-            }
-        }.start();
-    }
-    public void sendTeamThreeNotes(final String notes){
-        new Thread(){
-            public void run(){
-                dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child("superNotes").setValue(notes);
+                dataBase.child("TeamInMatchDatas").child(teamNumber + "Q" + numberOfMatch).child("superNotes").setValue(note);
             }
         }.start();
     }
