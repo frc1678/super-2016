@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -80,10 +81,12 @@ public class FinalDataPoints extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finaldatapoints);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         intent = getIntent();
         getExtrasForFinalData();
         firebaseRef = new Firebase(dataBaseUrl);
 
+        allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
         captureCheck = (ToggleButton) findViewById(R.id.captureToggleButton);
         breachCheck = (ToggleButton) findViewById(R.id.didBreach);
@@ -91,6 +94,8 @@ public class FinalDataPoints extends ActionBarActivity {
         teamOneJson = new JSONObject();
         teamTwoJson = new JSONObject();
         teamThreeJson = new JSONObject();
+        allianceScore.setCursorVisible(false);
+
         if(alliance.equals("Blue Alliance")){
             finalScore.setTextColor(Color.BLUE);
         }else if(alliance.equals("Red Alliance")){
@@ -106,11 +111,9 @@ public class FinalDataPoints extends ActionBarActivity {
         }else {
             captureCheck.setChecked(false);
         }
-
-        allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         allianceScore.setText(allianceScoreData);
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
-
+        Toast.makeText(this, "TIP: Check Data and Wait Until It is Finalized", Toast.LENGTH_LONG).show();
     }
     @Override
     public void onBackPressed(){
