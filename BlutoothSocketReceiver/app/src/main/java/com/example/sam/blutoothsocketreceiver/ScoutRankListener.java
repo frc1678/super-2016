@@ -27,12 +27,13 @@ public class ScoutRankListener extends Thread {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 LeaderBoard leaderBoard = dataSnapshot.getValue(LeaderBoard.class);
+                Log.e("scoutStatData", leaderBoard.toString());
+                //Change scout name for red alliance
                 List<String> scoutNames = Arrays.asList("blue 4", "blue 5", "blue 6");
                 for (String name : scoutNames) {
                     new scoutrank(context, name, gson.toJson(leaderBoard));
                 }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 Log.e("Listener", "canceled");
