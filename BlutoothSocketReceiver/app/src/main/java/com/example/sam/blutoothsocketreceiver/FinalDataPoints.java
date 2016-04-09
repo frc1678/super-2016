@@ -81,8 +81,8 @@ public class FinalDataPoints extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finaldatapoints);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         intent = getIntent();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getExtrasForFinalData();
         firebaseRef = new Firebase(dataBaseUrl);
 
@@ -113,7 +113,6 @@ public class FinalDataPoints extends ActionBarActivity {
         }
         allianceScore.setText(allianceScoreData);
         dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data");
-        Toast.makeText(this, "TIP: Check Data and Wait Until It is Finalized", Toast.LENGTH_LONG).show();
     }
     @Override
     public void onBackPressed(){

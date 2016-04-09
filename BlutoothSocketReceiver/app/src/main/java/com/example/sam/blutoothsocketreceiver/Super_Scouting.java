@@ -26,6 +26,9 @@ import android.widget.TextView;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.FirebaseException;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
@@ -364,6 +367,46 @@ public class Super_Scouting extends ActionBarActivity {
             }
         }
         if (id == R.id.finalNext) {
+
+            getEachDataNameAndValue();
+            //new added code
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
+                        for (int i = 0; i < 3; i++) {
+                            Log.e("Scouting", "1");
+                            dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamOneDefenseARanks.get(i)));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            Log.e("Scouting", "2");
+                            dataBase.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamTwoDefenseARanks.get(i)));
+                        }
+                        for (int i = 0; i < 3; i++) {
+                            Log.e("Scouting", "3");
+                            dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamThreeDefenseARanks.get(i)));
+                        }
+                        for (int i = 0; i < teamOneDataName.size(); i++) {
+                            Log.e("Scouting", "4");
+                            dataBase.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+                        }
+                        for (int i = 0; i < teamTwoDataName.size(); i++) {
+                            Log.e("Scouting", "5");
+                            dataBase.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+                        }
+                        for (int i = 0; i < teamThreeDataName.size(); i++) {
+                            Log.e("Scouting", "6");
+                            dataBase.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+                        }
+                    }catch (FirebaseException FBE){
+                        Log.e("firebase", "scoutingPage");
+                    }catch(IndexOutOfBoundsException IOB){
+                        Log.e("ScoutingPage", "Index");
+                    }
+                }
+            }.start();
+            //New Added Code//
             Intent intent = new Intent(this, FinalDataPoints.class);
             intent.putExtra("matchNumber", numberOfMatch);
             intent.putExtra("teamNumberOne", teamNumberOne);
@@ -382,8 +425,6 @@ public class Super_Scouting extends ActionBarActivity {
             intent.putExtra("scoutDidBreach", breached);
             intent.putExtra("scoutDidCapture", captured);
             intent.putExtra("mute", isMute);
-
-            getEachDataNameAndValue();
 
             intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
             intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);

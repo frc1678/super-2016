@@ -374,9 +374,6 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (searchBar.getText().toString().equals("")){
-                    View view = context.getCurrentFocus();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     adapter.clear();
                     searchBar.setFocusable(false);
                     for (File tmpFile : files) {
