@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity {
+    protected SuperScoutApplication app;
     Activity context;
     EditText numberOfMatch;
     EditText teamNumberOne;
@@ -85,6 +86,7 @@ public class MainActivity extends ActionBarActivity {
         Log.e("test", "Logcat is up and running!");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         context = this;
+        //app = (SuperScoutApplication)getApplication();
         //Start the class that continuosly accepts connection from scout
         accept_loop loop = new accept_loop(context, dataBaseUrl);
         loop.start();

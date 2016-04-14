@@ -13,7 +13,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Super Scout"
         android:theme="@style/AppTheme"
-        android:name=".SuperScoutApplication">
+        android:name=".SuperScoutApplication"
+        android:clearTaskOnLaunch="true">
+
 
         <activity
             android:name=".MainActivity"

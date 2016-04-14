@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -248,6 +249,10 @@ import org.json.JSONObject;
                                 } catch (JSONException JE) {
                                     Log.e("Json failure", "failed to get balls intaked");
                                     return;
+                                } catch (NullPointerException NPE){
+                                    Log.e("sendBallIntaked", "NULL");
+                                } catch (FirebaseException fbe){
+                                    Log.e("sendBallsIntaked", "failed");
                                 }
 
                                 try {
@@ -279,6 +284,7 @@ import org.json.JSONObject;
                                                 for (int i = 0; i < failedDefenseTele.length(); i++) {
                                                     dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                                                 }
+
                                             } catch (JSONException JE) {
                                                 Log.e("json failure", "failed loop red");
                                                 return;
@@ -288,6 +294,8 @@ import org.json.JSONObject;
                                         }catch(IndexOutOfBoundsException IOBE){
                                             Log.e("FirebaseException", "blue");
                                             toasts("Scout data match number does not exist!", true);
+                                        }catch (FirebaseException FBE){
+                                            Log.e("Blue", "failed");
                                         }
 
                                     } else if (scoutAlliance.equals("red")) {
@@ -322,6 +330,8 @@ import org.json.JSONObject;
                                         }catch(IndexOutOfBoundsException IOBE){
                                             Log.e("FirebaseException", "red");
                                             toasts("Scout data match number does not exist!", true);
+                                        }catch (FirebaseException FBE){
+                                            Log.e("Red", "failed");
                                         }
                                     }
                                 } catch (JSONException JE) {
