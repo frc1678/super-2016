@@ -41,7 +41,10 @@ public class CalculatedMatchData extends Object {
     public Float scoreContribution;
     public Float sdPredictedRedScore;
     public Float sdPredictedBlueScore;
+    public Float autoAbilityExcludeD;
+    public Float autoAbilityExcludeLb;
     public List<String> optimalRedDefenses;
     public List<String> optimalBlueDefenses;
+
 
 }

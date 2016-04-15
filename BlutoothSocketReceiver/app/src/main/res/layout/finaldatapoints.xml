@@ -65,5 +65,5 @@
         android:textSize="20sp"
         android:textOff="false"
         android:textOn="true"/>
-    
+
 </RelativeLayout>

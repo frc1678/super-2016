@@ -41,7 +41,11 @@ public class accept_loop extends Thread {
         this.context = context;
         this.dataBaseUrl = dataBaseUrl;
     }
+    private void crash () throws NullPointerException {
+        throw new NullPointerException();
+    }
     public void run() {
+        //crash();
         //continously checking for connection
         tmp = null;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
