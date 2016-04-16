@@ -3,11 +3,16 @@ package com.example.sam.blutoothsocketreceiver;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
@@ -17,8 +22,13 @@ import com.firebase.client.FirebaseError;
 import com.instabug.library.IBGInvocationEvent;
 import com.instabug.library.Instabug;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,16 +113,55 @@ public class SuperScoutApplication extends Application implements Application.Ac
     {
         List<Class<? extends ActionBarActivity>> activities = Arrays.asList(MainActivity.class, FinalDataPoints.class);
         // The following shows what I'd like, though it won't work like this.
-        Log.e("AcceptLoop", "CRASH");
-        Log.e("Activity", currentActivity.toString());
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            Log.e("crashed Thread", "in activities list");
+            Log.e("UI thread", "CRASHED!");
+            Log.e("Activity crashed", currentActivity.toString());
+            takeScreenshot();
             originalUncaughtExceptionHandler.uncaughtException(thread, e);
         }else{
             Log.e("Background thread", "CRASHED");
+            Toast.makeText(this, "Background Thread ERROR", Toast.LENGTH_LONG).show();
         }
 
     }
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        File dir = new File("/sdcard/Super_scout_backup");
+        Log.e("dir", dir.getAbsolutePath());
+        dir.mkdir();
+        File photoFile = new File(dir, (new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date())) + ".jpg");
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            Log.e("test", "1");
+            FileOutputStream file = new FileOutputStream(photoFile);
+            // create bitmap screen capture
+            Log.e("Test", "2");
+            View v1 = currentActivity.getWindow().getDecorView().getRootView();
+            Log.e("Test", "3");
+            v1.setDrawingCacheEnabled(true);
+            Log.e("Test", "4");
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            Log.e("Test", "5");
+            v1.setDrawingCacheEnabled(false);
+            Log.e("Test", "6");
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, file);
+            Log.e("Test", "7");
+            file.flush();
+            Log.e("Test", "8");
+            file.close();
+            Log.e("Test", "9");
+            Log.e("Test", "10");
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or OOM
+            e.printStackTrace();
+            Log.e("photoSave", "CRASHED");
+        }
+
+    }
+
 }
 
 
