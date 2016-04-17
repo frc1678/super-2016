@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
-    String changeAllianceScore;
     String previousScore;
     final static String dataBaseUrl = Constants.dataBaseUrl;
     int matchNum;

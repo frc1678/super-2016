@@ -47,9 +47,6 @@ public class SuperScoutApplication extends Application implements Application.Ac
     public void onCreate() {
         registerActivityLifecycleCallbacks(this);
         super.onCreate();
-        new Instabug.Builder(this, "6b6eb576898ed14a78727c3aa68ff738")
-                .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
-                .build();
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase firebase = new Firebase(url);
@@ -87,7 +84,9 @@ public class SuperScoutApplication extends Application implements Application.Ac
 
             }
         });
-
+        new Instabug.Builder(this, "80e433f23917733cf1e5d36fd1fbb4c7")
+                .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
+                .build();
     }
     public void onActivityCreated(Activity activity, Bundle savedInstanceState){currentActivity = activity;}
 
