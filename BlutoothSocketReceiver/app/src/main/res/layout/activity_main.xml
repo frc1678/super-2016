@@ -83,6 +83,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:alpha="0"/>
+        <!--
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,6 +92,7 @@
             android:layout_marginLeft="160dp"
             android:clickable="true"
             android:onClick="crashButtonClicked"/>
+            -->
 
     </RelativeLayout>
 

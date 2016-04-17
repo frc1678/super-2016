@@ -23,6 +23,7 @@ public class CalculatedMatchData extends Object {
     public Integer actualRedRPs;
     public Boolean redAllianceDidBreach;
     public Boolean blueAllianceDidBreach;
+    public Boolean wasDisfunctional;
     public Map<String, Float> redScoresForDefenses;
     public Map<String, Float> redWinningChanceForDefenses;
     public Map<String, Float> redBreachChanceForDefenses;
@@ -43,8 +44,8 @@ public class CalculatedMatchData extends Object {
     public Float sdPredictedBlueScore;
     public Float autoAbilityExcludeD;
     public Float autoAbilityExcludeLb;
+    public Float avgNumCrossingsAuto;
     public List<String> optimalRedDefenses;
     public List<String> optimalBlueDefenses;
-
 
 }

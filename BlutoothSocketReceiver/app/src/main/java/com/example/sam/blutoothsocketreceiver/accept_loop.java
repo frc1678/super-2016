@@ -45,7 +45,7 @@ public class accept_loop extends Thread {
         throw new NullPointerException();
     }
     public void run() {
-        crash();
+        //crash();
         //continously checking for connection
         tmp = null;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
