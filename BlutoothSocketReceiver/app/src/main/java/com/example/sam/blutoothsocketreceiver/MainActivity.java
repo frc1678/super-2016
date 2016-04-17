@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -60,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
     String firstKey;
     String keys;
     String scoutAlliance;
+    String changeAllianceScore;
     final static String dataBaseUrl = Constants.dataBaseUrl;
     int matchNum;
     int stringIndex;
@@ -111,9 +113,10 @@ public class MainActivity extends ActionBarActivity {
         } else {
             SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
             isRed = prefs.getBoolean("allianceColor", false);
-        }if(!backToHome.hasExtra("mute")){
+        }
+        if (!backToHome.hasExtra("mute")) {
             mute.setChecked(false);
-        }else if (backToHome.hasExtra("mute")){
+        } else if (backToHome.hasExtra("mute")) {
             mute.setChecked(true);
         }
         updateUI();
@@ -135,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
             public void onReceive(Context context, Intent intent) {
                 try {
                     updateUI();
-                }catch (NullPointerException NPE){
+                } catch (NullPointerException NPE) {
                     toasts("Teams not available", true);
                 }
             }
@@ -160,40 +163,77 @@ public class MainActivity extends ActionBarActivity {
                         .setTitle("RESEND DATA?")
                         .setMessage("RESEND " + "Q" + nameOfResendMatch[1] + "?")
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which){}
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
                         })
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                        if (scoutOrSuperFiles) {
-                            String content = readFile(fileName);
-                            JSONObject superData;
-                            try {
-                                superData = new JSONObject(content);
-                            } catch (JSONException jsone) {
-                                Log.e("File Error", "no valid JSON in the file");
-                                Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                return;
+                                if (scoutOrSuperFiles) {
+                                    String content = readFile(fileName);
+                                    JSONObject superData;
+                                    try {
+                                        superData = new JSONObject(content);
+                                    } catch (JSONException jsone) {
+                                        Log.e("File Error", "no valid JSON in the file");
+                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    List<JSONObject> dataPoints = new ArrayList<>();
+                                    dataPoints.add(superData);
+                                    resendSuperData(dataPoints);
+                                } else {
+                                    String content = readFile(fileName);
+                                    JSONObject data;
+                                    try {
+                                        data = new JSONObject(content);
+                                    } catch (JSONException jsone) {
+                                        Log.e("File Error", "no valid JSON in the file");
+                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    List<JSONObject> dataPoints = new ArrayList<>();
+                                    dataPoints.add(data);
+                                    resendScoutData(dataPoints);
+                                }
                             }
-                            List<JSONObject> dataPoints = new ArrayList<>();
-                            dataPoints.add(superData);
-                            resendSuperData(dataPoints);
+                        }).show();
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = parent.getItemAtPosition(position).toString();
+                String splitName[] = name.split("_");
+                final String editMatchNumber = splitName[0].replace("Q", "");
+                Log.e("matchNameChange", editMatchNumber);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Edit Alliance Score for " + name + ": ");
+                final EditText input = new EditText(context);
+                input.setText(changeAllianceScore);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                input.setGravity(1);
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        changeAllianceScore = input.getText().toString();
+                        if (isRed) {
+                            dataBase.child("Matches").child(editMatchNumber).child("redScore").setValue(Integer.parseInt(changeAllianceScore));
                         } else {
-                            String content = readFile(fileName);
-                            JSONObject data;
-                            try {
-                                data = new JSONObject(content);
-                            } catch (JSONException jsone) {
-                                Log.e("File Error", "no valid JSON in the file");
-                                Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            List<JSONObject> dataPoints = new ArrayList<>();
-                            dataPoints.add(data);
-                            resendScoutData(dataPoints);
+                            dataBase.child("Matches").child(editMatchNumber).child("blueScore").setValue(Integer.parseInt(changeAllianceScore));
                         }
                     }
-                }).show();
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+                return true;
             }
         });
     }

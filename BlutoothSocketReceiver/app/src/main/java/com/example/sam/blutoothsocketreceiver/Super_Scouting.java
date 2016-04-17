@@ -325,7 +325,6 @@ public class Super_Scouting extends ActionBarActivity {
         int id = item.getItemId();
 
         if(id == R.id.getAllianceScore){
-
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Input Alliance Score: ");
             final EditText input = new EditText(this);
