@@ -62,6 +62,7 @@ public class MainActivity extends ActionBarActivity {
     String keys;
     String scoutAlliance;
     String changeAllianceScore;
+    String previousScore;
     final static String dataBaseUrl = Constants.dataBaseUrl;
     int matchNum;
     int stringIndex;
@@ -203,25 +204,39 @@ public class MainActivity extends ActionBarActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = parent.getItemAtPosition(position).toString();
+                final String name = parent.getItemAtPosition(position).toString();
                 String splitName[] = name.split("_");
                 final String editMatchNumber = splitName[0].replace("Q", "");
                 Log.e("matchNameChange", editMatchNumber);
+                String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name;
+                String content = readFile(filePath);
+                final JSONObject superData;
+                try {
+                    superData = new JSONObject(content);
+                    if(isRed) {
+                        previousScore = superData.get("Red Alliance Score").toString();
+                    }else{
+                        previousScore = superData.get("Blue Alliance Score").toString();
+                        Log.e("score to change", previousScore);
+                    }
+                }catch (JSONException JE){
+                    Log.e("read Super Data", "failed");
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Edit Alliance Score for " + name + ": ");
                 final EditText input = new EditText(context);
-                input.setText(changeAllianceScore);
+                input.setText(previousScore);
                 input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 input.setGravity(1);
                 builder.setView(input);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        changeAllianceScore = input.getText().toString();
+                        previousScore = input.getText().toString();
                         if (isRed) {
-                            dataBase.child("Matches").child(editMatchNumber).child("redScore").setValue(Integer.parseInt(changeAllianceScore));
+                            dataBase.child("Matches").child(editMatchNumber).child("redScore").setValue(Integer.parseInt(previousScore));
                         } else {
-                            dataBase.child("Matches").child(editMatchNumber).child("blueScore").setValue(Integer.parseInt(changeAllianceScore));
+                            dataBase.child("Matches").child(editMatchNumber).child("blueScore").setValue(Integer.parseInt(previousScore));
                         }
                     }
                 });
