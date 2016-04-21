@@ -68,26 +68,25 @@ public class SuperScoutApplication extends Application implements Application.Ac
             firebase.authWithCustomToken("j1r2wo3RUPMeUZosxwvVSFEFVcrXuuMAGjk6uPOc", authResultHandler);
         } else if (url.equals("https://1678-dev2-2016.firebaseio.com/")) {
             firebase.authWithCustomToken("hL8fStivTbHUXM8A0KXBYPg2cMsl80EcD7vgwJ1u", authResultHandler);
+        } else if (url.equals("https://1678-extreme-testing.firebaseio.com/")) {
+            firebase.authWithCustomToken("lGufYCifprPw8p1fiVOs7rqYV3fswHHr9YLwiUWh", authResultHandler);
         }
-        FirebaseLists.matchesList = new FirebaseList<>(url + "Matches/", new FirebaseList.FirebaseUpdatedCallback() {
-            @Override
-            public void execute() {
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("matches_updated"));
-            }
-        }, Match.class);
-        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
-        {
-            @Override
-            public void uncaughtException (Thread thread, Throwable e)
-            {
-                handleUncaughtException(thread, e);
-
-            }
-        });
-        new Instabug.Builder(this, "80e433f23917733cf1e5d36fd1fbb4c7")
-                .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
-                .build();
-    }
+            FirebaseLists.matchesList = new FirebaseList<>(url + "Matches/", new FirebaseList.FirebaseUpdatedCallback() {
+                @Override
+                public void execute() {
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("matches_updated"));
+                }
+            }, Match.class);
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, Throwable e) {
+                    handleUncaughtException(thread, e);
+                }
+            });
+            new Instabug.Builder(this, "80e433f23917733cf1e5d36fd1fbb4c7")
+                    .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
+                    .build();
+        }
     public void onActivityCreated(Activity activity, Bundle savedInstanceState){currentActivity = activity;}
 
     public void onActivityDestroyed(Activity activity){currentActivity = null;}

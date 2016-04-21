@@ -273,7 +273,6 @@ public class MainActivity extends ActionBarActivity {
                                 try {
                                     JSONObject data = new JSONObject(content);
                                     dataPoints.add(data);
-                                    //we dont implement this because we dont care if one file is not JSON object
                                 } catch (JSONException jsone) {
                                     Log.i("JSON info", "Failed to parse JSON for resend all. unimportant");
                                 }
@@ -405,8 +404,8 @@ public class MainActivity extends ActionBarActivity {
             return super.onOptionsItemSelected(item);
     }
 
-
     public void updateListView() {
+
         final EditText searchBar = (EditText)findViewById(R.id.searchEditText);
         final File dir;
         if (scoutOrSuperFiles) {
