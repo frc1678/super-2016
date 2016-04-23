@@ -9,6 +9,7 @@ import java.util.Map;
  */
 
 public class CalculatedMatchData extends Object {
+    public String defensesCrossableTele;
     public Float predictedRedScore;
     public Float predictedBlueScore;
     public Integer numDefensesCrossedByBlue;
