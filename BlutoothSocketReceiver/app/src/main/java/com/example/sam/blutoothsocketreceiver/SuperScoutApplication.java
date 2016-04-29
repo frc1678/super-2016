@@ -54,7 +54,6 @@ public class SuperScoutApplication extends Application implements Application.Ac
             @Override
             public void onAuthenticated(AuthData authData) {
             }
-
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {
                 Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT).show();
@@ -83,9 +82,9 @@ public class SuperScoutApplication extends Application implements Application.Ac
                     handleUncaughtException(thread, e);
                 }
             });
-            new Instabug.Builder(this, "80e433f23917733cf1e5d36fd1fbb4c7")
-                    .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
-                    .build();
+        new Instabug.Builder(this, "8eab8e2db114c14290df21e21527f1a1")
+                .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
+                .build();
         }
     public void onActivityCreated(Activity activity, Bundle savedInstanceState){currentActivity = activity;}
 

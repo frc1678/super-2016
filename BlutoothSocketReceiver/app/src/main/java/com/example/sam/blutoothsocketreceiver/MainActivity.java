@@ -599,6 +599,9 @@ public class MainActivity extends ActionBarActivity {
                         String teamOneNumber = superData.getString("teamOne");
                         String teamTwoNumber = superData.getString("teamTwo");
                         String teamThreeNumber = superData.getString("teamThree");
+                        String teamOneNote = superData.getString("teamOneNote");
+                        String teamTwoNote = superData.getString("teamTwoNote");
+                        String teamThreeNote = superData.getString("teamThreeNote");
 
                         JSONArray teamOneDefenseARanks = superData.getJSONArray("teamOneDefenseARanks");
                         JSONArray teamTwoDefenseARanks = superData.getJSONArray("teamTwoDefenseARanks");
@@ -618,6 +621,11 @@ public class MainActivity extends ActionBarActivity {
 
                         ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
                         ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamOneNumber, teamTwoNumber, teamThreeNumber));
+
+                        dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child("superNotes").setValue(teamOneNote);
+                        dataBase.child(matchAndTeamTwo).child("superNotes").setValue(teamTwoNote);
+                        dataBase.child(matchAndTeamThree).child("superNotes").setValue(teamThreeNote);
+
                         for (int i = 0; i < teamNumbers.size(); i++){
                             //Log.e("path", teamNumbers.get(i) + "Q" + numberOfMatch.toString());
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
@@ -811,7 +819,7 @@ public class MainActivity extends ActionBarActivity {
                             for (int i = 0; i < failedDefenseTele.length(); i++) {
                                 dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                             }
-                            toasts("Resent Scout data", false);
+
                         } catch (JSONException JE) {
                             Log.e("json failure", "failed loop blue");
                             toasts("Failed to resend scout data", false);
@@ -856,13 +864,13 @@ public class MainActivity extends ActionBarActivity {
                                 return;
                             }
                             Log.e("reached", "toast");
-                            toasts("Resent Scout Data", false);
                         }catch(IndexOutOfBoundsException IOB){
                             Log.e("FirebaseException", "redMain");
                             toasts("Resent scout data match number does not exist!", true);
                         }
                     }
                 }
+                toasts("Resent Scout data", false);
             }
 
         }.start();

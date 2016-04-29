@@ -159,12 +159,12 @@ public class FinalDataPoints extends ActionBarActivity {
             startActivity(toNotes);
         }
         if(id == R.id.forgotAllianceScore){
-            Toast.makeText(this, "Shame...", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent();
+            Toast.makeText(this, "Not Available right now.", Toast.LENGTH_LONG).show();
+            /*Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
             intent.setData(Uri.parse("https://www.thebluealliance.com/match/2016casj_qm" + numberOfMatch));
-            startActivity(intent);
+            startActivity(intent);*/
 
         }
         //noinspection SimplifiableIfStatement
@@ -212,6 +212,9 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("teamOne", teamNumberOne);
                         superExternalData.put("teamTwo", teamNumberTwo);
                         superExternalData.put("teamThree", teamNumberThree);
+                        superExternalData.put("teamOneNote", teamOneNote);
+                        superExternalData.put("teamTwoNote", teamTwoNote);
+                        superExternalData.put("teamThreeNote", teamThreeNote);
 
                         //ArrayList<ArrayList> teamsDefenseARanks = new ArrayList<ArrayList>(Arrays.asList(teamOneDefenseARanks, teamTwoDefenseARanks, teamThreeDefenseARanks));
                         ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
@@ -330,6 +333,7 @@ public class FinalDataPoints extends ActionBarActivity {
         breached = intent.getExtras().getBoolean("scoutDidBreach");
         captured = intent.getExtras().getBoolean("scoutDidCapture");
         isMute = intent.getExtras().getBoolean("mute");
+
 
     }
 }
