@@ -41,10 +41,6 @@ public class FinalDataPoints extends ActionBarActivity {
     String teamNumberOne;
     String teamNumberTwo;
     String teamNumberThree;
-    String firstDefense;
-    String secondDefense;
-    String thirdDefense;
-    String fourthDefense;
     String alliance;
     String teamOneNote;
     String teamTwoNote;
@@ -63,9 +59,7 @@ public class FinalDataPoints extends ActionBarActivity {
     ArrayList<String> teamTwoDataScore;
     ArrayList<String> teamThreeDataName;
     ArrayList<String> teamThreeDataScore;
-    ArrayList<String> teamOneDefenseARanks;
-    ArrayList<String> teamTwoDefenseARanks;
-    ArrayList<String> teamThreeDefenseARanks;
+    ArrayList<String> defenses;
     ToggleButton captureCheck;
     ToggleButton breachCheck;
     Boolean breached;
@@ -200,10 +194,10 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("didCapture", captureCheck.getText().toString());
                         superExternalData.put("didBreach", breachCheck.getText().toString());
                         superExternalData.put("matchNumber", numberOfMatch);
-                        superExternalData.put("defenseOne", firstDefense);
-                        superExternalData.put("defenseTwo", secondDefense);
-                        superExternalData.put("defenseThree", thirdDefense);
-                        superExternalData.put("defenseFour", fourthDefense);
+                        superExternalData.put("defenseOne", defenses.get(0));
+                        superExternalData.put("defenseTwo", defenses.get(1));
+                        superExternalData.put("defenseThree", defenses.get(2));
+                        superExternalData.put("defenseFour", defenses.get(3));
                         superExternalData.put("alliance", alliance);
                         superExternalData.put(alliance + " Score", allianceScoreNum);
                         superExternalData.put(teamNumberOne, teamOneJson);
@@ -212,78 +206,27 @@ public class FinalDataPoints extends ActionBarActivity {
                         superExternalData.put("teamOne", teamNumberOne);
                         superExternalData.put("teamTwo", teamNumberTwo);
                         superExternalData.put("teamThree", teamNumberThree);
-                        superExternalData.put("teamOneNote", teamOneNote);
+                        /*superExternalData.put("teamOneNote", teamOneNote);
                         superExternalData.put("teamTwoNote", teamTwoNote);
-                        superExternalData.put("teamThreeNote", teamThreeNote);
-
-                        //ArrayList<ArrayList> teamsDefenseARanks = new ArrayList<ArrayList>(Arrays.asList(teamOneDefenseARanks, teamTwoDefenseARanks, teamThreeDefenseARanks));
+                        superExternalData.put("teamThreeNote", teamThreeNote);*/
                         ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
-                        ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamNumberOne, teamNumberTwo, teamNumberThree));
-
-                        for (int i = 0; i < teamNumbers.size(); i++){
-                            firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
-                            firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
-                        }
-                        for (int i = 0; i < 3; i++) {
-                            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamOneDefenseARanks.get(i)));
-                        }
-                        for (int i = 0; i < 3; i++) {
-                            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamTwoDefenseARanks.get(i)));
-                        }
-                        for (int i = 0; i < 3; i++) {
-                            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(rankNames.get(i)).setValue(Integer.parseInt(teamThreeDefenseARanks.get(i)));
-                        }
-                        JSONArray teamOneAJson = new JSONArray(teamOneDefenseARanks);
-                        JSONArray teamTwoAJson = new JSONArray(teamTwoDefenseARanks);
-                        JSONArray teamThreeAJson = new JSONArray(teamThreeDefenseARanks);
-
-                        superExternalData.put("teamOneDefenseARanks", teamOneAJson);
-                        superExternalData.put("teamTwoDefenseARanks", teamTwoAJson);
-                        superExternalData.put("teamThreeDefenseARanks", teamThreeAJson);
-
                     }catch(JSONException JE){
                         Log.e("JSON Error", "couldn't put keys and values in json object");
                     }
+                    ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamNumberOne, teamNumberTwo, teamNumberThree));
 
-                    for (int i = 0; i < teamOneDataName.size(); i++) {
-                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
-                        try {
-                            teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
-                        }catch (JSONException JE){
-                            Log.e("JSON ERROR", "teamOne");
-                        }
+                    for (int i = 0; i < teamNumbers.size(); i++){
+                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
+                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
                     }
-                    for (int i = 0; i < teamTwoDataName.size(); i++) {
-                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
-                        try {
-                            teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
-                        }catch (JSONException JE){
-                            Log.e("JSON ERROR", "teamTwo");
-                        }
-                    }
-                    for (int i = 0; i < teamThreeDataName.size(); i++) {
-                        firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
-                        try {
-                            teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
-                        }catch (JSONException JE){
-                            Log.e("JSON ERROR", "teamThree");
-                        }
-                    }
-                        if (alliance.equals("Blue Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
 
-                        } else if (alliance.equals("Red Alliance")) {
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
-                            firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-                        }
+                    sendScoutingData();
+                    sendAfterMatchData();
+
+                    System.out.println(superExternalData.toString());
 
                     file.println(superExternalData.toString());
                     file.close();
-                    //System.out.println("SUPER EXTERNAL DATA" + superExternalData.toString());
-                    //System.out.println(firstDefense + " " + secondDefense + " " + thirdDefense + " " + fourthDefense);
                     context.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -311,10 +254,8 @@ public class FinalDataPoints extends ActionBarActivity {
         teamNumberOne = intent.getExtras().getString("teamNumberOne");
         teamNumberTwo = intent.getExtras().getString("teamNumberTwo");
         teamNumberThree = intent.getExtras().getString("teamNumberThree");
-        firstDefense = intent.getExtras().getString("firstDefensePicked");
-        secondDefense = intent.getExtras().getString("secondDefensePicked");
-        thirdDefense = intent.getExtras().getString("thirdDefensePicked");
-        fourthDefense = intent.getExtras().getString("fourthDefensePicked");
+        defenses = intent.getStringArrayListExtra("defenses");
+        Log.e("defenses", defenses.toString());
         alliance = intent.getExtras().getString("alliance");
         teamOneDataName = intent.getStringArrayListExtra("dataNameOne");
         teamOneDataScore = intent.getStringArrayListExtra("ranksOfOne");
@@ -322,18 +263,53 @@ public class FinalDataPoints extends ActionBarActivity {
         teamTwoDataScore = intent.getStringArrayListExtra("ranksOfTwo");
         teamThreeDataName = intent.getStringArrayListExtra("dataNameThree");
         teamThreeDataScore = intent.getStringArrayListExtra("ranksOfThree");
-        teamOneDefenseARanks = intent.getStringArrayListExtra("teamOneDefenseARanks");
-        teamTwoDefenseARanks = intent.getStringArrayListExtra("teamTwoDefenseARanks");
-        teamThreeDefenseARanks = intent.getStringArrayListExtra("teamThreeDefenseARanks");
-        teamOneNote = intent.getStringExtra("teamOneNote");
+        /*teamOneNote = intent.getStringExtra("teamOneNote");
         teamTwoNote = intent.getStringExtra("teamTwoNote");
-        teamThreeNote = intent.getStringExtra("teamThreeNote");
+        teamThreeNote = intent.getStringExtra("teamThreeNote");*/
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
         allianceScoreData = intent.getExtras().getString("allianceScore");
         breached = intent.getExtras().getBoolean("scoutDidBreach");
         captured = intent.getExtras().getBoolean("scoutDidCapture");
         isMute = intent.getExtras().getBoolean("mute");
+    }
 
+    public void sendScoutingData(){
+        for (int i = 0; i < teamOneDataName.size(); i++) {
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+            try {
+                teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
+            }catch (JSONException JE){
+                Log.e("JSON ERROR", "teamOne");
+            }
+        }
+        for (int i = 0; i < teamTwoDataName.size(); i++) {
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+            try {
+                teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
+            }catch (JSONException JE){
+                Log.e("JSON ERROR", "teamTwo");
+            }
+        }
+        for (int i = 0; i < teamThreeDataName.size(); i++) {
+            firebaseRef.child("/TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+            try {
+                teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
+            }catch (JSONException JE){
+                Log.e("JSON ERROR", "teamThree");
+            }
+        }
+    }
 
+    public void sendAfterMatchData(){
+        if (alliance.equals("Blue Alliance")) {
+            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+            firebaseRef.child("/Matches").child(numberOfMatch).child("blueAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
+            firebaseRef.child("/Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+
+        } else if (alliance.equals("Red Alliance")) {
+            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+            firebaseRef.child("/Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
+            firebaseRef.child("/Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+        }
     }
 }

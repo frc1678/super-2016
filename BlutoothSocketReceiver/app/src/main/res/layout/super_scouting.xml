@@ -1,84 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
 
-        <TextView
-            android:id="@+id/team1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:text="Team1"
-            android:textSize="25dp"
-            android:longClickable="true"
-            android:onClick="teamOneNoteClick"/>
+    <fragment
+        android:name="com.example.sam.blutoothsocketreceiver.SuperScoutingPanel"
+        android:id="@+id/panelOne"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/team2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:text="Team2"
-            android:textSize="25dp"
-            android:longClickable="true"
-            android:onClick="teamTwoNoteClick"/>
+    <fragment
+        android:name="com.example.sam.blutoothsocketreceiver.SuperScoutingPanel"
+        android:id="@+id/panelTwo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/team3"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:text="Team3"
-            android:textSize="25dp"
-            android:longClickable="true"
-            android:onClick="teamThreeNoteClick"/>
-    </LinearLayout>
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:id="@+id/scoutTeam1"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:id="@+id/scoutTeam2"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:id="@+id/scoutTeam3"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+    <fragment
+        android:name="com.example.sam.blutoothsocketreceiver.SuperScoutingPanel"
+        android:id="@+id/panelThree"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

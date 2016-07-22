@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
     EditText teamNumberThree;
     EditText searchBar;
     TextView alliance;
+    ListView listView;
     Boolean isRed = false;
     Integer matchNumber = 0;
     Firebase dataBase;
@@ -88,11 +89,8 @@ public class MainActivity extends ActionBarActivity {
         Log.e("test", "Logcat is up and running!");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         context = this;
-        //app = (SuperScoutApplication)getApplication();
-        //Start the class that continuosly accepts connection from scout
-        accept_loop loop = new accept_loop(context, dataBaseUrl);
+        AcceptLoop loop = new AcceptLoop(context, dataBaseUrl);
         loop.start();
-        Intent backToHome = getIntent();
         numberOfMatch = (EditText) findViewById(R.id.matchNumber);
         teamNumberOne = (EditText) findViewById(R.id.teamOneNumber);
         teamNumberTwo = (EditText) findViewById(R.id.teamTwoNumber);
@@ -102,30 +100,14 @@ public class MainActivity extends ActionBarActivity {
         jsonUnderKey = new JSONObject();
         dataBase = new Firebase(dataBaseUrl);
         //If got intent from the last activity
-        if (backToHome.hasExtra("number")) {
-            matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
-        } else {
-            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-            matchNumber = prefs.getInt("match_number", 1);
-        }
-        if (backToHome.hasExtra("shouldBeRed")) {
-            isRed = getIntent().getBooleanExtra("shouldBeRed", false);
-        } else {
-            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-            isRed = prefs.getBoolean("allianceColor", false);
-        }
-        if (!backToHome.hasExtra("mute")) {
-            mute.setChecked(false);
-        } else if (backToHome.hasExtra("mute")) {
-            mute.setChecked(true);
-        }
+        checkPreviousMatchNumAndAlliance();
         updateUI();
         numberOfMatch.setText(matchNumber.toString());
         matchNumber = Integer.parseInt(numberOfMatch.getText().toString());
 
         disenableEditTextEditing();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        ListView listView = (ListView) findViewById(R.id.view_files_received);
+        listView = (ListView) findViewById(R.id.view_files_received);
         listView.setAdapter(adapter);
         updateListView();
 
@@ -148,112 +130,10 @@ public class MainActivity extends ActionBarActivity {
         changeTeamsByMatchName();
         commitSharedPreferences();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = parent.getItemAtPosition(position).toString();
-                if (scoutOrSuperFiles) {
-                    name = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name;
-                } else {
-                    name = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data/" + name;
-                }
-                final String fileName = name;
-                final String[] nameOfResendMatch = name.split("Q");
-                new AlertDialog.Builder(context)
-                        .setTitle("RESEND DATA?")
-                        .setMessage("RESEND " + "Q" + nameOfResendMatch[1] + "?")
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (scoutOrSuperFiles) {
-                                    String content = readFile(fileName);
-                                    JSONObject superData;
-                                    try {
-                                        superData = new JSONObject(content);
-                                    } catch (JSONException jsone) {
-                                        Log.e("File Error", "no valid JSON in the file");
-                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                        return;
-                                    }
-                                    List<JSONObject> dataPoints = new ArrayList<>();
-                                    dataPoints.add(superData);
-                                    resendSuperData(dataPoints);
-                                } else {
-                                    String content = readFile(fileName);
-                                    JSONObject data;
-                                    try {
-                                        data = new JSONObject(content);
-                                    } catch (JSONException jsone) {
-                                        Log.e("File Error", "no valid JSON in the file");
-                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
-                                        return;
-                                    }
-                                    List<JSONObject> dataPoints = new ArrayList<>();
-                                    dataPoints.add(data);
-                                    resendScoutData(dataPoints);
-                                }
-                            }
-                        }).show();
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if(scoutOrSuperFiles) {
-                    final String name = parent.getItemAtPosition(position).toString();
-                    String splitName[] = name.split("_");
-                    final String editMatchNumber = splitName[0].replace("Q", "");
-                    Log.e("matchNameChange", editMatchNumber);
-                    String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name;
-                    String content = readFile(filePath);
-                    final JSONObject superData;
-                    try {
-                        superData = new JSONObject(content);
-                        if (isRed) {
-                            previousScore = superData.get("Red Alliance Score").toString();
-                        } else {
-                            previousScore = superData.get("Blue Alliance Score").toString();
-                            Log.e("score to change", previousScore);
-                        }
-                    } catch (JSONException JE) {
-                        Log.e("read Super Data", "failed");
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Edit Alliance Score for " + name + ": ");
-                    final EditText input = new EditText(context);
-                    input.setText(previousScore);
-                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    input.setGravity(1);
-                    builder.setView(input);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            previousScore = input.getText().toString();
-                            if (isRed) {
-                                dataBase.child("Matches").child(editMatchNumber).child("redScore").setValue(Integer.parseInt(previousScore));
-                            } else {
-                                dataBase.child("Matches").child(editMatchNumber).child("blueScore").setValue(Integer.parseInt(previousScore));
-                            }
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
+        listenForResendClick();
+        listLongClick();
 
-                    builder.show();
-                }else {
-                    //Don't do anything...
-                }
-                return true;
-            }
-        });
+
     }
 
 //resends all data on the currently viewed list of data
@@ -356,6 +236,7 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.changeAlliance) {
             isRed = !isRed;
+            SuperScoutApplication.isRed = true;
             commitSharedPreferences();
             updateUI();
         }
@@ -385,6 +266,7 @@ public class MainActivity extends ActionBarActivity {
                     intent.putExtra("alliance", alliance.getText().toString());
                     intent.putExtra("dataBaseUrl", dataBaseUrl);
                     intent.putExtra("mute", isMute);
+                    intent.putExtra("allianceColor", isRed);
                     Log.e("start alliance", alliance.getText().toString());
                     startActivity(intent);
                 }
@@ -599,14 +481,9 @@ public class MainActivity extends ActionBarActivity {
                         String teamOneNumber = superData.getString("teamOne");
                         String teamTwoNumber = superData.getString("teamTwo");
                         String teamThreeNumber = superData.getString("teamThree");
-                        String teamOneNote = superData.getString("teamOneNote");
-                        String teamTwoNote = superData.getString("teamTwoNote");
-                        String teamThreeNote = superData.getString("teamThreeNote");
-
-                        JSONArray teamOneDefenseARanks = superData.getJSONArray("teamOneDefenseARanks");
-                        JSONArray teamTwoDefenseARanks = superData.getJSONArray("teamTwoDefenseARanks");
-                        JSONArray teamThreeDefenseARanks = superData.getJSONArray("teamThreeDefenseARanks");
-
+                        //String teamOneNote = superData.getString("teamOneNote");
+                        //String teamTwoNote = superData.getString("teamTwoNote");
+                        //String teamThreeNote = superData.getString("teamThreeNote");
                         JSONObject teamOneData = superData.getJSONObject(teamOneNumber);
                         JSONObject teamTwoData = superData.getJSONObject(teamTwoNumber);
                         JSONObject teamThreeData = superData.getJSONObject(teamThreeNumber);
@@ -618,13 +495,11 @@ public class MainActivity extends ActionBarActivity {
                         Iterator getTeamOneKeys = teamOneKeyNames.keys();
                         Iterator getTeamTwoKeys = teamTwoKeyNames.keys();
                         Iterator getTeamThreeKeys = teamThreeKeyNames.keys();
-
-                        ArrayList<String> rankNames = new ArrayList<>(Arrays.asList("numTimesBeached", "numTimesSlowed", "numTimesUnaffected"));
                         ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamOneNumber, teamTwoNumber, teamThreeNumber));
 
-                        dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child("superNotes").setValue(teamOneNote);
-                        dataBase.child(matchAndTeamTwo).child("superNotes").setValue(teamTwoNote);
-                        dataBase.child(matchAndTeamThree).child("superNotes").setValue(teamThreeNote);
+                       /* dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child("superNotes").setValue(teamOneNote);
+                        dataBase.child("TeamInMatchDatas").child(matchAndTeamTwo).child("superNotes").setValue(teamTwoNote);
+                        dataBase.child("TeamInMatchDatas").child(matchAndTeamThree).child("superNotes").setValue(teamThreeNote);*/
 
                         for (int i = 0; i < teamNumbers.size(); i++){
                             //Log.e("path", teamNumbers.get(i) + "Q" + numberOfMatch.toString());
@@ -632,15 +507,6 @@ public class MainActivity extends ActionBarActivity {
                             dataBase.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + matchNum).child("matchNumber").setValue(Integer.parseInt(matchNum));
                         }
 
-                        for (int i = 0; i < 3; i++) {
-                            dataBase.child("TeamInMatchDatas").child(teamOneNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamOneDefenseARanks)).get(i).toString()));
-                        }
-                        for (int i = 0; i < 3; i++) {
-                            dataBase.child("TeamInMatchDatas").child(teamTwoNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamTwoDefenseARanks)).get(i).toString()));
-                        }
-                        for (int i = 0; i < 3; i++) {
-                            dataBase.child("TeamInMatchDatas").child(teamThreeNumber + "Q" + matchNum).child(rankNames.get(i)).setValue(Integer.parseInt((jsonArrayToArray(teamThreeDefenseARanks)).get(i).toString()));
-                        }
                         while (getTeamOneKeys.hasNext()) {
                             String teamOneKeys = (String) getTeamOneKeys.next();
                             dataBase.child("TeamInMatchDatas").child(matchAndTeamOne).child(teamOneKeys).setValue(Integer.parseInt(teamOneData.get(teamOneKeys).toString()));
@@ -891,6 +757,142 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
         }
+    }
+
+    public void checkPreviousMatchNumAndAlliance(){
+        Intent backToHome = getIntent();
+        if (backToHome.hasExtra("number")) {
+            matchNumber = Integer.parseInt(backToHome.getExtras().getString("number")) + 1;
+        } else {
+            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+            matchNumber = prefs.getInt("match_number", 1);
+        }
+        if (backToHome.hasExtra("shouldBeRed")) {
+            isRed = getIntent().getBooleanExtra("shouldBeRed", false);
+        } else {
+            SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+            isRed = prefs.getBoolean("allianceColor", false);
+        }
+        if (!backToHome.hasExtra("mute")) {
+            mute.setChecked(false);
+        } else if (backToHome.hasExtra("mute")) {
+            mute.setChecked(true);
+        }
+    }
+
+    public void listenForResendClick(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = parent.getItemAtPosition(position).toString();
+                if (scoutOrSuperFiles) {
+                    name = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name;
+                } else {
+                    name = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data/" + name;
+                }
+                final String fileName = name;
+                final String[] nameOfResendMatch = name.split("Q");
+                new AlertDialog.Builder(context)
+                        .setTitle("RESEND DATA?")
+                        .setMessage("RESEND " + "Q" + nameOfResendMatch[1] + "?")
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (scoutOrSuperFiles) {
+                                    String content = readFile(fileName);
+                                    JSONObject superData;
+                                    try {
+                                        superData = new JSONObject(content);
+                                    } catch (JSONException jsone) {
+                                        Log.e("File Error", "no valid JSON in the file");
+                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    List<JSONObject> dataPoints = new ArrayList<>();
+                                    dataPoints.add(superData);
+                                    resendSuperData(dataPoints);
+                                } else {
+                                    String content = readFile(fileName);
+                                    JSONObject data;
+                                    try {
+                                        data = new JSONObject(content);
+                                    } catch (JSONException jsone) {
+                                        Log.e("File Error", "no valid JSON in the file");
+                                        Toast.makeText(context, "Not a valid JSON", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    List<JSONObject> dataPoints = new ArrayList<>();
+                                    dataPoints.add(data);
+                                    resendScoutData(dataPoints);
+                                }
+                            }
+                        }).show();
+            }
+        });
+    }
+
+    public void listLongClick(){
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if(scoutOrSuperFiles) {
+                    final String name = parent.getItemAtPosition(position).toString();
+                    String splitName[] = name.split("_");
+                    final String editMatchNumber = splitName[0].replace("Q", "");
+                    Log.e("matchNameChange", editMatchNumber);
+                    String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Super_scout_data/" + name;
+                    String content = readFile(filePath);
+                    final JSONObject superData;
+                    try {
+                        superData = new JSONObject(content);
+                        if (isRed) {
+                            previousScore = superData.get("Red Alliance Score").toString();
+                            Log.e("previous Score", previousScore);
+                        } else {
+                            previousScore = superData.get("Blue Alliance Score").toString();
+                            Log.e("previous Score", previousScore);
+                        }
+                    } catch (JSONException JE) {
+                        Log.e("read Super Data", "failed");
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Edit Alliance Score for " + name + ": ");
+                    final EditText input = new EditText(context);
+                    input.setText(previousScore);
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    input.setGravity(1);
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            previousScore = input.getText().toString();
+                            if (isRed) {
+                                dataBase.child("Matches").child(editMatchNumber).child("redScore").setValue(Integer.parseInt(previousScore));
+                            } else {
+                                dataBase.child("Matches").child(editMatchNumber).child("blueScore").setValue(Integer.parseInt(previousScore));
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+                }else {
+                    //Don't do anything...
+                }
+                return true;
+            }
+        });
+
     }
 
 }

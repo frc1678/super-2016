@@ -9,36 +9,20 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class FieldSetUp extends ActionBarActivity {
@@ -155,7 +139,7 @@ public class FieldSetUp extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.nextButton) {
-            Intent next = new Intent(this, Super_Scouting.class);
+            Intent next = new Intent(this, ScoutingPage.class);
             defensesPicked.clear();
             checkDefensesPicked.clear();
             for (int i = 0; i < toggleButtonList.size(); i++) {
@@ -205,9 +189,13 @@ public class FieldSetUp extends ActionBarActivity {
                     next.putExtra("teamNumberTwo", teamTwoNumber);
                     next.putExtra("teamNumberThree", teamThreeNumber);
                     next.putExtra("firstDefensePicked", defensesPicked.get(0));
+                    Log.e("first defense", defensesPicked.get(0));
                     next.putExtra("secondDefensePicked", defensesPicked.get(1));
+                    Log.e("first defense", defensesPicked.get(1));
                     next.putExtra("thirdDefensePicked", defensesPicked.get(2));
+                    Log.e("first defense", defensesPicked.get(2));
                     next.putExtra("fourthDefensePicked", defensesPicked.get(3));
+                    Log.e("first defense", defensesPicked.get(3));
                     next.putExtra("alliance", alliance);
                     next.putExtra("dataBaseUrl", dataBaseUrl);
                     next.putExtra("mute", isMute);

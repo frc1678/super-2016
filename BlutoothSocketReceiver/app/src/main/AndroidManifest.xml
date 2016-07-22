@@ -31,7 +31,7 @@
         </activity>
         <activity android:name=".FieldSetUp">
         </activity>
-        <activity android:name=".Super_Scouting">
+        <activity android:name=".ScoutingPage">
         </activity>
         <activity android:name=".FinalDataPoints">
         </activity>

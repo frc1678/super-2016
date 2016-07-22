@@ -27,7 +27,7 @@ import java.util.UUID;
 /**
  * Created by sam on 1/3/16.
  */
-public class accept_loop extends Thread {
+public class AcceptLoop extends Thread {
     BluetoothServerSocket tmp;
     BluetoothServerSocket mmServerSocket;
     BluetoothAdapter mBluetoothAdapter;
@@ -37,16 +37,11 @@ public class accept_loop extends Thread {
     Activity context;
     TextView changing;
 
-    public accept_loop(Activity context, String dataBaseUrl){
+    public AcceptLoop(Activity context, String dataBaseUrl){
         this.context = context;
         this.dataBaseUrl = dataBaseUrl;
     }
-    private void crash () throws NullPointerException {
-        throw new NullPointerException();
-    }
     public void run() {
-        //crash();
-        //continously checking for connection
         tmp = null;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {

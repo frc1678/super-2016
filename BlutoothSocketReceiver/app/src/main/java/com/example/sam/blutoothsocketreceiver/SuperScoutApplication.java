@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sam on 1/31/16.
@@ -40,8 +41,11 @@ import java.util.List;
 
 public class SuperScoutApplication extends Application implements Application.ActivityLifecycleCallbacks {
     String url = Constants.dataBaseUrl;
+    Map<String, String> dataBaseList = Constants.dataBases;
     public Activity currentActivity = null;
     final Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+    public static boolean isRed = false;
+
 
     @Override
     public void onCreate() {
@@ -59,16 +63,8 @@ public class SuperScoutApplication extends Application implements Application.Ac
                 Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT).show();
             }
         };
-        if (url.equals("https://1678-scouting-2016.firebaseio.com/")) {
-            firebase.authWithCustomToken("qVIARBnAD93iykeZSGG8mWOwGegminXUUGF2q0ee", authResultHandler);
-        } else if (url.equals("https://1678-dev3-2016.firebaseio.com/")) {
-            firebase.authWithCustomToken("AEduO6VFlZKD4v10eW81u9j3ZNopr5h2R32SPpeq", authResultHandler);
-        } else if (url.equals("https://1678-dev-2016.firebaseio.com/")) {
-            firebase.authWithCustomToken("j1r2wo3RUPMeUZosxwvVSFEFVcrXuuMAGjk6uPOc", authResultHandler);
-        } else if (url.equals("https://1678-dev2-2016.firebaseio.com/")) {
-            firebase.authWithCustomToken("hL8fStivTbHUXM8A0KXBYPg2cMsl80EcD7vgwJ1u", authResultHandler);
-        } else if (url.equals("https://1678-extreme-testing.firebaseio.com/")) {
-            firebase.authWithCustomToken("lGufYCifprPw8p1fiVOs7rqYV3fswHHr9YLwiUWh", authResultHandler);
+        if (dataBaseList.containsKey(url)) {
+            firebase.authWithCustomToken(dataBaseList.get(url), authResultHandler);
         }
             FirebaseLists.matchesList = new FirebaseList<>(url + "Matches/", new FirebaseList.FirebaseUpdatedCallback() {
                 @Override
