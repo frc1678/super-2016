@@ -58,6 +58,8 @@ import org.json.JSONObject;
     JSONArray failedDefenseTele;
     JSONArray successDefenseAuto;
     JSONArray failedDefenseAuto;
+    ArrayList<String> ABC = new ArrayList<>(Arrays.asList("A", "B", "C"));
+    public static int counter = 0;
     public AcceptThread(Activity context, BluetoothSocket socket, String dataBaseUrl) {
         this.socket = socket;
         this.context = context;
@@ -67,6 +69,7 @@ import org.json.JSONObject;
     public void run() {
         // If a connection was accepted
         if (socket != null) {
+            Log.e("socket initial", "not null");
             //socket opened with connection
             // Do work to manage the connection (in a separate thread)
             try {
@@ -111,7 +114,7 @@ import org.json.JSONObject;
                             try {
                                 data.put("redTeamNumbers", redTeamNumbers);
                                 data.put("blueTeamNumbers", blueTeamNumbers);
-                            }catch (JSONException JE){
+                            } catch (JSONException JE) {
                                 Log.e("JSON Error", "Failed to put redTeamNumbers and blueTeamNumbers to data");
                                 return;
                             }
@@ -131,6 +134,7 @@ import org.json.JSONObject;
                                 return;
                             }
                         }
+
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
                             System.out.println("The read failed: " + firebaseError.getMessage());
@@ -138,6 +142,7 @@ import org.json.JSONObject;
                     });
                 }
                 if (socket != null) {
+                    Log.e("Socket", "not null");
                     data = "";
                     List<JSONObject> dataPoints = new ArrayList<>();
                     while (true) {
@@ -170,7 +175,9 @@ import org.json.JSONObject;
                         out.println("0");
                         out.flush();
                         toasts("Data transfer Success!", false);
+                        Log.e("counter beforeLoop", counter + " ");
                         for (int j = 0; j < dataPoints.size(); j++) {
+                            Log.e("initialCounter", counter + " ");
                             scoutData = dataPoints.get(j);
                             //get first key of the scout data that contains the match and the team number
                             Iterator getFirstKey = scoutData.keys();
@@ -181,9 +188,14 @@ import org.json.JSONObject;
                                 matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
                                 teamNumber = (teamAndMatchNumbers[0].replace("Q", ""));
                                 try {
+                                    Log.e("counter first", AcceptThread.counter + "");
                                     jsonUnderKey = scoutData.getJSONObject(firstKey);
+                                    firstKey = firstKey + "-" + ABC.get(AcceptThread.counter);
+                                    Log.e("ABC", ABC.toString());
+                                    Log.e("ABC first", ABC.get(AcceptThread.counter));
                                     System.out.println("First Key: " + firstKey);
                                     System.out.println(jsonUnderKey.toString());
+
                                 } catch (Exception e) {
                                     Log.e("JSON", "Failed to get first key");
                                     return;
@@ -228,14 +240,14 @@ import org.json.JSONObject;
                                 final Firebase dataBase = new Firebase(dataBaseUrl);
                                 for (int i = 0; i < checkNumKeys.size(); i++) {
                                     stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
+                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
                                 }
                                 for (int i = 0; i < checkStringKeys.size(); i++) {
                                     intIndex = (keysInKey.indexOf(checkStringKeys.get(i)));
-                                    dataBase.child("TeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
+                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                                 }
                                 try {
-                                    Firebase pathToBallsIntakedAuto = new Firebase(dataBaseUrl + "TeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
+                                    Firebase pathToBallsIntakedAuto = new Firebase(dataBaseUrl + "TempTeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
                                     JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                                     if (jsonArrayToArray(balls).size() < 1) {
                                         Log.e("balls", "is Null!");
@@ -243,15 +255,15 @@ import org.json.JSONObject;
                                         Log.e("ballsIntakedAuto", "Has been removed!");
                                     } else {
                                         for (int i = 0; i < balls.length(); i++) {
-                                            dataBase.child("TeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
+                                            dataBase.child("TempTeamInMatchDatas").child(firstKey).child("ballsIntakedAuto").setValue(jsonArrayToArray(balls));
                                         }
                                     }
                                 } catch (JSONException JE) {
                                     Log.e("Json failure", "failed to get balls intaked");
                                     return;
-                                } catch (NullPointerException NPE){
+                                } catch (NullPointerException NPE) {
                                     Log.e("sendBallIntaked", "NULL");
-                                } catch (FirebaseException fbe){
+                                } catch (FirebaseException fbe) {
                                     Log.e("sendBallsIntaked", "failed");
                                 }
 
@@ -273,16 +285,16 @@ import org.json.JSONObject;
                                                     defenses.add(tmp);
                                                 }
                                                 for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                                 }
                                                 for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                                                 }
                                                 for (int i = 0; i < successDefenseTele.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                                                 }
                                                 for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                                                 }
 
                                             } catch (JSONException JE) {
@@ -291,10 +303,10 @@ import org.json.JSONObject;
                                             } catch (NullPointerException npe) {
                                                 toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
-                                        }catch(IndexOutOfBoundsException IOBE){
+                                        } catch (IndexOutOfBoundsException IOBE) {
                                             Log.e("FirebaseException", "blue");
                                             toasts("Scout data match number does not exist!", true);
-                                        }catch (FirebaseException FBE){
+                                        } catch (FirebaseException FBE) {
                                             Log.e("Blue", "failed");
                                         }
 
@@ -309,16 +321,16 @@ import org.json.JSONObject;
                                                     defenses.add(tmp);
                                                 }
                                                 for (int i = 0; i < successDefenseAuto.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseAuto.get(i)));
                                                 }
                                                 for (int i = 0; i < failedDefenseAuto.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesAuto").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseAuto.get(i)));
                                                 }
                                                 for (int i = 0; i < successDefenseTele.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesSuccessfulCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) successDefenseTele.get(i)));
                                                 }
                                                 for (int i = 0; i < failedDefenseTele.length(); i++) {
-                                                    dataBase.child("TeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
+                                                    dataBase.child("TempTeamInMatchDatas").child(firstKey).child("timesFailedCrossedDefensesTele").child(defenses.get(i)).setValue(jsonArrayToArray((JSONArray) failedDefenseTele.get(i)));
                                                 }
                                             } catch (JSONException JE) {
                                                 Log.e("json failure", "failed loop red");
@@ -327,10 +339,10 @@ import org.json.JSONObject;
                                                 Log.e("asdf", "defense is null");
                                                 toasts("Input defenses for Match " + Integer.toString(matchNum) + " And resend scout data!", true);
                                             }
-                                        }catch(IndexOutOfBoundsException IOBE){
+                                        } catch (IndexOutOfBoundsException IOBE) {
                                             Log.e("FirebaseException", "red");
                                             toasts("Scout data match number does not exist!", true);
-                                        }catch (FirebaseException FBE){
+                                        } catch (FirebaseException FBE) {
                                             Log.e("Red", "failed");
                                         }
                                     }
@@ -351,15 +363,24 @@ import org.json.JSONObject;
                                 }
                             }
                         }
+                        Log.e("test", "1");
+                    }
+                    Log.e("test", "2");
+                    if(counter + 1 > 2){
+                        AcceptThread.counter = 0;
+                    }else{
+                        AcceptThread.counter = AcceptThread.counter + 1;
+                        Log.e("counter added", AcceptThread.counter + " ");
                     }
                 }
+                Log.e("test", "3");
                 return;
-        } catch (IOException e) {
-            System.out.println("Failed to handle data");
-            Log.getStackTraceString(e);
-            return;
+            } catch (IOException e) {
+                System.out.println("Failed to handle data");
+                Log.getStackTraceString(e);
+                return;
+            }
         }
-    }
 }
 
     public void toasts(final String message, boolean isLongMessage) {

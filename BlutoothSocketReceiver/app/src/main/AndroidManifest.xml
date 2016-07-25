@@ -15,8 +15,6 @@
         android:theme="@style/AppTheme"
         android:name=".SuperScoutApplication"
         android:clearTaskOnLaunch="true">
-
-
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
