@@ -60,6 +60,7 @@ import org.json.JSONObject;
     JSONArray failedDefenseAuto;
     ArrayList<String> ABC = new ArrayList<>(Arrays.asList("A", "B", "C"));
     public static int counter = 0;
+    public static String currentTeamNum;
     public AcceptThread(Activity context, BluetoothSocket socket, String dataBaseUrl) {
         this.socket = socket;
         this.context = context;
@@ -187,6 +188,11 @@ import org.json.JSONObject;
                                 String[] teamAndMatchNumbers = firstKey.split("Q");
                                 matchNum = Integer.parseInt(teamAndMatchNumbers[1]);
                                 teamNumber = (teamAndMatchNumbers[0].replace("Q", ""));
+                                if(currentTeamNum == null){
+                                    currentTeamNum = teamNumber;
+                                }else if(!currentTeamNum.equals(teamNumber)){
+                                    AcceptThread.counter = 0;
+                                }
                                 try {
                                     Log.e("counter first", AcceptThread.counter + "");
                                     jsonUnderKey = scoutData.getJSONObject(firstKey);
@@ -368,7 +374,7 @@ import org.json.JSONObject;
                     Log.e("test", "2");
                     if(counter + 1 > 2){
                         AcceptThread.counter = 0;
-                    }else{
+                    }else if(currentTeamNum.equals(teamNumber)){
                         AcceptThread.counter = AcceptThread.counter + 1;
                         Log.e("counter added", AcceptThread.counter + " ");
                     }
