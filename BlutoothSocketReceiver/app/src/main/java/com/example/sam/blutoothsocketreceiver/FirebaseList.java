@@ -1,10 +1,13 @@
 package com.example.sam.blutoothsocketreceiver;
 
 import android.util.Log;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class FirebaseList<T> {
     }
 
     public void setupFirebaseListening(String url, final Class<T> firebaseClass, final FirebaseUpdatedCallback firebaseUpdatedCallback) {
-        Firebase firebase = new Firebase(url);
+        DatabaseReference firebase = FirebaseDatabase.getInstance().getReference().child("Matches");
         firebase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -91,8 +94,8 @@ public class FirebaseList<T> {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.e("Firebase List", "Listen was cancelled, no more updates will occur");
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

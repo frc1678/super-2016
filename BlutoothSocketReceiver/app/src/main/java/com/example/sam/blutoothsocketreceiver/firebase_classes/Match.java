@@ -18,8 +18,44 @@ public class Match extends Object {
 	public Integer blueScore;
 	public List<String> redDefensePositions;
 	public List<String> blueDefensePositions;
-	public Boolean redAllianceDidCapture;
-	public Boolean blueAllianceDidCapture;
-	public Boolean redAllianceDidBreach;
-	public Boolean blueAllianceDidBreach;
+	private Boolean redAllianceDidCapture;
+	private Boolean blueAllianceDidCapture;
+	private Boolean redAllianceDidBreach;
+	private Boolean blueAllianceDidBreach;
+
+	public Match(){
+
+	}
+
+	public void setRedAllianceDidCapture(Object redAllianceDidCapture){	//TODO: TEST THESE
+		try {
+			this.redAllianceDidCapture = (Boolean) redAllianceDidCapture;
+		} catch (ClassCastException cce){
+			this.redAllianceDidCapture = Boolean.valueOf((String) redAllianceDidCapture);
+		}
+	}
+
+	public void setBlueAllianceDidCapture(Object blueAllianceDidCapture){
+		try{
+			this.blueAllianceDidCapture = (Boolean) blueAllianceDidCapture;
+		} catch (ClassCastException cce){
+			this.blueAllianceDidCapture = Boolean.valueOf((String) blueAllianceDidCapture);
+		}
+	}
+
+	public void setRedAllianceDidBreach(Object redAllianceDidBreach){
+		try{
+			this.redAllianceDidBreach = (Boolean) redAllianceDidBreach;
+		} catch (ClassCastException cce) {
+			this.redAllianceDidBreach = Boolean.valueOf((String) redAllianceDidBreach);
+		}
+	}
+
+	public void setBlueAllianceDidBreach(Object blueAllianceDidBreach){
+		try{
+			this.blueAllianceDidBreach = (Boolean) blueAllianceDidBreach;
+		}catch (ClassCastException cce){
+			this.blueAllianceDidBreach = Boolean.valueOf((String) blueAllianceDidBreach);
+		}
+	}
 }

@@ -13,9 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SuperNotes extends ActionBarActivity {
     Intent toNotes;
@@ -35,7 +35,7 @@ public class SuperNotes extends ActionBarActivity {
     EditText teamOneEditText;
     EditText teamTwoEditText;
     EditText teamThreeEditText;
-    Firebase dataBase;
+    DatabaseReference dataBase;
     boolean isBlue = new Boolean(true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class SuperNotes extends ActionBarActivity {
         teamOneEditText.setText(teamOneNote);
         teamTwoEditText.setText(teamTwoNote);
         teamThreeEditText.setText(teamThreeNote);
-        dataBase = new Firebase(dataBaseUrl);
+        dataBase = FirebaseDatabase.getInstance().getReference();
     }
     public void onBackPressed(){
         final Activity activity = this;

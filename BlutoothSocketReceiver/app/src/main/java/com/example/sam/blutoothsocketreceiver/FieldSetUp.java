@@ -18,7 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class FieldSetUp extends ActionBarActivity {
     ArrayList<String> defenses;
     ToggleButton defenseButton;
     Boolean isMute;
-    Firebase firebaseRef;
+    DatabaseReference firebaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class FieldSetUp extends ActionBarActivity {
         dataBaseUrl = intent.getExtras().getString("dataBaseUrl");
         isMute = intent.getExtras().getBoolean("mute");
 
-        firebaseRef = new Firebase(dataBaseUrl);
+        firebaseRef = FirebaseDatabase.getInstance().getReference();
         toggleButtonList = new ArrayList<>();
         defensesPicked = new ArrayList<>();
         checkDefensesPicked = new ArrayList<>();
@@ -178,9 +179,9 @@ public class FieldSetUp extends ActionBarActivity {
                 new Thread() {
                     @Override
                     public void run() {
-                        firebaseRef.child("/Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child("0").setValue("lb");
+                        firebaseRef.child("Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child("0").setValue("lb");
                         for(int i =0; i < 4; i++){
-                            firebaseRef.child("/Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child(Integer.toString(i + 1)).setValue(defensesPicked.get(i));
+                            firebaseRef.child("Matches").child(numberOfMatch).child(allianceColor + "DefensePositions").child(Integer.toString(i + 1)).setValue(defensesPicked.get(i));
                         }
                     }
                 }.start();

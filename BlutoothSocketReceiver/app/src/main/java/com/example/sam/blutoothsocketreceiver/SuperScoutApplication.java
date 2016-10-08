@@ -16,9 +16,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.instabug.library.IBGInvocationEvent;
 import com.instabug.library.Instabug;
 
@@ -41,7 +40,7 @@ import java.util.Map;
 
 public class SuperScoutApplication extends Application implements Application.ActivityLifecycleCallbacks {
     String url = Constants.dataBaseUrl;
-    Map<String, String> dataBaseList = Constants.dataBases;
+    Map<DatabaseReference, String> dataBaseList;
     public Activity currentActivity = null;
     final Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
     public static boolean isRed = false;
@@ -51,21 +50,6 @@ public class SuperScoutApplication extends Application implements Application.Ac
     public void onCreate() {
         registerActivityLifecycleCallbacks(this);
         super.onCreate();
-        Firebase.setAndroidContext(this);
-        Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase firebase = new Firebase(url);
-        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-            @Override
-            public void onAuthenticated(AuthData authData) {
-            }
-            @Override
-            public void onAuthenticationError(FirebaseError firebaseError) {
-                Toast.makeText(getApplicationContext(), "Please wait...", Toast.LENGTH_SHORT).show();
-            }
-        };
-        if (dataBaseList.containsKey(url)) {
-            firebase.authWithCustomToken(dataBaseList.get(url), authResultHandler);
-        }
             FirebaseLists.matchesList = new FirebaseList<>(url + "Matches/", new FirebaseList.FirebaseUpdatedCallback() {
                 @Override
                 public void execute() {
@@ -81,6 +65,7 @@ public class SuperScoutApplication extends Application implements Application.Ac
         new Instabug.Builder(this, "8eab8e2db114c14290df21e21527f1a1")
                 .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
                 .build();
+        dataBaseList = Constants.dataBases;
         }
     public void onActivityCreated(Activity activity, Bundle savedInstanceState){currentActivity = activity;}
 

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "271381195123",
+    "firebase_url": "https://1678-scouting-2016.firebaseio.com",
+    "project_id": "firebase-scouting-2016",
+    "storage_bucket": "firebase-scouting-2016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271381195123:android:3c56477c74714d7e",
+        "android_client_info": {
+          "package_name": "com.example.sam.bluetoothsocketreceiver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271381195123-j8cerfrcha781ejq9p84mq31cnvsivpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXGn-Od7EnwThVSoFDfwPxkHlVZxGyyuk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271381195123:android:2829f0a89f52ae04",
+        "android_client_info": {
+          "package_name": "com.example.sam.blutoothsocketreceiver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271381195123-j8cerfrcha781ejq9p84mq31cnvsivpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXGn-Od7EnwThVSoFDfwPxkHlVZxGyyuk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

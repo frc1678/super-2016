@@ -5,12 +5,13 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.sam.blutoothsocketreceiver.firebase_classes.Match;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.FirebaseException;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +91,7 @@ import org.json.JSONObject;
                 final int size = Integer.parseInt(byteSize);
                 //If the scout requests the schedule
                 if (size == -1) {
-                    final Firebase dataBase = new Firebase(dataBaseUrl + "Matches");
+                    final DatabaseReference dataBase = FirebaseDatabase.getInstance().getReference().child("Matches");
                     dataBase.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -137,7 +138,7 @@ import org.json.JSONObject;
                         }
 
                         @Override
-                        public void onCancelled(FirebaseError firebaseError) {
+                        public void onCancelled(DatabaseError firebaseError) {
                             System.out.println("The read failed: " + firebaseError.getMessage());
                         }
                     });
@@ -199,6 +200,8 @@ import org.json.JSONObject;
                                     firstKey = firstKey + "-" + ABC.get(AcceptThread.counter);
                                     Log.e("ABC", ABC.toString());
                                     Log.e("ABC first", ABC.get(AcceptThread.counter));
+                                    jsonUnderKey.put("version", "-" + ABC.get(AcceptThread.counter));
+                                    Log.e("ABC", ABC.toString());
                                     System.out.println("First Key: " + firstKey);
                                     System.out.println(jsonUnderKey.toString());
 
@@ -243,7 +246,7 @@ import org.json.JSONObject;
                                         "didChallengeTele", "didReachAuto", "scoutName"));
 
                                 scoutAlliance = valueOfKeys.get(keysInKey.indexOf("alliance"));
-                                final Firebase dataBase = new Firebase(dataBaseUrl);
+                                final DatabaseReference dataBase = FirebaseDatabase.getInstance().getReference();
                                 for (int i = 0; i < checkNumKeys.size(); i++) {
                                     stringIndex = (keysInKey.indexOf(checkNumKeys.get(i)));
                                     dataBase.child("TempTeamInMatchDatas").child(firstKey).child(keysInKey.get(stringIndex)).setValue(Integer.parseInt(valueOfKeys.get(stringIndex)));
@@ -253,7 +256,7 @@ import org.json.JSONObject;
                                     dataBase.child("TempTeamInMatchDatas").child(firstKey).child(keysInKey.get(intIndex)).setValue(valueOfKeys.get(intIndex));
                                 }
                                 try {
-                                    Firebase pathToBallsIntakedAuto = new Firebase(dataBaseUrl + "TempTeamInMatchDatas/" + firstKey + "/ballsIntakedAuto");
+                                    DatabaseReference pathToBallsIntakedAuto = FirebaseDatabase.getInstance().getReference().child("TempTeamInMatchDatas").child(firstKey).child("ballsIntakedAuto");
                                     JSONArray balls = jsonUnderKey.getJSONArray("ballsIntakedAuto");
                                     if (jsonArrayToArray(balls).size() < 1) {
                                         Log.e("balls", "is Null!");
@@ -269,7 +272,7 @@ import org.json.JSONObject;
                                     return;
                                 } catch (NullPointerException NPE) {
                                     Log.e("sendBallIntaked", "NULL");
-                                } catch (FirebaseException fbe) {
+                                } catch (DatabaseException fbe) {
                                     Log.e("sendBallsIntaked", "failed");
                                 }
 
@@ -312,7 +315,7 @@ import org.json.JSONObject;
                                         } catch (IndexOutOfBoundsException IOBE) {
                                             Log.e("FirebaseException", "blue");
                                             toasts("Scout data match number does not exist!", true);
-                                        } catch (FirebaseException FBE) {
+                                        } catch (DatabaseException FBE) {
                                             Log.e("Blue", "failed");
                                         }
 
@@ -348,7 +351,7 @@ import org.json.JSONObject;
                                         } catch (IndexOutOfBoundsException IOBE) {
                                             Log.e("FirebaseException", "red");
                                             toasts("Scout data match number does not exist!", true);
-                                        } catch (FirebaseException FBE) {
+                                        } catch (DatabaseException FBE) {
                                             Log.e("Red", "failed");
                                         }
                                     }
@@ -360,7 +363,7 @@ import org.json.JSONObject;
                                     //make file and directory for Scout data
                                     File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/Scout_data");
                                     dir.mkdir();
-                                    file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + "_" + teamNumber)));
+                                    file = new PrintWriter(new FileOutputStream(new File(dir, "Q" + matchNum + "_" + (valueOfKeys.get(keysInKey.indexOf(checkStringKeys.get(5)))).toUpperCase() + "_" + new SimpleDateFormat("MM-dd-yyyy-H:mm:ss").format(new Date()) + "_" + teamNumber + "-" + ABC.get(AcceptThread.counter))));
                                     file.println(scoutData.toString());
                                     file.close();
                                 } catch (IOException IOE) {
