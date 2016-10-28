@@ -181,7 +181,7 @@ public class ScoutingPage extends ActionBarActivity {
                 public void run() {
                     try {
 
-                        for (int i = 0; i < panelOne.getDataNameCount() - 1; i++) {
+                        /*for (int i = 0; i < panelOne.getDataNameCount() - 1; i++) {
                             Log.e("Scouting", "4");
                             dataBase.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
                         }
@@ -192,7 +192,7 @@ public class ScoutingPage extends ActionBarActivity {
                         for (int i = 0; i < panelThree.getDataNameCount() - 1; i++) {
                             Log.e("Scouting", "6");
                             dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
-                        }
+                        }*/
                     } catch (DatabaseException FBE) {
                         Log.e("firebase", "scoutingPage");
                     } catch (IndexOutOfBoundsException IOB) {

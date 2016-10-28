@@ -17,7 +17,7 @@
         android:id="@+id/Speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
         custom:dataName="Speed"
         custom:startingValue="2"
         custom:max="4"
@@ -28,7 +28,7 @@
         android:id="@+id/Torque"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="7dp"
         custom:dataName="Torque"
         custom:startingValue="2"
         custom:max="4"
@@ -39,7 +39,7 @@
         android:id="@+id/Defense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="7dp"
         custom:dataName="Defense"
         custom:startingValue="2"
         custom:max="4"
@@ -50,7 +50,7 @@
         android:id="@+id/Agility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="7dp"
         custom:dataName="Agility"
         custom:startingValue="2"
         custom:max="4"
@@ -61,12 +61,24 @@
         android:id="@+id/BallControl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="7dp"
         custom:dataName="Ball Control"
         custom:startingValue="2"
         custom:max="4"
         custom:min="0"
         custom:increment="1"/>
+
+    <com.example.sam.blutoothsocketreceiver.Counter
+        android:id="@+id/SiegeQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        custom:dataName="Siege Quality"
+        custom:startingValue="2"
+        custom:max="4"
+        custom:min="0"
+        custom:increment="1"/>
+
 
 
 </LinearLayout>

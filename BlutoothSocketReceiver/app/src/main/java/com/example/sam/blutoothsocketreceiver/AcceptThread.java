@@ -34,8 +34,8 @@ import org.json.JSONObject;
  * Created by sam on 1/7/16.
  */
 
-    public class AcceptThread extends  Thread {
-    Activity context;
+    //public class AcceptThread extends  Thread {
+    /*Activity context;
     String text;
     String byteSize;
     String data;
@@ -426,3 +426,4 @@ import org.json.JSONObject;
 
 
 
+*/

@@ -275,7 +275,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
     public void sendScoutingData(){
         for (int i = 0; i < teamOneDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(teamOneDataName.get(i)).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(("rank" + teamOneDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             try {
                 teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
             }catch (JSONException JE){
@@ -283,7 +283,7 @@ public class FinalDataPoints extends ActionBarActivity {
             }
         }
         for (int i = 0; i < teamTwoDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(teamTwoDataName.get(i)).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(("rank" + teamTwoDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
             try {
                 teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
             }catch (JSONException JE){
@@ -291,7 +291,7 @@ public class FinalDataPoints extends ActionBarActivity {
             }
         }
         for (int i = 0; i < teamThreeDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(("rank" + teamThreeDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             try {
                 teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
             }catch (JSONException JE){

@@ -73,8 +73,8 @@ public class AcceptLoop extends Thread {
                 System.out.println("before .accept");
                 socket = mmServerSocket.accept();
                 System.out.println("after .accept");
-                AcceptThread acceptThread = new AcceptThread(context, socket, dataBaseUrl);
-                acceptThread.start();
+                /*AcceptThread acceptThread = new AcceptThread(context, socket, dataBaseUrl);
+                acceptThread.start();*/
                 System.out.println("after .start");
 
             } catch (IOException IOE) {
