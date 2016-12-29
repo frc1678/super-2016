@@ -21,9 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +64,7 @@ public class FinalDataPoints extends ActionBarActivity {
     Boolean isMute;
     File dir;
     PrintWriter file;
-    DatabaseReference firebaseRef;
+//    DatabaseReference firebaseRef;
     Intent intent;
 
     @Override
@@ -78,7 +75,7 @@ public class FinalDataPoints extends ActionBarActivity {
         intent = getIntent();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getExtrasForFinalData();
-        firebaseRef = FirebaseDatabase.getInstance().getReference();
+//        firebaseRef = FirebaseDatabase.getInstance().getReference();
 
         allianceScore = (EditText) findViewById(R.id.finalScoreEditText);
         finalScore = (TextView)findViewById(R.id.finalScoreTextView);
@@ -216,12 +213,12 @@ public class FinalDataPoints extends ActionBarActivity {
                     ArrayList<String> teamNumbers = new ArrayList<>(Arrays.asList(teamNumberOne, teamNumberTwo, teamNumberThree));
 
                     for (int i = 0; i < teamNumbers.size(); i++){
-                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
-                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
+//                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("teamNumber").setValue(Integer.parseInt(teamNumbers.get(i)));
+//                        firebaseRef.child("TeamInMatchDatas").child(teamNumbers.get(i) + "Q" + numberOfMatch).child("matchNumber").setValue(Integer.parseInt(numberOfMatch));
                     }
 
                     sendScoutingData();
-                    sendAfterMatchData();
+//                    sendAfterMatchData();
 
                     System.out.println(superExternalData.toString());
 
@@ -275,7 +272,7 @@ public class FinalDataPoints extends ActionBarActivity {
 
     public void sendScoutingData(){
         for (int i = 0; i < teamOneDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(("rank" + teamOneDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamOneDataScore.get(i)));
+//            firebaseRef.child("TeamInMatchDatas").child(teamNumberOne + "Q" + numberOfMatch).child(("rank" + teamOneDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamOneDataScore.get(i)));
             try {
                 teamOneJson.put(teamOneDataName.get(i), teamOneDataScore.get(i));
             }catch (JSONException JE){
@@ -283,7 +280,7 @@ public class FinalDataPoints extends ActionBarActivity {
             }
         }
         for (int i = 0; i < teamTwoDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(("rank" + teamTwoDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
+//            firebaseRef.child("TeamInMatchDatas").child(teamNumberTwo + "Q" + numberOfMatch).child(("rank" + teamTwoDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamTwoDataScore.get(i)));
             try {
                 teamTwoJson.put(teamTwoDataName.get(i), teamTwoDataScore.get(i));
             }catch (JSONException JE){
@@ -291,7 +288,7 @@ public class FinalDataPoints extends ActionBarActivity {
             }
         }
         for (int i = 0; i < teamThreeDataName.size(); i++) {
-            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(("rank" + teamThreeDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
+//            firebaseRef.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(("rank" + teamThreeDataName.get(i)).replaceAll(" ", "")).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
             try {
                 teamThreeJson.put(teamThreeDataName.get(i), teamThreeDataScore.get(i));
             }catch (JSONException JE){
@@ -300,16 +297,16 @@ public class FinalDataPoints extends ActionBarActivity {
         }
     }
 
-    public void sendAfterMatchData(){
-        if (alliance.equals("Blue Alliance")) {
-            firebaseRef.child("Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-            firebaseRef.child("Matches").child(numberOfMatch).child("blueAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
-            firebaseRef.child("Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-
-        } else if (alliance.equals("Red Alliance")) {
-            firebaseRef.child("Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
-            firebaseRef.child("Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
-            firebaseRef.child("Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
-        }
-    }
+//    public void sendAfterMatchData(){
+//        if (alliance.equals("Blue Alliance")) {
+//            firebaseRef.child("Matches").child(numberOfMatch).child("blueAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+//            firebaseRef.child("Matches").child(numberOfMatch).child("blueAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
+//            firebaseRef.child("Matches").child(numberOfMatch).child("blueScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+//
+//        } else if (alliance.equals("Red Alliance")) {
+//            firebaseRef.child("Matches").child(numberOfMatch).child("redAllianceDidCapture").setValue(captureCheck.isChecked() ? "true" : "false");
+//            firebaseRef.child("Matches").child(numberOfMatch).child("redAllianceDidBreach").setValue(breachCheck.isChecked() ? "true" : "false");
+//            firebaseRef.child("Matches").child(numberOfMatch).child("redScore").setValue(Integer.parseInt(allianceScore.getText().toString()));
+//        }
+//    }
 }

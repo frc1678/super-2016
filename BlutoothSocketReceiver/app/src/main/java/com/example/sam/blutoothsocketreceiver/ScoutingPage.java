@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.text.Layout;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,10 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +68,7 @@ public class ScoutingPage extends ActionBarActivity {
     Boolean isMute;
     JSONObject object;
     Intent next;
-    DatabaseReference dataBase;
+//    DatabaseReference dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +81,8 @@ public class ScoutingPage extends ActionBarActivity {
         getExtrasForScouting();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.super_scouting_panel, null);
-        Log.e("Super Scouting", dataBaseUrl);
-        dataBase = FirebaseDatabase.getInstance().getReference();
+
+//        dataBase = FirebaseDatabase.getInstance().getReference();
         setPanels();
         defenses = new ArrayList<>(Arrays.asList(firstDefense, secondDefense, thirdDefense, fourthDefense));
         initializeTeamTextViews();
@@ -193,10 +188,10 @@ public class ScoutingPage extends ActionBarActivity {
                             Log.e("Scouting", "6");
                             dataBase.child("TeamInMatchDatas").child(teamNumberThree + "Q" + numberOfMatch).child(teamThreeDataName.get(i)).setValue(Integer.parseInt(teamThreeDataScore.get(i)));
                         }*/
-                    } catch (DatabaseException FBE) {
-                        Log.e("firebase", "scoutingPage");
+//                    } catch (DatabaseException FBE) {
+
                     } catch (IndexOutOfBoundsException IOB) {
-                        Log.e("ScoutingPage", "Index");
+
                     }
                 }
             }.start();
@@ -210,11 +205,7 @@ public class ScoutingPage extends ActionBarActivity {
     }
 
     public void sendNotes(final String teamNumber, final String note) {
-        new Thread() {
-            public void run() {
-                dataBase.child("TeamInMatchDatas").child(teamNumber + "Q" + numberOfMatch).child("superNotes").setValue(note);
-            }
-        }.start();
+
     }
 
     public void getExtrasForScouting() {
@@ -224,15 +215,6 @@ public class ScoutingPage extends ActionBarActivity {
         teamNumberTwo = next.getExtras().getString("teamNumberTwo");
         teamNumberThree = next.getExtras().getString("teamNumberThree");
         alliance = next.getExtras().getString("alliance");
-        firstDefense = next.getExtras().getString("firstDefensePicked");
-        Log.e("DefenseOneReceived", firstDefense);
-        secondDefense = next.getExtras().getString("secondDefensePicked");
-        Log.e("DefenseTwoReceived", secondDefense);
-        thirdDefense = next.getExtras().getString("thirdDefensePicked");
-        Log.e("DefenseThreeReceived", thirdDefense);
-        fourthDefense = next.getExtras().getString("fourthDefensePicked");
-        Log.e("DefenseFourReceived", fourthDefense);
-        dataBaseUrl = next.getExtras().getString("dataBaseUrl");
         isMute = next.getExtras().getBoolean("mute");
     }
 
@@ -256,40 +238,10 @@ public class ScoutingPage extends ActionBarActivity {
         intent.putExtra("teamNumberTwo", teamNumberTwo);
         intent.putExtra("teamNumberThree", teamNumberThree);
         intent.putExtra("alliance", alliance);
-        /*intent.putExtra("teamOneNote", teamOneNote);
-        intent.putExtra("teamTwoNote", teamTwoNote);
-        intent.putExtra("teamThreeNote", teamThreeNote);*/
-        intent.putExtra("dataBaseUrl", dataBaseUrl);
+
         intent.putExtra("allianceScore", allianceScoreData);
         intent.putExtra("scoutDidBreach", breached);
-        intent.putExtra("scoutDidCapture", captured);
-        intent.putExtra("mute", isMute);
-        intent.putStringArrayListExtra("defenses", defenses);
-        intent.putStringArrayListExtra("dataNameOne", teamOneDataName);
-        intent.putStringArrayListExtra("ranksOfOne", teamOneDataScore);
-        intent.putStringArrayListExtra("dataNameTwo", teamTwoDataName);
-        intent.putStringArrayListExtra("ranksOfTwo", teamTwoDataScore);
-        intent.putStringArrayListExtra("dataNameThree", teamThreeDataName);
-        intent.putStringArrayListExtra("ranksOfThree", teamThreeDataScore);
-        allTeamNotes.add(teamNumberOneNote);
-        allTeamNotes.add(teamNumberTwoNote);
-        allTeamNotes.add(teamNumberThreeNote);
-        intent.putStringArrayListExtra("allTeamNotes", allTeamNotes);
-        /*if(!teamOneNote.equals("")) {
-            sendNotes(teamNumberOne, teamOneNote);
-        }else {
-            sendNotes(teamNumberOne, "No_Notes");
-        }
-        if(!teamTwoNote.equals("")) {
-            sendNotes(teamNumberTwo, teamTwoNote);
-        }else {
-            sendNotes(teamNumberTwo, "No_Notes");
-        }
-        if(!teamThreeNote.equals("")) {
-            sendNotes(teamNumberThree, teamThreeNote);
-        }else {
-            sendNotes(teamNumberThree, "No_Notes");
-        }*/
+
         startActivity(intent);
     }
 
@@ -314,20 +266,6 @@ public class ScoutingPage extends ActionBarActivity {
         for (int i = 0; i < teamThreeDataName.size(); i++) {
             teamThreeDataScore.add(panelThree.getData().get(teamThreeDataName.get(i)).toString());
         }
-        Log.e("teamOneDataKeys", panelOne.getData().keySet().toString());
-        Log.e("teamTwoDataKeys", panelTwo.getData().keySet().toString());
-        Log.e("teamThreeDataKeys", panelThree.getData().keySet().toString());
-
-        Log.e("teamOneDataNameSize", Integer.toString(teamOneDataName.size()));
-        Log.e("teamTwoDataNameSize", Integer.toString(teamTwoDataName.size()));
-        Log.e("teamThreeDataNameSize", Integer.toString(teamThreeDataName.size()));
-
-        Log.e("teamOneDataName", teamOneDataName.toString());
-        Log.e("teamOneDataScore", teamOneDataScore.toString());
-        Log.e("teamTwoDataName", teamTwoDataName.toString());
-        Log.e("teamTwoDataScore", teamTwoDataScore.toString());
-        Log.e("teamThreeDataName", teamThreeDataName.toString());
-        Log.e("teamThreeDataScore", teamThreeDataScore.toString());
 
     }
 
@@ -335,7 +273,6 @@ public class ScoutingPage extends ActionBarActivity {
         textview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("teamNumber", "Clicked");
                 final Dialog dialog = new Dialog(ScoutingPage.this);
                 final View dialogView = getLayoutInflater().inflate(R.layout.dialog, null);
                 dialog.setContentView(dialogView);

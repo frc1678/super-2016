@@ -14,9 +14,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class SuperNotes extends ActionBarActivity {
     Intent toNotes;
     String alliance;
@@ -35,7 +32,7 @@ public class SuperNotes extends ActionBarActivity {
     EditText teamOneEditText;
     EditText teamTwoEditText;
     EditText teamThreeEditText;
-    DatabaseReference dataBase;
+//    DatabaseReference dataBase;
     boolean isBlue = new Boolean(true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +68,7 @@ public class SuperNotes extends ActionBarActivity {
         teamOneEditText.setText(teamOneNote);
         teamTwoEditText.setText(teamTwoNote);
         teamThreeEditText.setText(teamThreeNote);
-        dataBase = FirebaseDatabase.getInstance().getReference();
+//        dataBase = FirebaseDatabase.getInstance().getReference();
     }
     public void onBackPressed(){
         final Activity activity = this;
@@ -83,9 +80,9 @@ public class SuperNotes extends ActionBarActivity {
                         new Thread() {
                             public void run() {
                                 Log.e("matchNumber", numberOfMatch);
-                                dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
-                                dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
-                                dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
+//                                dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
+//                                dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
+//                                dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
                             }
                         }.start();
                         activity.finish();
@@ -118,9 +115,9 @@ public class SuperNotes extends ActionBarActivity {
             new Thread() {
                 public void run() {
                     Log.e("matchNumber", numberOfMatch);
-                    dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
-                    dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
-                    dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
+//                    dataBase.child("TeamInMatchDatas").child(teamOne + "Q" + numberOfMatch).child("superNotes").setValue(teamOneEditText.getText().toString());
+//                    dataBase.child("TeamInMatchDatas").child(teamTwo + "Q" + numberOfMatch).child("superNotes").setValue(teamTwoEditText.getText().toString());
+//                    dataBase.child("TeamInMatchDatas").child(teamThree + "Q" + numberOfMatch).child("superNotes").setValue(teamThreeEditText.getText().toString());
                 }
             }.start();
             final Activity activity = this;
